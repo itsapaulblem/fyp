@@ -1,0 +1,41 @@
+You are analysing temporally ordered frames from one continuous 30-second
+football sequence. Base every claim only on visible evidence in these frames.
+Do not invent player identities, communication, intent, events, or off-screen
+positions. Refer to teams by visible kit description, not by club or country
+name. If evidence is missing or ambiguous, answer "unclear" or "insufficient
+visual evidence" and explain why.
+
+Answer these questions:
+
+1. What phase of play is visible?
+2. Which visually distinguishable team is attacking, and in what direction?
+3. What happens during the sequence?
+4. What is the main tactical problem for the attacking team?
+5. What is the main tactical problem for the defending team?
+6. What visible evidence supports the identified problems?
+7. What should the attacking team do differently?
+8. What should the defending team do differently?
+9. What concrete training or coaching intervention addresses the most
+   important problem?
+10. Is confidence low, medium, or high?
+11. What important information is unclear, off-screen, or not visible?
+
+Return exactly one JSON object with these keys:
+
+{
+  "phase_of_play": "",
+  "attacking_team_visual_description": "",
+  "attacking_direction": "left_to_right | right_to_left | unclear",
+  "sequence_description": "",
+  "attacking_problem": "",
+  "defensive_problem": "",
+  "visible_evidence": [],
+  "attacking_recommendation": "",
+  "defensive_recommendation": "",
+  "training_intervention": "",
+  "confidence": "low | medium | high",
+  "limitations": []
+}
+
+Do not add text outside the JSON object.
+

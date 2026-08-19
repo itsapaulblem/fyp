@@ -1,0 +1,113 @@
+{
+  "protocol_id": "coach-eval-v0.1.0",
+  "status": "pilot-draft",
+  "research_question": "Can an MLLM observe a football sequence, identify visible tactical problems, and provide grounded, useful coaching advice?",
+  "dataset": {
+    "name": "SoccerNet Game State Reconstruction",
+    "version": "1.3",
+    "verified_split_counts": {
+      "train": 57,
+      "valid": 58,
+      "test": 49
+    }
+  },
+  "model": {
+    "provider": "ollama",
+    "name": "qwen3-vl:2b-instruct",
+    "input_condition": "temporally ordered sampled frames only"
+  },
+  "prompt": "prompts/qwen_coach_v1.txt",
+  "hidden_from_model": [
+    "Labels-GameState.json",
+    "sequences_info.json",
+    "official action labels",
+    "clip identifiers and revealing filenames",
+    "bounding boxes",
+    "pitch coordinates and calibration",
+    "track IDs, roles, teams, and jersey numbers",
+    "derived analytics",
+    "human ratings"
+  ],
+  "required_response_fields": [
+    "phase_of_play",
+    "attacking_team_visual_description",
+    "attacking_direction",
+    "sequence_description",
+    "attacking_problem",
+    "defensive_problem",
+    "visible_evidence",
+    "attacking_recommendation",
+    "defensive_recommendation",
+    "training_intervention",
+    "confidence",
+    "limitations"
+  ],
+  "objective_claim_states": [
+    "supported",
+    "contradicted",
+    "inconclusive",
+    "not_measurable"
+  ],
+  "objective_analytics": [
+    "team_width",
+    "team_depth",
+    "team_centroid",
+    "defensive_compactness",
+    "nearest_opponent_distance_to_ball",
+    "local_attacker_defender_counts",
+    "local_numerical_superiority",
+    "visible_players_in_penalty_area",
+    "goalkeeper_position_relative_to_ball_and_goal",
+    "ball_movement_direction",
+    "player_movement_relative_to_goal"
+  ],
+  "human_rubric": {
+    "scale": {
+      "minimum": 0,
+      "maximum": 2
+    },
+    "criteria": [
+      "factual_accuracy",
+      "tactical_correctness",
+      "visual_grounding",
+      "specificity",
+      "actionability",
+      "evidence_advice_consistency"
+    ],
+    "maximum_total": 12,
+    "preferred_reviewer_count": 2,
+    "major_hallucinations_recorded_separately": true
+  },
+  "split_policy": {
+    "train": "development and 12-clip pilot",
+    "valid": "method selection and protocol freeze",
+    "test": "one final evaluation without tuning"
+  },
+  "pilot": {
+    "split": "train",
+    "clip_count": 12,
+    "allocation": {
+      "Corner": 2,
+      "Direct free-kick": 2,
+      "Foul or defensive restart": 2,
+      "Shots on target": 2,
+      "Shots off target or Goal": 2,
+      "Open-play candidate": 2
+    },
+    "penalty_required": false
+  },
+  "provisional_success_criteria": {
+    "minimum_mean_human_score_out_of_12": 8.0,
+    "minimum_supported_fraction_of_eligible_measurable_claims": 0.7,
+    "maximum_fraction_of_clips_with_major_hallucination": 0.15,
+    "minimum_fraction_of_clips_with_actionable_recommendation": 0.7,
+    "report_results_by_scenario_group": true
+  },
+  "change_control": {
+    "may_change_during_train_pilot": true,
+    "may_change_during_validation": true,
+    "must_freeze_before_test": true,
+    "test_tuning_forbidden": true
+  }
+}
+

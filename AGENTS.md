@@ -1,0 +1,82 @@
+# Project instructions for coding agents
+
+## Research objective
+
+This project evaluates whether a multimodal large language model (MLLM) can
+observe short football sequences, identify visible tactical problems, and
+produce useful coaching advice. Objective tracking analytics may verify
+measurable claims, but they are not ground-truth coaching advice.
+
+The current local model is `qwen3-vl:2b-instruct`. The current experiment is
+defined in `docs/EVALUATION_PROTOCOL.md` and
+`config/evaluation_protocol.json`. Read both before changing evaluation code,
+prompts, sampling, metrics, or result files.
+
+## Verified dataset facts
+
+- The local source is the official SoccerNet Game State Reconstruction v1.3
+  release.
+- The downloaded archives contain 164 clips: 57 train, 58 valid, and 49 test.
+  Do not report 166 clips merely because an older task page advertises that
+  number.
+- Each clip contains 750 ordered JPEG frames representing 30 seconds at
+  25 fps. The JPEG sequence is the video representation.
+- `Labels-GameState.json` contains player, goalkeeper, referee, ball, pitch,
+  tracking, and pitch-position annotations.
+- SoccerNet does not supply coaching-advice ground truth.
+- `open_play` is not an official GSR action class. A clearance clip may be an
+  open-play candidate, but must not be presented as an official open-play
+  label.
+- The public release has one penalty clip and no indirect-free-kick anchor
+  class. Do not claim balanced evaluation for those categories.
+
+Use `docs/DATASET_CARD.md`, `data/processed/summary.json`, and
+`data/processed/validation_report.json` as the local evidence for dataset
+claims. Inspect the source data before making any stronger claim.
+
+## Experimental separation
+
+The MLLM may receive only temporally ordered sampled frames and the frozen
+prompt. Do not expose label JSON, action classes, bounding boxes, coordinates,
+track IDs, filenames that reveal the event, or derived analytics to it.
+
+Annotations may be used privately for sampling, objective verification, and
+human review. Keep these three evidence layers separate:
+
+1. `model_input`: frames and neutral prompt only.
+2. `reference_analytics`: calculations derived from hidden annotations.
+3. `human_evaluation`: rubric scores and reviewer comments.
+
+Never describe xG, tracking measurements, or SoccerNet event labels as the
+ground truth for overall coaching quality. xG is outside the current protocol
+unless the user explicitly reintroduces it as a separate experiment.
+
+## Split discipline
+
+- Train: prompt, sampling, metric, and rubric development; includes the
+  12-clip pilot.
+- Validation: method selection and final checks.
+- Test: one final evaluation after the protocol is frozen.
+
+Do not tune prompts, thresholds, sampling, claim mappings, or success criteria
+on test results. Record every protocol change and increment its version. Once
+test evaluation begins, do not alter the frozen protocol for that experiment.
+
+## Provenance and repository safety
+
+- Treat files in `data/raw` as immutable official SoccerNet data.
+- Treat files in `data/processed` as project-generated metadata or results,
+  not SoccerNet-authored labels.
+- Do not commit raw SoccerNet frames, archives, credentials, or model weights.
+- Never invent missing annotations, clips, expert scores, model responses, or
+  metric values.
+- Verify paths on disk; IDE tabs may refer to files that were removed.
+- Preserve unrelated user changes and do not delete data without explicit
+  authorization.
+
+## Reporting language
+
+Use `verified`, `derived`, `human-rated`, or `model-generated` to identify the
+provenance of important results. State visibility and calibration limitations,
+especially when off-screen players or a missing ball can bias a metric.
+

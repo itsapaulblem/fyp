@@ -1,0 +1,15 @@
+{
+  "provider": "ollama",
+  "model": "qwen3-vl:2b-instruct",
+  "model_id": "ea422f1e7365",
+  "architecture": "qwen3vl",
+  "parameters": "2.1B",
+  "quantization": "Q4_K_M",
+  "capabilities": ["completion", "vision", "tools"],
+  "installed": true,
+  "verified": true,
+  "verification_response": "QWEN3_VL_READY",
+  "recommended_initial_context": 4096,
+  "recommended_video_input": "temporally ordered sampled frames"
+}
+

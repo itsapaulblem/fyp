@@ -1,0 +1,28 @@
+{
+  "dataset_name": "soccernet_coaching_eval",
+  "target_clip_count": 164,
+  "clip_duration_seconds": 30,
+  "sources": {
+    "gamestate": {
+      "task": "gamestate-2024",
+      "splits": ["train", "valid", "test"],
+      "published_web_counts": {"train": 57, "valid": 59, "test": 50},
+      "verified_v1_3_counts": {"train": 57, "valid": 58, "test": 49},
+      "minimum_annotation_version": "1.3"
+    },
+    "tracking": {
+      "tasks": ["tracking-2023", "tracking"],
+      "splits": ["train", "test", "challenge"]
+    }
+  },
+  "target_scenarios": [
+    "corner",
+    "direct_free_kick",
+    "indirect_free_kick",
+    "penalty",
+    "shot",
+    "goal",
+    "foul",
+    "open_play"
+  ]
+}

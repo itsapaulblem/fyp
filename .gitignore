@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# SoccerNet data is NDA-controlled and must never be committed.
+data/raw/*
+data/extracted/*
+data/processed/*
+!data/raw/.gitkeep
+!data/extracted/.gitkeep
+!data/processed/.gitkeep
+
+# Local secrets and machine-specific settings.
+.env
+*.log
+
