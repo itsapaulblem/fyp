@@ -49,7 +49,7 @@ indirect-free-kick anchor clip.
 | Shots | 32 official anchor clips |
 | Goals | 15 official anchor clips |
 | Fouls | 16 official anchor clips |
-| Open play | Not an official SoccerNet label; 18 clearance clips are flagged only as candidates |
+| Clearance | 18 official anchor clips |
 
 No oversampling is performed. Repeating the single penalty clip would not add
 independent evidence and would make evaluation results misleading.
@@ -84,4 +84,3 @@ excluded from Git because the source data is subject to SoccerNet access
 terms. The canonical dataset manifest is `data/processed/manifest.csv`.
 Archive SHA-256 hashes and aggregate statistics are in
 `data/processed/summary.json`.
-

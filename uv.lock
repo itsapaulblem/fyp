@@ -427,11 +427,15 @@ name = "mllm-football-coach-dataset"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "pillow" },
     { name = "soccernet" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "soccernet", specifier = "==0.1.62" }]
+requires-dist = [
+    { name = "pillow", specifier = ">=10,<13" },
+    { name = "soccernet", specifier = "==0.1.62" },
+]
 
 [[package]]
 name = "numpy"

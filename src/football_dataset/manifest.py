@@ -17,9 +17,7 @@ ACTION_GROUPS = {
     "Shots off target": "shot",
     "Goal": "goal",
     "Foul": "foul",
-    # Clearance is the only anchor that normally occurs during active play,
-    # but SoccerNet does not provide an official "open play" label.
-    "Clearance": "open_play_candidate",
+    "Clearance": "clearance",
 }
 
 
@@ -162,7 +160,7 @@ def build_manifest(project_root: Path) -> dict:
         "notes": [
             "The current official v1.3 archives contain 164 public clips, not the 166 advertised on the SoccerNet task page.",
             "Ball annotations are inherited from SoccerNet-Tracking and embedded in Labels-GameState.json.",
-            "SoccerNet has no official open-play class; clearance clips are marked only as open_play_candidate.",
+            "Clearance clips retain SoccerNet's official Clearance anchor label.",
             "Coaching quality labels are not supplied by SoccerNet and require a later expert rubric.",
         ],
     }
@@ -206,7 +204,7 @@ def validate_manifest(project_root: Path) -> dict:
         "errors": errors,
         "warnings": [
             f"{sum(not int(row['ball_boxes']) for row in rows)} clips have no visible ball boxes.",
-            "Open play is not an official SoccerNet action class and remains unverified.",
+            "Clearance is preserved as an official SoccerNet anchor action.",
         ],
     }
     output = project_root / "data" / "processed" / "validation_report.json"
@@ -214,4 +212,3 @@ def validate_manifest(project_root: Path) -> dict:
     if errors:
         raise RuntimeError("Dataset validation failed: " + "; ".join(errors))
     return report
-

@@ -88,16 +88,24 @@ The first experimental artifact is the pilot protocol in
 - train, validation, and test responsibilities;
 - provisional success criteria and the 12-clip train pilot.
 
-The exact model-facing prompt is
-[`prompts/qwen_coach_v1.txt`](prompts/qwen_coach_v1.txt), while
+The current model-facing prompt is
+[`prompts/qwen_coach_v1_1.txt`](prompts/qwen_coach_v1_1.txt), while
 [`config/evaluation_protocol.json`](config/evaluation_protocol.json) is the
 machine-readable protocol record. Blank score and verification sheets are in
-`templates/`. No pilot responses or scores have been fabricated at this stage.
+`templates/`. The exact 12 selected train clips are recorded in
+[`data/processed/pilot_selection.csv`](data/processed/pilot_selection.csv).
+No pilot model responses or human scores have been fabricated at this stage.
 
 Future coding agents must read [`AGENTS.md`](AGENTS.md) before modifying the
 experiment. In particular, tracking analytics verify only measurable claims;
 they are not treated as ground-truth coaching advice. The protocol is currently
 `pilot-draft` and must be frozen before the test split is used.
+
+The completed train-pilot sampling comparison provisionally selected uniform
+16-frame sampling over event-centred sampling. The decision, measurements, and
+important negative result—that both strategies showed weak event
+understanding—are documented in
+[`docs/SAMPLING_PILOT_RESULTS.md`](docs/SAMPLING_PILOT_RESULTS.md).
 
 ## Local MLLM
 

@@ -1,0 +1,25 @@
+You are analysing 16 temporally ordered frames from one continuous 30-second
+football sequence. The first image is earliest and the last image is latest.
+Base every claim only on visible evidence in these frames.
+
+Do not invent player identities, communication, intent, events, or off-screen
+positions. Refer to teams only by visible kit description. If evidence is
+missing or ambiguous, say "unclear" or "insufficient visual evidence".
+
+Answer concisely:
+
+1. Identify the visible phase of play.
+2. Identify the attacking team by kit and its direction, if visible.
+3. Describe what happens across the frames.
+4. Identify at most one attacking tactical problem.
+5. Identify at most one defensive tactical problem.
+6. Give at most three short pieces of visible evidence.
+7. Give one specific recommendation to the attacking team.
+8. Give one specific recommendation to the defending team.
+9. Give one concrete training intervention for the most important problem.
+10. Rate confidence as low, medium, or high.
+11. Give at most three short limitations.
+
+Keep each string to one or two short sentences. Do not repeat evidence or
+limitations. Return exactly one JSON object matching the requested schema and
+do not add any text outside it.

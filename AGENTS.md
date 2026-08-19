@@ -12,6 +12,15 @@ defined in `docs/EVALUATION_PROTOCOL.md` and
 `config/evaluation_protocol.json`. Read both before changing evaluation code,
 prompts, sampling, metrics, or result files.
 
+The selected pilot membership is recorded in
+`data/processed/pilot_selection.csv`. Do not silently substitute pilot clips;
+record the reason and update the protocol version if selection changes.
+
+The 12-clip train comparison provisionally selected uniform 16-frame sampling.
+Read `docs/SAMPLING_PILOT_RESULTS.md` before changing it. This decision is not
+frozen until validation confirms it, and it does not imply that the observed
+coaching responses were good.
+
 ## Verified dataset facts
 
 - The local source is the official SoccerNet Game State Reconstruction v1.3
@@ -24,9 +33,8 @@ prompts, sampling, metrics, or result files.
 - `Labels-GameState.json` contains player, goalkeeper, referee, ball, pitch,
   tracking, and pitch-position annotations.
 - SoccerNet does not supply coaching-advice ground truth.
-- `open_play` is not an official GSR action class. A clearance clip may be an
-  open-play candidate, but must not be presented as an official open-play
-  label.
+- `Clearance` is an official GSR anchor action. Preserve that label exactly in
+  project-derived scenario groupings.
 - The public release has one penalty clip and no indirect-free-kick anchor
   class. Do not claim balanced evaluation for those categories.
 
@@ -79,4 +87,3 @@ test evaluation begins, do not alter the frozen protocol for that experiment.
 Use `verified`, `derived`, `human-rated`, or `model-generated` to identify the
 provenance of important results. State visibility and calibration limitations,
 especially when off-screen players or a missing ball can bias a metric.
-

@@ -1,5 +1,5 @@
 {
-  "protocol_id": "coach-eval-v0.1.0",
+  "protocol_id": "coach-eval-v0.1.1",
   "status": "pilot-draft",
   "research_question": "Can an MLLM observe a football sequence, identify visible tactical problems, and provide grounded, useful coaching advice?",
   "dataset": {
@@ -16,7 +16,7 @@
     "name": "qwen3-vl:2b-instruct",
     "input_condition": "temporally ordered sampled frames only"
   },
-  "prompt": "prompts/qwen_coach_v1.txt",
+  "prompt": "prompts/qwen_coach_v1_1.txt",
   "hidden_from_model": [
     "Labels-GameState.json",
     "sequences_info.json",
@@ -86,15 +86,47 @@
   "pilot": {
     "split": "train",
     "clip_count": 12,
+    "selection_file": "data/processed/pilot_selection.csv",
+    "selection_status": "sampling-selected-pending-validation",
+    "selection_criteria": {
+      "scenario_quota": "two clips in each of six pilot groups",
+      "source_game_balance": "four clips from each of training game IDs 4, 6, and 9",
+      "minimum_whole_clip_fraction_with_five_pitch_players_per_team": 0.6,
+      "prefer_high_ball_coverage": true,
+      "mean_selected_ball_coverage": 0.9886
+    },
     "allocation": {
       "Corner": 2,
       "Direct free-kick": 2,
       "Foul or defensive restart": 2,
       "Shots on target": 2,
       "Shots off target or Goal": 2,
-      "Open-play candidate": 2
+      "Clearance": 2
     },
-    "penalty_required": false
+    "penalty_required": false,
+    "selected_clip_ids": [
+      "SNGS-067",
+      "SNGS-103",
+      "SNGS-066",
+      "SNGS-100",
+      "SNGS-062",
+      "SNGS-164",
+      "SNGS-112",
+      "SNGS-159",
+      "SNGS-115",
+      "SNGS-165",
+      "SNGS-074",
+      "SNGS-169"
+    ],
+    "sampling_comparison": {
+      "comparison_protocol_id": "coach-eval-v0.1.1",
+      "frame_count_per_clip": 16,
+      "strategies": ["uniform", "event_centered"],
+      "selected_baseline": "uniform",
+      "selection_scope": "provisional train-pilot decision pending validation",
+      "result_file": "data/processed/pilot_comparison.json",
+      "human_coaching_scores_complete": false
+    }
   },
   "provisional_success_criteria": {
     "minimum_mean_human_score_out_of_12": 8.0,
@@ -110,4 +142,3 @@
     "test_tuning_forbidden": true
   }
 }
-

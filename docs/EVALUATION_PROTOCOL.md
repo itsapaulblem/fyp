@@ -1,8 +1,11 @@
 # MLLM football coaching evaluation protocol
 
-Protocol ID: `coach-eval-v0.1.0`  
-Status: pilot draft  
-Model under evaluation: `qwen3-vl:2b-instruct`  
+Protocol ID: `coach-eval-v0.1.1`
+
+Status: pilot draft
+
+Model under evaluation: `qwen3-vl:2b-instruct`
+
 Dataset: SoccerNet Game State Reconstruction v1.3
 
 ## 1. Research question
@@ -35,7 +38,7 @@ prompt version, frame numbers, generation settings, raw response, and run time.
 ### Visible to the model
 
 - Temporally ordered sampled frames from one clip.
-- The neutral prompt in `prompts/qwen_coach_v1.txt`.
+- The neutral prompt in `prompts/qwen_coach_v1_1.txt`.
 - The knowledge that the images represent one chronological football sequence.
 
 ### Hidden from the model
@@ -168,7 +171,7 @@ The first run uses 12 train clips:
 - 2 fouls or defensive restarts
 - 2 shots on target
 - 2 shots off target or goals
-- 2 open-play candidates, documented as candidates rather than official labels
+- 2 clearances
 
 The single penalty clip is not required in the pilot and must not be
 oversampled. Selection should prefer clips with sufficient visible players and
@@ -178,7 +181,63 @@ The pilot checks prompt clarity, response structure, frame sufficiency,
 measurability of claims, reviewer usability, and failure cases. Pilot results
 are developmental and are not final model-performance estimates.
 
-## 10. Provisional success criteria
+### Selected pilot clips
+
+Selection is complete but the pilot has not yet been run. All clips come from
+the train split. The selection uses two clips per scenario group and four clips
+from each of training game IDs 4, 6, and 9 so that one source match does not
+dominate the pilot.
+
+| Pilot group | Selected clips | Official anchor actions |
+|---|---|---|
+| Corner | `SNGS-067`, `SNGS-103` | Corner, Corner |
+| Direct free kick | `SNGS-066`, `SNGS-100` | Direct free-kick, Direct free-kick |
+| Foul or defensive restart | `SNGS-062`, `SNGS-164` | Foul, Foul |
+| Shots on target | `SNGS-112`, `SNGS-159` | Shots on target, Shots on target |
+| Shots off target or goal | `SNGS-115`, `SNGS-165` | Shots off target, Goal |
+| Clearance | `SNGS-074`, `SNGS-169` | Clearance, Clearance |
+
+The preliminary eligibility check requires at least five pitch-located
+outfield players from each team in at least 60% of the clip's frames. All 12
+clips pass. Their mean ball-annotation coverage is 98.86%. This is a pilot
+usability filter, not a claim that every tactical metric will be valid in every
+frame. Metric-specific eligibility must still be checked in the selected
+analysis window.
+
+The two clearance clips retain SoccerNet's official `Clearance` anchor label.
+The model will not see that label; it must determine the visible phase from
+the sampled frames.
+
+The authoritative row-level selection record is
+`data/processed/pilot_selection.csv`. It is project-derived metadata and is not
+an official SoccerNet annotation file.
+
+## 10. Why the pilot contains 12 clips
+
+Twelve is a development sample, not the final evaluation size. It is the
+smallest convenient number that gives two examples in each of the six pilot
+scenario groups. One example can expose a problem; the second helps reveal
+whether it is clip-specific. Twelve 30-second clips also represent six minutes
+of source footage and a manageable first manual-review workload while the
+prompt, frame sampling, analytics, and rubric can still change.
+
+The pilot cannot establish statistically reliable model performance. Final
+claims will use the frozen protocol on the 49-clip test split, with validation
+used before that to select the method. If the pilot reveals unstable or
+scenario-specific behaviour, the development sample may be expanded using
+additional train clips without touching the test set.
+
+### Sampling comparison outcome
+
+Both 16-frame strategies were run on all 12 pilot clips. Uniform sampling is
+the provisional baseline because it produced 12/12 complete schemas versus
+11/12 for event-centred sampling, matched the hidden anchor terminology equally
+often (2/12 each), ran slightly faster, and does not depend on hidden event
+timing. This choice remains subject to validation confirmation and human
+coaching-quality review. See `docs/SAMPLING_PILOT_RESULTS.md` for the complete
+comparison and limitations.
+
+## 11. Provisional success criteria
 
 Before test evaluation, the final protocol must state numeric criteria. The
 pilot begins with these provisional targets:
@@ -194,7 +253,7 @@ These thresholds are research design choices, not established industry
 standards. They may be revised using train and validation evidence, with the
 reason recorded, but must be frozen before the test run.
 
-## 11. Change control
+## 12. Change control
 
 The protocol is currently `pilot-draft`. Any material change must increment
 the version in this document, `config/evaluation_protocol.json`, the prompt,
@@ -202,3 +261,10 @@ and future result records. A protocol becomes `frozen` only after the pilot and
 validation decisions are complete. Results from different protocol versions
 must not be pooled without explicit analysis.
 
+### Draft change history
+
+- `v0.1.0`: initial protocol and prompt; one uniform smoke run reached the
+  output limit while repeating limitations and produced incomplete JSON.
+- `v0.1.1`: concise field limits and a strict JSON schema were added before the
+  paired sampling comparison. The failed v0.1.0 smoke result is retained as a
+  development artifact and excluded from the comparison.

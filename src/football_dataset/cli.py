@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Sequence
 
 from football_dataset.manifest import build_manifest, validate_manifest
+from football_dataset.pilot import compare_pilot, prepare_pilot_inputs, run_pilot
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -62,6 +63,23 @@ def build_parser() -> argparse.ArgumentParser:
     )
     subparsers.add_parser("manifest", help="Build metadata directly from the ZIPs")
     subparsers.add_parser("validate", help="Validate the generated dataset manifest")
+    subparsers.add_parser(
+        "pilot-prepare", help="Build the audited 16-frame pilot sampling manifest"
+    )
+    pilot_run = subparsers.add_parser(
+        "pilot-run", help="Run Qwen on prepared pilot frame strategies"
+    )
+    pilot_run.add_argument(
+        "--strategy",
+        choices=("uniform", "event_centered", "both"),
+        default="both",
+    )
+    pilot_run.add_argument("--limit", type=int)
+    pilot_run.add_argument("--overwrite", action="store_true")
+    pilot_run.add_argument("--timeout", type=int, default=900)
+    subparsers.add_parser(
+        "pilot-compare", help="Create a technical comparison of completed pilot runs"
+    )
     return parser
 
 
@@ -76,6 +94,24 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(json.dumps(build_manifest(PROJECT_ROOT), indent=2))
     elif args.command == "validate":
         print(json.dumps(validate_manifest(PROJECT_ROOT), indent=2))
+    elif args.command == "pilot-prepare":
+        print(json.dumps(prepare_pilot_inputs(PROJECT_ROOT), indent=2))
+    elif args.command == "pilot-run":
+        strategies = (
+            ("uniform", "event_centered")
+            if args.strategy == "both"
+            else (args.strategy,)
+        )
+        written = run_pilot(
+            PROJECT_ROOT,
+            strategies,
+            overwrite=args.overwrite,
+            limit=args.limit,
+            timeout=args.timeout,
+        )
+        print(json.dumps({"written": [str(path) for path in written]}, indent=2))
+    elif args.command == "pilot-compare":
+        print(json.dumps(compare_pilot(PROJECT_ROOT), indent=2))
     return 0
 
 
