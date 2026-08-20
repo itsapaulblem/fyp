@@ -54,7 +54,7 @@ The official anchor is verified SoccerNet metadata. All observations and coachin
 
 ## Original coaching-output error audit
 
-The supplied Qwen output contains only event-recognition fields and does not provide any tactical problems, coaching recommendations, or training interventions. Therefore, the model fails to provide the required coaching analysis for this clip.
+The Qwen output contains only event-recognition fields and does not provide any tactical problems, coaching recommendations, or training interventions. Therefore, the model fails to provide the required coaching analysis for this clip.
 
 - **Qwen's specific errors:** Qwen does not provide any coaching analysis or recommendations. It also incorrectly identifies the white team as the attacking team for the decisive phase of the sequence. The black-and-red team is the side that regains possession, launches the counter-attack, and scores.
 - **Correct observations made by Qwen:** Qwen correctly identifies the phase as attacking and correctly recognises both the event and outcome as a goal.
