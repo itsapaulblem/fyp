@@ -73,18 +73,18 @@ The official anchor is verified SoccerNet metadata. All observations and coachin
 | Factual accuracy | 1 | Correctly identifies the white team as attacking and in possession, but misses the clearance-related event and provides an unsupported claim about the ball not being in a clear shooting position. |
 | Tactical correctness | 1 | The suggestion to play towards a teammate closer to goal is broadly reasonable, but the defensive analysis is incorrect and directed at the wrong team. |
 | Visual grounding | 1 | The response is grounded in the general fact that the white team is advancing and passing the ball, but it does not identify the goalkeeper distribution, long forward pass, or specific progression visible in the clip. |
-| Specificity | 1 | Identifies the white team and general attacking direction but does not reference specific players, positions, or the actual sequence of passes. |
+| Specificity | 0 | Identifying only the white team and general direction is generic; no goalkeeper distribution, long pass, player, position, or specific option is identified. |
 | Actionability | 1 | The recommendation to pass to a teammate closer to goal is actionable but too generic to provide meaningful clip-specific coaching. |
-| Evidence-advice consistency | 1 | The attacking recommendation is loosely connected to the observed forward progression, but the defensive recommendation is inconsistent because it is assigned to the attacking team. |
-| **Total (0–12)** | **6** | |
+| Evidence-advice consistency | 0 | The unsupported shooting-position claim and defensive recommendation aimed at the attacking team prevent a consistent evidence-to-advice link. |
+| **Total (0–12)** | **4** | |
 
 ## Recognition-gate review
 
 - **Phase correct?** `yes — correctly identifies the clip as an attacking phase`
 - **Attacking team correct?** `yes — correctly identifies the white team`
-- **Event correct?** `partly — recognises the attack and passing sequence but does not identify the official clearance event`
-- **Outcome correct?** `partly — recognises that the white team is still attacking but does not explicitly state that the sequence ends without a visible final outcome`
+- **Event correct?** `no — labels the event as a goal rather than identifying the clearance-related build-up`
+- **Outcome correct?** `no — labels the outcome as a goal even though play remains ongoing without a visible final outcome`
 - **Evidence visibly grounded?** `partly — references possession, passing, and forward movement, but the evidence remains generic and misses the key clearance-related action`
 - **Confidence appropriate?** `no — high confidence is too strong given the missed anchor event and generic visual evidence`
-- **Recognition gate passes for this clip?** `yes`
-- **Reviewer notes:** Qwen correctly recognises the white team as the attacking side and understands that the team is progressing possession towards goal. However, it does not identify the official `Clearance` anchor or the specific build-up sequence beginning with the goalkeeper and defender. Its supporting evidence and tactical advice are generic, and the defensive recommendation is incorrectly assigned to the white team. The recognition gate nevertheless passes because the model correctly identifies the attacking phase, team in possession, and general progression of play.
+- **Recognition gate passes for this clip?** `no`
+- **Reviewer notes:** Qwen correctly recognises the white team as the attacking side and understands that the team is progressing possession towards goal. However, it does not identify the official `Clearance` anchor or explicitly state the visible outcome. Because event and outcome are only partly correct, the clip does not pass the all-three-correct gate.

@@ -125,7 +125,8 @@
       "selected_baseline": "uniform",
       "selection_scope": "provisional train-pilot decision pending validation",
       "result_file": "data/processed/pilot_comparison.json",
-      "human_coaching_scores_complete": false
+      "human_coaching_scores_complete": true,
+      "human_evaluation_summary": "data/processed/pilot_human_evaluation_summary.json"
     }
   },
   "provisional_success_criteria": {

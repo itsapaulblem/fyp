@@ -81,10 +81,10 @@ visible only in the full sequence to unfairly score what Qwen saw in 16 frames.
 Complete this after reading the separate recognition-only response.
 
 - Phase correct? `unclear`
-- Attacking team correct? `yes `
-- Event correct? ` unclear`
-- Outcome correct? `yes`
+- Attacking team correct? `partly`
+- Event correct? `no`
+- Outcome correct? `no`
 - Evidence visibly grounded? `partly`
 - Confidence appropriate? `no`
 - Recognition gate passes for this clip? ` no`
-- Reviewer notes: The response is too vague and fails to identify the corner, despite it being a key event in the sequence. It demonstrates some recognition of the red team's involvement and the final outcome but does not provide sufficiently specific or visually grounded evidence.
+- Reviewer notes: The response identifies the red team from the initial phase but labels the event and outcome as a goal. It misses the corner, clearance, change of possession, counter-attack, and final foul.

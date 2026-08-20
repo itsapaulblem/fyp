@@ -2,7 +2,7 @@
 
 Protocol: `event-recognition-v0.1.0`
 
-Status: 12 model runs complete; single-reviewer assessment pending
+Status: 12 model runs and single-reviewer assessment complete; gate failed
 
 ## Purpose
 
@@ -54,6 +54,18 @@ cannot be determined from the sampled frames, with a written explanation.
 The project uses one reviewer. No inter-rater agreement will be reported, and
 the final report must identify single-reviewer subjectivity as a limitation.
 
+## Human-rated result
+
+The strict gate passed for 0 of 12 eligible clips, below the required 9 of 12.
+Attacking team was judged exactly correct in 4/12 clips, event in 1/12, and
+visible outcome in 1/12. All model responses reported high confidence, but the
+reviewer judged that confidence appropriate in 0/12 clips.
+
+The row-level record is `human_evaluation/pilot_review_index.csv`; complete
+aggregate statistics and limitations are recorded in
+`docs/PILOT_HUMAN_EVALUATION_RESULTS.md` and
+`data/processed/pilot_human_evaluation_summary.json`.
+
 ## Interpretation boundary
 
 The recognition gate is not the project objective by itself. It is a validity
@@ -65,4 +77,3 @@ If event understanding fails, downstream coaching may sound plausible while
 being grounded in the wrong team, phase, or outcome. Tracking analytics cannot
 repair that perceptual failure; they can only verify measurable claims after a
 response is grounded in the correct sequence.
-

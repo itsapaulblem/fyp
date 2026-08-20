@@ -67,12 +67,12 @@ visible only in the full sequence to unfairly score what Qwen saw in 16 frames.
 | Human rubric criterion | Score (0–2) | Evidence or reason |
 |---|---:|---|
 | Factual accuracy | 1 | Correctly identifies the green team as the team in possession but does not identify the foul as the final outcome. |
-| Tactical correctness | 1 | Provides generally reasonable tactical advice, but it is too broad and does not address the specific opportunities visible in the sequence. |
+| Tactical correctness | 0 | It does not identify a tactical problem; the response merely repeats that the green team is advancing with the ball. |
 | Visual grounding | 1 | Refers to the general build-up situation but does not sufficiently ground the analysis in specific players or actions. |
-| Specificity | 1 | Identifies the green team but does not reference specific players, positions, or passing options. |
-| Actionability | 1 | The recommendation is partly actionable but lacks a clear indication of who should perform the suggested action and when. |
-| Evidence-advice consistency | 1 | The advice is somewhat consistent with the observed sequence but is only loosely connected to the specific visual evidence. |
-| **Total (0–12)** |  6|  |
+| Specificity | 0 | Identifying only the green team is not enough to make the advice clip-specific; no player, position, event, or passing option is identified. |
+| Actionability | 0 | “Continue to advance with the ball” does not state a corrective coaching action. |
+| Evidence-advice consistency | 0 | The recommendation is not connected to the missed foul or to a clearly identified tactical problem. |
+| **Total (0–12)** | 2 |  |
 
 ## Recognition-gate review
 
@@ -80,10 +80,9 @@ Complete this after reading the separate recognition-only response.
 
 - Phase correct? `partly`
 - Attacking team correct? `yes`
-- Event correct? `partly`
-- Outcome correct? `partly`
+- Event correct? `no`
+- Outcome correct? `no`
 - Evidence visibly grounded? `partly`
 - Confidence appropriate? `no`
-- Recognition gate passes for this clip? `partly`
-- Reviewer notes: Fails to see the final outcome which is a foul and gave an attacking recommendation when I asked for a defensive recommendation.
-
+- Recognition gate passes for this clip? `no`
+- Reviewer notes: The recognition-only response identifies generic passing but does not recognise the foul or stoppage. Coaching recommendations are assessed separately and are not part of this gate.

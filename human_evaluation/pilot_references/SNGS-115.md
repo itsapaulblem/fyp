@@ -88,9 +88,9 @@ Complete this after reading the separate recognition-only response.
 
 - Phase correct? `yes correctly identifies the sequence as an attacking phase `
 - Attacking team correct? `yes correctly identifies the red-and-white team`
-- Event correct? `partly — recognises attacking play and an airborne ball but does not identify the header`
+- Event correct? `no — labels the event as a goal rather than a headed shot off target`
 - Outcome correct? `no — fails to recognise that the header goes wide for a shot off target`
 - Evidence visibly grounded? `partly — several observations correspond to the frames, but they remain generic and omit the key even`
 - Confidence appropriate? `no — "high" confidence is inappropriate because the model expresses uncertainty about whether the airborne ball is a shot or pass and misses the final outcome`
-- Recognition gate passes for this clip? `yes `
+- Recognition gate passes for this clip? `no`
 - Reviewer notes: Qwen correctly recognises the attacking team, general phase of play, and defensive setup. However, it fails to recognise the most important event in the sequence: the red attacker heads the cross wide for a shot off target. The recognition is therefore sufficient for the general attacking context but incomplete at the event and outcome level.

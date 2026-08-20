@@ -77,12 +77,12 @@ visible only in the full sequence to unfairly score what Qwen saw in 16 frames.
 | Human rubric criterion | Score (0–2) | Evidence or reason |
 |---|---:|---|
 | Factual accuracy | 1 |  Correctly identifies one attacking team but fails to recognise the corner and does not adequately distinguish the two attacking phases. |
-| Tactical correctness | 2|  Provides tactically reasonable suggestions regarding the initial delivery and the need for the white-and-blue team to prevent the subsequent counter-attack. |
+| Tactical correctness | 1 | The passing and transition suggestions are plausible but incomplete because the response does not recognise the corner or change of possession. |
 | Visual grounding |  1| Some recommendations correspond to visible actions in the clip, but the response fails to explicitly identify the clearly visible corner and provides limited reference to specific events. |
 | Specificity | 1 | Provides some context-specific advice but does not identify individual players, specific positions, or key football events such as the corner and transition. |
 | Actionability | 1 | The recommendations provide actions that could be implemented, but they remain relatively general and are not clearly assigned to the correct phases of play. |
 | Evidence-advice consistency | 1 | Some recommendations are supported by the visible sequence, particularly regarding the delivery and defensive transition, but the failure to recognise the event and change of possession weakens the connection between the evidence and advice. |
-| **Total (0–12)** | 7 |  |
+| **Total (0–12)** | 6 |  |
 
 ## Recognition-gate review
 
@@ -90,9 +90,9 @@ Complete this after reading the separate recognition-only response.
 
 - Phase correct? `unclear`
 - Attacking team correct? `partly`
-- Event correct? `partly`
+- Event correct? `no`
 - Outcome correct? `no`
 - Evidence visibly grounded? `yes`
 - Confidence appropriate? `no`
-- Recognition gate passes for this clip? `yes`
-- Reviewer notes: The response demonstrates some visual understanding of the sequence and identifies relevant aspects of the attacking and defensive play. However, it fails to explicitly recognise the corner and does not clearly distinguish the change of possession between the white-and-blue team's set piece and the green team's subsequent counter-attack.
+- Recognition gate passes for this clip? `no`
+- Reviewer notes: The response identifies the initial white team only, labels the event and outcome as a goal, and fails to recognise the corner, clearance, change of possession, and unsuccessful counter-attack.

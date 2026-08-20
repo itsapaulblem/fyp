@@ -189,7 +189,7 @@ are developmental and are not final model-performance estimates.
 
 ### Selected pilot clips
 
-Selection is complete but the pilot has not yet been run. All clips come from
+Selection and the initial pilot evaluation are complete. All clips come from
 the train split. The selection uses two clips per scenario group and four clips
 from each of training game IDs 4, 6, and 9 so that one source match does not
 dominate the pilot.
@@ -242,6 +242,12 @@ often (2/12 each), ran slightly faster, and does not depend on hidden event
 timing. This choice remains subject to validation confirmation and human
 coaching-quality review. See `docs/SAMPLING_PILOT_RESULTS.md` for the complete
 comparison and limitations.
+
+The subsequent single-reviewer coaching assessment produced a mean score of
+3.33/12, and the recognition-only prerequisite passed for 0/12 clips. These
+development results are documented in
+`docs/PILOT_HUMAN_EVALUATION_RESULTS.md`. This condition must not progress to
+validation until its perception failure has been investigated on train data.
 
 ## 11. Provisional success criteria
 

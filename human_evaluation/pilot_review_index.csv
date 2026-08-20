@@ -1,14 +1,13 @@
 clip_id,official_anchor,reference_file,coaching_score_0_12,coaching_review_complete,recognition_team_correct,recognition_event_correct,recognition_outcome_correct,recognition_gate_pass,review_status
-SNGS-062,Foul,human_evaluation/pilot_references/SNGS-062.md,,,,,,,incomplete
-SNGS-066,Direct free-kick,human_evaluation/pilot_references/SNGS-066.md,,,,,,,incomplete
-SNGS-067,Corner,human_evaluation/pilot_references/SNGS-067.md,,,,,,,incomplete
-SNGS-074,Clearance,human_evaluation/pilot_references/SNGS-074.md,,,,,,,incomplete
-SNGS-100,Direct free-kick,human_evaluation/pilot_references/SNGS-100.md,,,,,,,incomplete
-SNGS-103,Corner,human_evaluation/pilot_references/SNGS-103.md,,,,,,,incomplete
-SNGS-112,Shots on target,human_evaluation/pilot_references/SNGS-112.md,,,,,,,incomplete
-SNGS-115,Shots off target,human_evaluation/pilot_references/SNGS-115.md,,,,,,,incomplete
-SNGS-159,Shots on target,human_evaluation/pilot_references/SNGS-159.md,,,,,,,incomplete
-SNGS-164,Foul,human_evaluation/pilot_references/SNGS-164.md,,,,,,,incomplete
-SNGS-165,Goal,human_evaluation/pilot_references/SNGS-165.md,,,,,,,incomplete
-SNGS-169,Clearance,human_evaluation/pilot_references/SNGS-169.md,,,,,,,incomplete
-
+SNGS-062,Foul,human_evaluation/pilot_references/SNGS-062.md,2,yes,yes,no,no,no,complete
+SNGS-066,Direct free-kick,human_evaluation/pilot_references/SNGS-066.md,3,yes,partly,no,no,no,complete
+SNGS-067,Corner,human_evaluation/pilot_references/SNGS-067.md,6,yes,partly,no,no,no,complete
+SNGS-074,Clearance,human_evaluation/pilot_references/SNGS-074.md,2,yes,partly,partly,partly,no,complete
+SNGS-100,Direct free-kick,human_evaluation/pilot_references/SNGS-100.md,6,yes,partly,no,no,no,complete
+SNGS-103,Corner,human_evaluation/pilot_references/SNGS-103.md,3,yes,partly,no,no,no,complete
+SNGS-112,Shots on target,human_evaluation/pilot_references/SNGS-112.md,2,yes,yes,no,no,no,complete
+SNGS-115,Shots off target,human_evaluation/pilot_references/SNGS-115.md,5,yes,yes,no,no,no,complete
+SNGS-159,Shots on target,human_evaluation/pilot_references/SNGS-159.md,0,yes,no,no,no,no,complete
+SNGS-164,Foul,human_evaluation/pilot_references/SNGS-164.md,5,yes,partly,no,no,no,complete
+SNGS-165,Goal,human_evaluation/pilot_references/SNGS-165.md,2,yes,partly,yes,yes,no,complete
+SNGS-169,Clearance,human_evaluation/pilot_references/SNGS-169.md,4,yes,yes,no,no,no,complete

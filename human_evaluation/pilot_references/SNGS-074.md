@@ -69,17 +69,17 @@ visible only in the full sequence to unfairly score what Qwen saw in 16 frames.
 - Outcome correct? `no`
 - Advice clip-specific? `yes `
 - Major hallucination count: 0
-- Confidence appropriate? `yes`
+- Confidence appropriate? `no`
 
 | Human rubric criterion | Score (0–2) | Evidence or reason |
 |---|---:|---|
-| Factual accuracy | 2| Able to recognise the distribution by the white team is not good but did not mention about the counter attack by the green team |
-| Tactical correctness | 2 | Identify that the white team is not ready  |
-| Visual grounding | 2 |Ale to see from the video white team is advancing too quickly   |
-| Specificity | 1 |Did not mneion what is a better position to receive it   |
-| Actionability | 2 |  |
-| Evidence-advice consistency | 2 |  |
-| **Total (0–12)** | 11 |  |
+| Factual accuracy | 0 | The response treats the white team as attacking throughout and misses the decisive turnover and green-team attack. |
+| Tactical correctness | 0 | The claims that the white team advances too quickly and that a receiver is poorly positioned are not supported by the reviewed sequence. |
+| Visual grounding | 1 | It identifies the two shirt colours and a general attacking context, but it does not ground the analysis in the goalkeeper distribution or turnover. |
+| Specificity | 0 | It does not identify the goalkeeper, distribution, change of possession, green transition, or a concrete receiving position. |
+| Actionability | 1 | Passing to a better-positioned teammate and improving defensive coverage are actions, but they remain generic and are applied to an incorrect reading of the sequence. |
+| Evidence-advice consistency | 0 | The recommendations follow unsupported claims and do not address the actual loss of possession or green-team attack. |
+| **Total (0–12)** | 2 |  |
 
 ## Recognition-gate review
 
@@ -90,6 +90,6 @@ Complete this after reading the separate recognition-only response.
 - Event correct? `partly`
 - Outcome correct? `partly`
 - Evidence visibly grounded? `partly`
-- Confidence appropriate? `yes`
-- Recognition gate passes for this clip? `yes`
+- Confidence appropriate? `no`
+- Recognition gate passes for this clip? `no`
 - Reviewer notes: The response correctly identifies elements of the initial white-and-blue phase but fails to recognise the second half of the clip, where the green team gains possession and transitions into attack.

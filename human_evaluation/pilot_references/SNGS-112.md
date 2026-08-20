@@ -69,12 +69,12 @@ visible only in the full sequence to unfairly score what Qwen saw in 16 frames.
 | Human rubric criterion | Score (0–2) | Evidence or reason |
 |---|---:|---|
 | Factual accuracy |1  |  Correctly identifies the red-and-white team as attacking and progressing towards goal but fails to identify the shot on target and goalkeeper's save.|
-| Tactical correctness | 1 |Provides reasonable attacking advice for the red team but does not adequately analyse the black team's defensive problem of allowing the attacker space to shoot.  |
+| Tactical correctness | 0 | “Continue to advance” does not identify or correct the shooting or defensive problem, and the defensive recommendation is assigned to the attacking team. |
 | Visual grounding | 1 | Grounds the response in the red-and-white team's forward movement but fails to reference the most important visible event, the shot and subsequent save. |
 | Specificity | 0 | Does not identify the shooter, shot on target, goalkeeper's save, or the specific defensive space that allowed the attempt. |
-| Actionability |1 | The recommendation provides an action that could be applied by the attacking team, even though the defensive recommendation is incorrectly attributed. |
-| Evidence-advice consistency |1  | The attacking advice is broadly consistent with the visible attacking sequence, but the defensive advice does not properly follow from the black team's defensive actions. |
-| **Total (0–12)** |  5|  |
+| Actionability | 0 | Continuing to advance and practising generic passing and shooting do not provide a corrective action for the saved shot or lack of defensive pressure. |
+| Evidence-advice consistency | 0 | The advice is not connected to the missed shot outcome and the defensive advice targets the wrong team. |
+| **Total (0–12)** | 2 |  |
 
 ## Recognition-gate review
 
@@ -82,9 +82,9 @@ Complete this after reading the separate recognition-only response.
 
 - Phase correct? ` partly `
 - Attacking team correct? `yes`
-- Event correct? `yes `
+- Event correct? `no`
 - Outcome correct? `no`
 - Evidence visibly grounded? `yes `
 - Confidence appropriate? ` no`
-- Recognition gate passes for this clip? `yes`
-- Reviewer notes: Qwen correctly recognises the attacking team and the general attacking sequence but fails to identify the final outcome: a shot on target that is saved by the black-team goalkeeper.
+- Recognition gate passes for this clip? `no`
+- Reviewer notes: Qwen correctly recognises the attacking team and general attacking phase, but labels the event and outcome as a goal rather than a shot on target saved by the black-team goalkeeper.

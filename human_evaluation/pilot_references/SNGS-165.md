@@ -47,41 +47,39 @@ The official anchor is verified SoccerNet metadata. All observations and coachin
 
 ## Human coaching reference
 
-- **Main tactical problem:** The main tactical problem for the white team is the loss of possession following the long throw-in while several players are positioned high up the pitch. After losing the ball, the white team does not apply enough immediate pressure to slow the transition and is unable to recover its defensive shape before the black-and-red team progresses through the centre. The black-and-red team executes the counter-attack effectively and does not display a major attacking problem in this sequence.
-- **Reasonable coaching recommendation:** The white team should provide closer supporting options around the long throw-in to improve the chances of retaining possession. If the ball is lost, the nearest players should immediately counter-press or delay the ball carrier while the remaining defenders recover into shape. The black-and-red team should continue to use the same principles demonstrated in this sequence: immediate forward progression after winning possession, quick support runs, and direct exploitation of central space.
-- **Why the recommendation follows from the visible evidence:** The black-and-red team is able to transition rapidly from winning possession to creating a goalscoring opportunity. The white team does not stop or sufficiently delay the initial counter-attack, allowing the black-and-red players to exploit the available central space before the defence can reorganise. The transition ultimately results in a goal.
-- **Claims that cannot be determined from the frames:** The intended tactical structure of the white team's throw-in routine, individual defensive assignments, and whether specific players were instructed to counter-press or recover cannot be determined from the sampled frames.
+- **Main tactical problem:** The white team loses possession following the long throw-in while several players are positioned high up the pitch. After the turnover, the team does not apply enough immediate pressure to slow the transition and is unable to recover its defensive shape before the black-and-red team attacks through the centre. The black-and-red team executes the counter-attack effectively and does not display a major attacking problem in this sequence.
+- **Reasonable coaching recommendation:** The white team should provide closer supporting options around the throw-in so that possession can be retained more securely. If possession is lost, the nearest players should immediately counter-press or delay the ball carrier while the remaining players recover into a compact defensive shape. The black-and-red team should continue using the same successful counter-attacking principles: immediate forward progression after winning possession, quick supporting runs, and direct exploitation of central space.
+- **Why the recommendation follows from the visible evidence:** The black-and-red team moves quickly from regaining possession to creating a goalscoring opportunity. The white team fails to stop or sufficiently delay the initial transition, allowing the black-and-red players to exploit the open central space before the defence can reorganise. The counter-attack ultimately results in a goal.
+- **Claims that cannot be determined from the frames:** The intended tactical structure of the white team's throw-in routine, individual defensive responsibilities, and whether specific players were instructed to counter-press cannot be determined from the sampled frames.
 
 ## Original coaching-output error audit
 
-The Qwen output contains only event-recognition fields and does not provide any tactical problems, coaching recommendations, or training interventions. Therefore, the model fails to provide the required coaching analysis for this clip.
-
-- **Qwen's specific errors:** Qwen does not provide any coaching analysis or recommendations. It also incorrectly identifies the white team as the attacking team for the decisive phase of the sequence. The black-and-red team is the side that regains possession, launches the counter-attack, and scores.
-- **Correct observations made by Qwen:** Qwen correctly identifies the phase as attacking and correctly recognises both the event and outcome as a goal.
-- **Event correct?** `yes`
-- **Attacking team correct?** `partly — identifies the white team, which begins the sequence in possession, but fails to recognise the black-and-red team as the decisive attacking team`
-- **Outcome correct?** `yes`
-- **Advice clip-specific?** `no — no coaching advice is provided`
-- **Major hallucination count:** `1 — incorrectly identifies the white team as the attacking team for the goalscoring phase`
-- **Confidence appropriate?** `no — high confidence is not appropriate because the attacking team is misidentified and the supporting evidence is extremely limited`
+- **Qwen's specific errors:** Qwen incorrectly treats the white team as the attacking team throughout the clip and fails to recognise the decisive change of possession. It does not identify the black-and-red team's counter-attack or the goal that concludes the sequence. Its attacking problem, `"the ball is not being passed effectively"`, does not address the actual tactical issue of the turnover and poor defensive transition. The defensive problem simply repeats the attacking problem, and the defensive recommendation is incorrectly directed at the white team rather than analysing how the white team should defend the black-and-red counter-attack. The response also fails to recognise the successful nature of the black-and-red team's transition.
+- **Correct observations made by Qwen:** Qwen correctly recognises that the sequence contains an attacking phase and that the white team is initially involved in possession. It also observes that the ball moves across the pitch and that passing occurs during the sequence.
+- **Event correct?** `no — Qwen does not identify the goal or the counter-attack that leads to it`
+- **Attacking team correct?** `partly — correctly recognises the white team as initially in possession but fails to recognise that the black-and-red team becomes the decisive attacking team`
+- **Outcome correct?** `no — does not identify that the black-and-red team scores`
+- **Advice clip-specific?** `no — the recommendation to pass to a teammate closer to goal is generic and does not address the turnover, counter-attack, or goal`
+- **Major hallucination count:** `2 — treats the white team as the attacking team throughout the sequence and repeats the attacking problem as the defensive problem`
+- **Confidence appropriate?** `no — high confidence is not justified because the model misses the possession change, counter-attack, and goal`
 
 | Human rubric criterion | Score (0–2) | Evidence or reason |
 |---|---:|---|
-| Factual accuracy | 0 | No coaching response is provided from which an accurate tactical description can be evaluated. |
-| Tactical correctness | 0 | No tactical problem or tactical analysis is provided. |
-| Visual grounding | 0 | No coaching analysis is grounded in specific visual evidence from the sequence. |
-| Specificity | 0 | No player-specific, team-specific, or situation-specific coaching analysis is provided. |
-| Actionability | 0 | No actionable coaching recommendation is provided. |
-| Evidence-advice consistency | 0 | No coaching advice is provided that can be connected to the visible evidence. |
-| **Total (0–12)** | **0** | No coaching response was provided. |
+| Factual accuracy | 0 | Fails to recognise the decisive black-and-red counter-attack and the goal, and incorrectly treats the white team as the attacking side throughout. |
+| Tactical correctness | 0 | The identified tactical problem is unrelated to the main issue of losing possession and failing to defend the transition. |
+| Visual grounding | 1 | Refers to the white team's initial possession and the ball moving across the pitch, but misses the most important visible events. |
+| Specificity | 0 | Does not identify the throw-in, turnover, counter-attack, defensive recovery problem, or goal. |
+| Actionability | 1 | The recommendation to pass to a teammate closer to goal is actionable in a general sense but is not useful for the actual tactical problem in the clip. |
+| Evidence-advice consistency | 0 | The advice does not follow from the key visible evidence and is based on an incorrect understanding of the attacking team and sequence. |
+| **Total (0–12)** | **2** | |
 
 ## Recognition-gate review
 
-- **Phase correct?** `yes — correctly identifies the sequence as an attacking phase`
-- **Attacking team correct?** `partly — identifies the white team, which begins the sequence in possession, but fails to recognise that the black-and-red team becomes the decisive attacking team after the turnover`
+- **Phase correct?** `yes — correctly identifies an attacking phase`
+- **Attacking team correct?** `partly — identifies the white team, which begins in possession, but fails to recognise the black-and-red team as the team that counter-attacks and scores`
 - **Event correct?** `yes — correctly identifies the event as a goal`
 - **Outcome correct?** `yes — correctly identifies that the sequence ends in a goal`
-- **Evidence visibly grounded?** `partly — references the goal and goalkeeper but provides almost no description of the actual visible sequence`
-- **Confidence appropriate?** `no — high confidence is too strong given the incorrect attacking-team identification and weak supporting evidence`
-- **Recognition gate passes for this clip?** `yes`
-- **Reviewer notes:** Qwen successfully recognises the most important event and final outcome, correctly identifying that the sequence ends in a goal. However, it incorrectly identifies the white team as the attacking team. The white team only initiates the sequence with the long throw-in; the decisive attacking phase belongs to the black-and-red team, which wins possession, launches a counter-attack, and scores. The visible-evidence field is also extremely weak, consisting only of the generic terms `"goal"`, `"goalkeeper"`, and `"goal"` rather than describing the turnover, transition, attacking team, or scoring action. Despite these limitations, the recognition gate passes because the official SoccerNet anchor event and final outcome are correctly identified.
+- **Evidence visibly grounded?** `partly — some generic statements correspond to the early part of the sequence, but the key turnover, counter-attack, and goal are omitted`
+- **Confidence appropriate?** `no`
+- **Recognition gate passes for this clip?** `no`
+- **Reviewer notes:** Qwen correctly identifies the goal and final outcome, but incorrectly identifies the white team as the attacking team. The white team begins with the long throw-in; the black-and-red team wins possession, counter-attacks, and scores. Because the attacking-team component is not correct, the clip does not pass the all-three-correct gate.

@@ -74,12 +74,12 @@ visible only in the full sequence to unfairly score what Qwen saw in 16 frames.
 | Human rubric criterion | Score (0–2) | Evidence or reason |
 |---|---:|---|
 | Factual accuracy | 1 |  Identifies one of the attacking teams but fails to account adequately for the change of possession and the second attacking phase. |
-| Tactical correctness | 1 | Provides broadly reasonable advice about progressing towards the opponent's goal, but the recommendation is generic and does not address the specific tactical decisions visible in the sequence. |
+| Tactical correctness | 0 | The response does not identify a genuine tactical problem and misses the free kick, save, turnover, and second attacking phase. |
 | Visual grounding | 1 | Identifies the green and white-and-blue teams but provides few references to specific visible actions, players, or events. |
 | Specificity | 0 | Does not identify specific players, actions, passing decisions, or moments from the sequence. |
 | Actionability | 1 | The recommendation to practise passing and improve ball control is actionable in general, but it is assigned to the wrong team and does not directly address the main tactical problems in the clip.  |
 | Evidence-advice consistency | 0 | The recommendation does not follow clearly from the observed evidence and is attributed to the wrong team. |
-| **Total (0–12)** | 4 |  |
+| **Total (0–12)** | 3 |  |
 
 ## Recognition-gate review
 
@@ -87,9 +87,9 @@ Complete this after reading the separate recognition-only response.
 
 - Phase correct? `unclear`
 - Attacking team correct? `partly`
-- Event correct? `partly`
+- Event correct? `no`
 - Outcome correct? `no`
 - Evidence visibly grounded? `no`
 - Confidence appropriate? `no`
 - Recognition gate passes for this clip? `no`
-- Reviewer notes: The response contains some generally reasonable tactical advice, but it attributes the recommendation to the wrong team and fails to clearly recognise the change of possession and the two distinct attacking phases.
+- Reviewer notes: The recognition-only response labels the event and outcome as a goal, but the actual sequence is an unsuccessful direct free kick followed by a change of possession and an unsuccessful counter-attack.

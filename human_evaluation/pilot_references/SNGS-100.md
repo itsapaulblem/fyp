@@ -79,17 +79,17 @@ visible only in the full sequence to unfairly score what Qwen saw in 16 frames.
 - Outcome correct? `partly correctly identifies the unsuccessful free kick but misses the outcome of the subsequent counter-attack`
 - Advice clip-specific? `partly`
 - Major hallucination count: 0 
-- Confidence appropriate? `yes`
+- Confidence appropriate? `no`
 
 | Human rubric criterion | Score (0–2) | Evidence or reason |
 |---|---:|---|
-| Factual accuracy | 2 | Correctly identifies the direct free kick, the red team as the initial attacking team, and the goalkeeper's save. However, it omits the subsequent black-team counter-attack.  |
-| Tactical correctness |  2| The tactical assessment of the free-kick phase is reasonable and appropriate to the observed situation, although the second attacking phase is not analysed. |
-| Visual grounding | 2 | Correctly grounds its analysis in visible events, particularly the free kick and the goalkeeper's save. |
-| Specificity | 2 | Provides specific observations regarding the free kick and goalkeeper rather than relying solely on generic attacking advice. |
-| Actionability |2  |  Provides a clear recommendation that could be applied to improve the red team's free-kick execution.|
-| Evidence-advice consistency | 2 | The recommendation for the free kick follows directly from the observed unsuccessful attempt and goalkeeper's save. |
-| **Total (0–12)** | 12 |  |
+| Factual accuracy | 1 | It recognises the red team's initial attempt and a goalkeeper save, but does not explicitly identify the direct free kick and omits the complete black-team counter-attack. |
+| Tactical correctness | 1 | Passing to a better-positioned teammate is plausible, but the goalkeeper-position criticism conflicts with the successful save and the second phase is not analysed. |
+| Visual grounding | 1 | The response refers to a red player, a shot, and the goalkeeper, but misses the set-piece context and subsequent transition. |
+| Specificity | 1 | It includes some clip detail about the shot and goalkeeper but no free-kick delivery, counter-attack, winger, or overhit cross. |
+| Actionability | 1 | Seeking a better-positioned teammate is actionable in general but does not provide a precise correction for either actual final delivery. |
+| Evidence-advice consistency | 1 | The attacking recommendation is partly connected to the unsuccessful first attempt, while the defensive advice and omitted second phase weaken consistency. |
+| **Total (0–12)** | 6 |  |
 
 ## Recognition-gate review
 
@@ -97,9 +97,9 @@ Complete this after reading the separate recognition-only response.
 
 - Phase correct? `yes`
 - Attacking team correct? `partly`
-- Event correct? `partly`
-- Outcome correct? `partly`
+- Event correct? `no`
+- Outcome correct? `no`
 - Evidence visibly grounded? `yes`
-- Confidence appropriate? `yes`
-- Recognition gate passes for this clip? `yes`
+- Confidence appropriate? `no`
+- Recognition gate passes for this clip? `no`
 - Reviewer notes: Qwen accurately recognises and describes the initial free-kick phase, including the goalkeeper's save. However, it fails to identify the second half of the clip, in which the black team gains possession, launches a counter-attack, and ends the move with an overhit cross.
