@@ -264,13 +264,21 @@ def _load_images(project_root: Path, clip: dict, strategy: str) -> tuple[list[st
     return encoded, hashes
 
 
-def _call_ollama(model: str, prompt: str, images: list[str], timeout: int) -> dict:
+def _call_ollama(
+    model: str,
+    prompt: str,
+    images: list[str],
+    timeout: int,
+    *,
+    response_schema: dict | None = None,
+    generation_options: dict | None = None,
+) -> dict:
     payload = {
         "model": model,
         "messages": [{"role": "user", "content": prompt, "images": images}],
         "stream": False,
-        "format": RESPONSE_SCHEMA,
-        "options": GENERATION_OPTIONS,
+        "format": response_schema or RESPONSE_SCHEMA,
+        "options": generation_options or GENERATION_OPTIONS,
         "keep_alive": "10m",
     }
     request = urllib.request.Request(

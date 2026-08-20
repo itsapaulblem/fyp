@@ -23,6 +23,12 @@ This protocol evaluates three different things:
 Tracking analytics are evidence for particular claims. They are not complete
 ground truth for coaching quality. xG is not part of this first experiment.
 
+After the initial coaching pilot showed weak event understanding, a separate
+recognition-only prerequisite was introduced without changing or overwriting
+the coaching runs. Its protocol and results are documented in
+`docs/EVENT_RECOGNITION_GATE.md`. Coaching evaluation should not progress to
+validation until the perception failure is understood.
+
 ## 2. Experimental unit
 
 One experimental unit is one official 30-second SoccerNet-GSR clip. The source

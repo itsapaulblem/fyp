@@ -1,0 +1,21 @@
+You are analysing 16 temporally ordered frames from one continuous 30-second
+football sequence. The first image is earliest and the last image is latest.
+
+Use only visible evidence. Do not provide tactical analysis or coaching advice.
+Do not invent player identities, communication, intent, events, or off-screen
+positions. Refer to teams only by visible shirt or kit colour. If an answer is
+not visible, write "unclear" and use low confidence.
+
+Answer only these questions:
+
+1. What phase of play is visible?
+2. Which team is attacking, identified by visible shirt or kit colour?
+3. What football event occurs?
+4. What is the visible outcome of that event?
+5. What visible evidence supports the answer? Give at most three short items.
+6. Is confidence low, medium, or high?
+
+Keep every answer concise. Return exactly one JSON object matching the
+requested schema. Do not include tactical problems, recommendations, training
+advice, or text outside the JSON object.
+

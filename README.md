@@ -94,7 +94,8 @@ The current model-facing prompt is
 machine-readable protocol record. Blank score and verification sheets are in
 `templates/`. The exact 12 selected train clips are recorded in
 [`data/processed/pilot_selection.csv`](data/processed/pilot_selection.csv).
-No pilot model responses or human scores have been fabricated at this stage.
+Pilot model responses are stored locally under `data/processed`; human scores
+remain incomplete and must be entered by the project reviewer.
 
 Future coding agents must read [`AGENTS.md`](AGENTS.md) before modifying the
 experiment. In particular, tracking analytics verify only measurable claims;
@@ -106,6 +107,33 @@ The completed train-pilot sampling comparison provisionally selected uniform
 important negative result—that both strategies showed weak event
 understanding—are documented in
 [`docs/SAMPLING_PILOT_RESULTS.md`](docs/SAMPLING_PILOT_RESULTS.md).
+
+## Human reference and recognition gate
+
+The single project reviewer records pilot observations and coaching scores in
+[`human_evaluation/pilot_references`](human_evaluation/pilot_references). The
+workflow and its single-reviewer limitation are documented in
+[`human_evaluation/README.md`](human_evaluation/README.md).
+
+Because the coaching pilot frequently misunderstood the underlying event, the
+same 16 uniform frames were rerun with a recognition-only prompt. All 12 runs
+are complete and await human assessment. See
+[`docs/EVENT_RECOGNITION_GATE.md`](docs/EVENT_RECOGNITION_GATE.md).
+
+## Human review videos
+
+Generate local MP4 versions of the selected JPEG sequences with:
+
+```powershell
+uv run soccernet-dataset review-videos
+```
+
+The 12 generated videos are under `data/processed/review_videos/`. Each is a
+silent 30-second, 1920×1080, 25-fps MP4 containing all 750 source frames. The
+conversion manifest stores validation metadata and checksums. These videos are
+for full-sequence human review only: Qwen received the 16 sampled frames, not
+the MP4s. All derived videos remain ignored by Git under the SoccerNet data
+handling policy.
 
 ## Local MLLM
 

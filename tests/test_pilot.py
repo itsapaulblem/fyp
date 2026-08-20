@@ -9,9 +9,18 @@ from football_dataset.pilot import (
     event_frame_from_info,
     uniform_frames,
 )
+from football_dataset.recognition import RECOGNITION_SCHEMA, RECOGNITION_OPTIONS
 
 
 class SamplingTests(unittest.TestCase):
+    def test_recognition_schema_is_smaller_than_coaching_schema(self) -> None:
+        self.assertEqual(
+            set(RECOGNITION_SCHEMA["required"]),
+            set(RECOGNITION_SCHEMA["properties"]),
+        )
+        self.assertNotIn("attacking_recommendation", RECOGNITION_SCHEMA["properties"])
+        self.assertLess(RECOGNITION_OPTIONS["num_predict"], 600)
+
     def test_response_schema_matches_required_protocol_fields(self) -> None:
         self.assertEqual(
             set(RESPONSE_SCHEMA["required"]), set(RESPONSE_SCHEMA["properties"])

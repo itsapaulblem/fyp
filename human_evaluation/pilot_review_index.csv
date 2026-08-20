@@ -1,0 +1,14 @@
+clip_id,official_anchor,reference_file,coaching_score_0_12,coaching_review_complete,recognition_team_correct,recognition_event_correct,recognition_outcome_correct,recognition_gate_pass,review_status
+SNGS-062,Foul,human_evaluation/pilot_references/SNGS-062.md,,,,,,,incomplete
+SNGS-066,Direct free-kick,human_evaluation/pilot_references/SNGS-066.md,,,,,,,incomplete
+SNGS-067,Corner,human_evaluation/pilot_references/SNGS-067.md,,,,,,,incomplete
+SNGS-074,Clearance,human_evaluation/pilot_references/SNGS-074.md,,,,,,,incomplete
+SNGS-100,Direct free-kick,human_evaluation/pilot_references/SNGS-100.md,,,,,,,incomplete
+SNGS-103,Corner,human_evaluation/pilot_references/SNGS-103.md,,,,,,,incomplete
+SNGS-112,Shots on target,human_evaluation/pilot_references/SNGS-112.md,,,,,,,incomplete
+SNGS-115,Shots off target,human_evaluation/pilot_references/SNGS-115.md,,,,,,,incomplete
+SNGS-159,Shots on target,human_evaluation/pilot_references/SNGS-159.md,,,,,,,incomplete
+SNGS-164,Foul,human_evaluation/pilot_references/SNGS-164.md,,,,,,,incomplete
+SNGS-165,Goal,human_evaluation/pilot_references/SNGS-165.md,,,,,,,incomplete
+SNGS-169,Clearance,human_evaluation/pilot_references/SNGS-169.md,,,,,,,incomplete
+

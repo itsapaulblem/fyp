@@ -1,0 +1,52 @@
+{
+  "protocol_id": "event-recognition-v0.1.0",
+  "status": "runs-complete-awaiting-human-review",
+  "purpose": "Determine whether Qwen can identify the visible football phase, attacking team, event, and outcome before requesting coaching advice.",
+  "source_coaching_protocol_id": "coach-eval-v0.1.1",
+  "model": {
+    "provider": "ollama",
+    "name": "qwen3-vl:2b-instruct"
+  },
+  "prompt": "prompts/qwen_event_recognition_v1.txt",
+  "sampling": {
+    "strategy": "uniform",
+    "frame_count": 16,
+    "source": "data/processed/pilot_inputs.json",
+    "maximum_image_edge": 672
+  },
+  "required_response_fields": [
+    "phase_of_play",
+    "attacking_team_visual_description",
+    "event",
+    "outcome",
+    "visible_evidence",
+    "confidence"
+  ],
+  "hidden_from_model": [
+    "official SoccerNet anchor action",
+    "Labels-GameState.json",
+    "tracking annotations",
+    "clip identifier",
+    "coaching response",
+    "human reference"
+  ],
+  "human_review": {
+    "reference_directory": "human_evaluation/pilot_references",
+    "reviewer_count": 1,
+    "success_gate": "At least 9 of 12 eligible clips have the attacking team, event, and visible outcome judged correct by the project reviewer.",
+    "automatic_anchor_terms_are_diagnostic_only": true
+  },
+  "model_run_summary": {
+    "result_file": "data/processed/recognition_summary.json",
+    "completed_runs": 12,
+    "complete_schema_runs": 12,
+    "automatic_anchor_term_matches": 2,
+    "high_confidence_responses": 12,
+    "mean_elapsed_seconds": 28.393,
+    "human_gate_result": "pending"
+  },
+  "split_policy": {
+    "split": "train",
+    "test_split_used": false
+  }
+}

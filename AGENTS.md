@@ -21,6 +21,19 @@ Read `docs/SAMPLING_PILOT_RESULTS.md` before changing it. This decision is not
 frozen until validation confirms it, and it does not imply that the observed
 coaching responses were good.
 
+The separate recognition-only gate is defined in
+`config/event_recognition_gate.json` and documented in
+`docs/EVENT_RECOGNITION_GATE.md`. Its 12 model runs are complete, but its human
+pass/fail result is pending. Do not replace the sole reviewer's judgement with
+automatic anchor-term matching.
+
+Human pilot references live in `human_evaluation/pilot_references`. The project
+has one reviewer; never claim inter-rater agreement or invent a second rating.
+
+Full-sequence review MP4s under `data/processed/review_videos` are derived from
+the official JPEG sequences and remain NDA-controlled and Git-ignored. They are
+human-review aids, not MLLM inputs. Do not imply that Qwen saw all 750 frames.
+
 ## Verified dataset facts
 
 - The local source is the official SoccerNet Game State Reconstruction v1.3
