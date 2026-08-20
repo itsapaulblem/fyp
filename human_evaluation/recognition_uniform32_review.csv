@@ -1,0 +1,13 @@
+clip_id,official_anchor,model_run,attacking_team_correct,event_correct,outcome_correct,recognition_gate_pass,reviewer_notes,review_status
+SNGS-062,Foul,data/processed/recognition_runs/uniform32/SNGS-062.json,,,,,,pending
+SNGS-066,Direct free-kick,data/processed/recognition_runs/uniform32/SNGS-066.json,,,,,,pending
+SNGS-067,Corner,data/processed/recognition_runs/uniform32/SNGS-067.json,,,,,,pending
+SNGS-074,Clearance,data/processed/recognition_runs/uniform32/SNGS-074.json,,,,,,pending
+SNGS-100,Direct free-kick,data/processed/recognition_runs/uniform32/SNGS-100.json,,,,,,pending
+SNGS-103,Corner,data/processed/recognition_runs/uniform32/SNGS-103.json,,,,,,pending
+SNGS-112,Shots on target,data/processed/recognition_runs/uniform32/SNGS-112.json,,,,,,pending
+SNGS-115,Shots off target,data/processed/recognition_runs/uniform32/SNGS-115.json,,,,,,pending
+SNGS-159,Shots on target,data/processed/recognition_runs/uniform32/SNGS-159.json,,,,,,pending
+SNGS-164,Foul,data/processed/recognition_runs/uniform32/SNGS-164.json,,,,,,pending
+SNGS-165,Goal,data/processed/recognition_runs/uniform32/SNGS-165.json,,,,,,pending
+SNGS-169,Clearance,data/processed/recognition_runs/uniform32/SNGS-169.json,,,,,,pending

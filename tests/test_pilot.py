@@ -34,6 +34,13 @@ class SamplingTests(unittest.TestCase):
         self.assertGreaterEqual(frames[0], 1)
         self.assertLessEqual(frames[-1], 750)
 
+    def test_uniform_sampling_supports_32_unique_ordered_frames(self) -> None:
+        frames = uniform_frames(count=32)
+        self.assertEqual(len(frames), 32)
+        self.assertEqual(frames, sorted(set(frames)))
+        self.assertGreaterEqual(frames[0], 1)
+        self.assertLessEqual(frames[-1], 750)
+
     def test_event_sampling_has_16_unique_ordered_frames(self) -> None:
         for event_frame in (1, 173, 375, 750):
             frames = event_centered_frames(event_frame)

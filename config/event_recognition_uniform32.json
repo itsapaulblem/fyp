@@ -1,0 +1,66 @@
+{
+  "protocol_id": "event-recognition-v0.2.0",
+  "status": "runs-complete-awaiting-human-review",
+  "purpose": "Test whether denser uniform temporal sampling improves recognition while keeping the model, prompt, clips, and gate unchanged.",
+  "source_coaching_protocol_id": "coach-eval-v0.1.1",
+  "model": {
+    "provider": "ollama",
+    "name": "qwen3-vl:2b-instruct"
+  },
+  "prompt": "prompts/qwen_event_recognition_v1.txt",
+  "generation_options": {
+    "num_ctx": 32768
+  },
+  "sampling": {
+    "condition": "uniform32",
+    "strategy": "uniform",
+    "strategy_key": "uniform32",
+    "frame_count": 32,
+    "source_frame_count": 750,
+    "source_frame_rate": 25,
+    "base_source": "data/processed/pilot_inputs.json",
+    "source": "data/processed/recognition_inputs_uniform32.json",
+    "maximum_image_edge": 672
+  },
+  "output": {
+    "run_directory": "data/processed/recognition_runs/uniform32",
+    "summary_file": "data/processed/recognition_summary_uniform32.json"
+  },
+  "required_response_fields": [
+    "phase_of_play",
+    "attacking_team_visual_description",
+    "event",
+    "outcome",
+    "visible_evidence",
+    "confidence"
+  ],
+  "hidden_from_model": [
+    "official SoccerNet anchor action",
+    "Labels-GameState.json",
+    "tracking annotations",
+    "clip identifier",
+    "coaching response",
+    "human reference"
+  ],
+  "human_review": {
+    "reference_directory": "human_evaluation/pilot_references",
+    "condition_review_file": "human_evaluation/recognition_uniform32_review.csv",
+    "reviewer_count": 1,
+    "success_gate": "At least 9 of 12 eligible clips have the attacking team, event, and visible outcome judged correct by the project reviewer.",
+    "automatic_anchor_terms_are_diagnostic_only": true,
+    "status": "pending-single-reviewer-assessment"
+  },
+  "model_run_summary": {
+    "result_file": "data/processed/recognition_summary_uniform32.json",
+    "completed_runs": 12,
+    "complete_schema_runs": 12,
+    "automatic_anchor_term_matches": 3,
+    "high_confidence_responses": 12,
+    "mean_elapsed_seconds": 73.617,
+    "human_gate_result": "pending"
+  },
+  "split_policy": {
+    "split": "train",
+    "test_split_used": false
+  }
+}

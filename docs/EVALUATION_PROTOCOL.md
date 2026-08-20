@@ -249,6 +249,12 @@ development results are documented in
 `docs/PILOT_HUMAN_EVALUATION_RESULTS.md`. This condition must not progress to
 validation until its perception failure has been investigated on train data.
 
+That train-only investigation now includes the separate
+`event-recognition-v0.2.0` condition, which increases uniform temporal sampling
+to 32 frames without replacing the 16-frame baseline. Its model runs and later
+human judgements must be analysed as a paired but distinct condition; see
+`docs/UNIFORM32_RECOGNITION_EXPERIMENT.md`.
+
 ## 11. Provisional success criteria
 
 Before test evaluation, the final protocol must state numeric criteria. The

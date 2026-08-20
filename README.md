@@ -120,6 +120,11 @@ same 16 uniform frames were rerun with a recognition-only prompt. All 12 runs
 are complete and await human assessment. See
 [`docs/EVENT_RECOGNITION_GATE.md`](docs/EVENT_RECOGNITION_GATE.md).
 
+A separate train-only 32-frame recognition condition is available without
+overwriting the 16-frame baseline. Its rationale, commands, and isolated
+artifact paths are documented in
+[`docs/UNIFORM32_RECOGNITION_EXPERIMENT.md`](docs/UNIFORM32_RECOGNITION_EXPERIMENT.md).
+
 ## Human review videos
 
 Generate local MP4 versions of the selected JPEG sequences with:
