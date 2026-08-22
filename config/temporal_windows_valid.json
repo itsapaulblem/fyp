@@ -1,0 +1,25 @@
+{
+  "protocol_id": "reference-windows-v0.1.0-valid",
+  "status": "complete-validated",
+  "evidence_layer": "reference_analytics",
+  "model_access": "forbidden",
+  "source_protocol_id": "reference-analytics-v0.2.0-valid",
+  "dataset": "SoccerNet Game State Reconstruction v1.3",
+  "split": "valid",
+  "expected_clip_count": 58,
+  "frame_rate": 25,
+  "windows": [
+    {"name": "before", "start_offset_seconds": -5.0, "end_offset_seconds": -2.0},
+    {"name": "around", "start_offset_seconds": -2.0, "end_offset_seconds": 2.0},
+    {"name": "after", "start_offset_seconds": 2.0, "end_offset_seconds": 5.0}
+  ],
+  "boundary_rule": "start inclusive, end exclusive",
+  "minimum_metric_frame_coverage": 0.8,
+  "require_complete_temporal_window": true,
+  "outputs": {
+    "source_frame_metrics": "data/processed/reference_analytics/valid/frame_metrics",
+    "window_metrics": "data/processed/reference_analytics/valid/window_metrics.csv",
+    "summary": "data/processed/reference_analytics/valid/window_metrics_summary.json",
+    "validation_report": "data/processed/reference_analytics/valid/window_metrics_validation.json"
+  }
+}

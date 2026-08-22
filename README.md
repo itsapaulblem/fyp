@@ -140,6 +140,79 @@ for full-sequence human review only: Qwen received the 16 sampled frames, not
 the MP4s. All derived videos remain ignored by Git under the SoccerNet data
 handling policy.
 
+## Reference analytics pilot
+
+The first train-only tracking-analytics pilot measures visible team shape and
+ball proximity for `SNGS-165`, `SNGS-067`, and `SNGS-112`. Its frozen pilot
+definitions and limitations are documented in
+[`docs/REFERENCE_ANALYTICS_PILOT.md`](docs/REFERENCE_ANALYTICS_PILOT.md).
+
+Generate the derived tables and coordinate checks with:
+
+```powershell
+uv run --system-certs soccernet-dataset analytics-pilot
+```
+
+Outputs are stored beneath `data/processed/reference_analytics/pilot/` and
+remain hidden from the MLLM and excluded from Git.
+
+Validate the generated tables and coordinate checks with:
+
+```powershell
+uv run --system-certs soccernet-dataset analytics-validate
+```
+
+See `docs/REFERENCE_ANALYTICS_PILOT_RESULTS.md` for finalized coverage and
+known limitations for the three clips.
+
+## Train-wide reference analytics
+
+The same frozen direct metrics have been generated for all 57 train clips.
+Generate or validate this train-only layer with:
+
+```powershell
+uv run --system-certs soccernet-dataset analytics-train
+uv run --system-certs soccernet-dataset analytics-train-validate
+```
+
+Outputs remain hidden from the MLLM and Git-ignored under
+`data/processed/reference_analytics/train/`. See
+[`docs/TRAIN_REFERENCE_ANALYTICS_RESULTS.md`](docs/TRAIN_REFERENCE_ANALYTICS_RESULTS.md)
+for the quality-control result and metric-specific limitations.
+
+Generate and validate the train-only event-relative summaries with:
+
+```powershell
+uv run --system-certs soccernet-dataset analytics-train-windows
+uv run --system-certs soccernet-dataset analytics-train-windows-validate
+```
+
+The window definitions and results are documented in
+[`docs/TEMPORAL_WINDOW_RESULTS.md`](docs/TEMPORAL_WINDOW_RESULTS.md).
+
+Derive and validate train-only claim-verification thresholds with:
+
+```powershell
+uv run --system-certs soccernet-dataset analytics-train-thresholds
+uv run --system-certs soccernet-dataset analytics-train-thresholds-validate
+```
+
+Build and validate the hidden cross-split master analytics index after train,
+validation, and test analytics are complete:
+
+```powershell
+uv run --system-certs soccernet-dataset analytics-index
+uv run --system-certs soccernet-dataset analytics-index-validate
+```
+
+The canonical table is
+`data/processed/reference_analytics/all_clips_index.csv`. It links all 164
+official clips to project-derived analytics and quality information. It is
+reference evidence only and must never be supplied to the MLLM.
+
+See [`docs/CLAIM_VERIFICATION_RULES.md`](docs/CLAIM_VERIFICATION_RULES.md) for
+the allowed claim families, prerequisites, thresholds, and decision states.
+
 ## Local MLLM
 
 The selected first local model is `qwen3-vl:2b-instruct`, installed through

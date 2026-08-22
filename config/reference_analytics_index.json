@@ -1,0 +1,38 @@
+{
+  "protocol_id": "reference-analytics-index-v0.1.0",
+  "status": "complete-validated",
+  "dataset": "SoccerNet Game State Reconstruction v1.3",
+  "evidence_layer": "reference_analytics",
+  "model_access": "forbidden",
+  "expected_split_counts": {"train": 57, "valid": 58, "test": 49},
+  "expected_clip_count": 164,
+  "expected_windows_per_clip": 3,
+  "splits": {
+    "train": {
+      "reference_protocol_id": "reference-analytics-v0.2.0-train",
+      "window_protocol_id": "reference-windows-v0.1.0-train",
+      "root": "data/processed/reference_analytics/train",
+      "quality_control": "train_quality_control.csv",
+      "window_metrics": "window_metrics.csv"
+    },
+    "valid": {
+      "reference_protocol_id": "reference-analytics-v0.2.0-valid",
+      "window_protocol_id": "reference-windows-v0.1.0-valid",
+      "root": "data/processed/reference_analytics/valid",
+      "quality_control": "valid_quality_control.csv",
+      "window_metrics": "window_metrics.csv"
+    },
+    "test": {
+      "reference_protocol_id": "reference-analytics-v0.2.0-test",
+      "window_protocol_id": "reference-windows-v0.1.0-test",
+      "root": "data/processed/reference_analytics/test",
+      "quality_control": "test_quality_control.csv",
+      "window_metrics": "window_metrics.csv"
+    }
+  },
+  "outputs": {
+    "index": "data/processed/reference_analytics/all_clips_index.csv",
+    "summary": "data/processed/reference_analytics/all_splits_summary.json",
+    "validation_report": "data/processed/reference_analytics/all_clips_index_validation.json"
+  }
+}

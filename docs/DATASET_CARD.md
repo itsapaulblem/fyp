@@ -84,3 +84,34 @@ excluded from Git because the source data is subject to SoccerNet access
 terms. The canonical dataset manifest is `data/processed/manifest.csv`.
 Archive SHA-256 hashes and aggregate statistics are in
 `data/processed/summary.json`.
+
+## Project-derived reference analytics
+
+All 164 clips have a hidden, project-derived analytics layer under
+`data/processed/reference_analytics/`. The canonical entry point is
+`data/processed/reference_analytics/all_clips_index.csv`; its validation report
+is `all_clips_index_validation.json` and its aggregate description is
+`all_splits_summary.json`.
+
+The index links each official clip to its per-frame object positions, direct
+spatial metrics, coordinate-check aid, and three event-relative window rows.
+It also records structural validity, coverage, missing-coordinate warnings,
+and one of four availability tiers:
+
+- `fully_eligible`: shape and ball metric families are eligible in all windows;
+- `partially_eligible`: at least one metric family is eligible in a window;
+- `tracking_only`: official tracking exists but no window metric family passes;
+- `invalid`: structural validation failed.
+
+The validated index contains 33 `fully_eligible`, 127 `partially_eligible`,
+four `tracking_only`, and zero `invalid` clips. These tiers describe metric
+availability, not football quality or MLLM performance.
+
+The implemented derived metrics are visible-team width, depth, centroid and
+compactness, nearest left/right team athlete to the ball, players from each
+team within 10 metres of the ball, and eligible changes across the `before`,
+`around`, and `after` windows. Missing measurements remain blank, never zero.
+
+These analytics are private reference evidence. The MLLM input condition must
+not read the master index, label JSON, per-frame metric tables, window tables,
+coordinate checks, quality-control fields, or official event labels.

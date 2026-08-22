@@ -1,0 +1,43 @@
+{
+  "protocol_id": "reference-analytics-v0.1.0",
+  "status": "complete-validated-train-pilot",
+  "dataset": "SoccerNet Game State Reconstruction v1.3",
+  "split": "train",
+  "clip_ids": ["SNGS-165", "SNGS-067", "SNGS-112"],
+  "coordinate_source": "bbox_pitch.x_bottom_middle/y_bottom_middle",
+  "pitch_metres": {
+    "x_min": -52.5,
+    "x_max": 52.5,
+    "y_min": -34.0,
+    "y_max": 34.0
+  },
+  "plausible_coordinate_bounds_metres": {
+    "absolute_x_max": 60.0,
+    "absolute_y_max": 45.0
+  },
+  "ball_metric_bounds_metres": {
+    "absolute_x_max": 55.5,
+    "absolute_y_max": 37.0,
+    "description": "nominal pitch plus a 3 m restart tolerance"
+  },
+  "eligibility": {
+    "minimum_visible_on_pitch_outfield_players_per_team": 5,
+    "local_ball_radius_metres": 10.0,
+    "shape_players": "on-pitch outfield players only",
+    "ball_distance_players": "on-pitch players and goalkeepers"
+  },
+  "coordinate_review": {
+    "status": "completed",
+    "result": "Image-space boxes and pitch-coordinate minimaps aligned plausibly in all 15 pilot checks. Extreme airborne-ball ground-plane projections and off-pitch athletes remain explicit limitations."
+  },
+  "coordinate_check_frames": [1, 188, 376, 563, 750],
+  "outputs": {
+    "root": "data/processed/reference_analytics/pilot",
+    "object_positions": "object_positions",
+    "frame_metrics": "frame_metrics",
+    "coordinate_checks": "coordinate_checks",
+    "summary": "analytics_pilot_summary.json",
+    "quality_control_table": "pilot_quality_control.csv",
+    "validation_report": "validation_report.json"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "protocol_id": "reference-analytics-v0.2.0-valid",
+  "status": "complete-validated-with-data-quality-warnings",
+  "evidence_layer": "reference_analytics",
+  "model_access": "forbidden",
+  "dataset": "SoccerNet Game State Reconstruction v1.3",
+  "split": "valid",
+  "selection": "all_manifest_clips_in_split",
+  "expected_clip_count": 58,
+  "coordinate_source": "bbox_pitch.x_bottom_middle/y_bottom_middle",
+  "pitch_metres": {"x_min": -52.5, "x_max": 52.5, "y_min": -34.0, "y_max": 34.0},
+  "plausible_coordinate_bounds_metres": {"absolute_x_max": 60.0, "absolute_y_max": 45.0},
+  "ball_metric_bounds_metres": {
+    "absolute_x_max": 55.5,
+    "absolute_y_max": 37.0,
+    "description": "nominal pitch plus a 3 m restart tolerance"
+  },
+  "eligibility": {
+    "minimum_visible_on_pitch_outfield_players_per_team": 5,
+    "local_ball_radius_metres": 10.0,
+    "shape_players": "on-pitch outfield players only",
+    "ball_distance_players": "on-pitch players and goalkeepers"
+  },
+  "quality_control": {
+    "minimum_both_team_shape_coverage": 0.8,
+    "minimum_ball_metric_coverage": 0.9,
+    "coverage_thresholds_are_warnings_not_exclusion_rules": true
+  },
+  "coordinate_review": {
+    "status": "generated-not-human-reviewed",
+    "result": "Coordinate-check artifacts are hidden human-review aids; automated existence and dimension checks are required."
+  },
+  "coordinate_check_frames": [1, 188, 376, 563, 750],
+  "outputs": {
+    "root": "data/processed/reference_analytics/valid",
+    "object_positions": "object_positions",
+    "frame_metrics": "frame_metrics",
+    "coordinate_checks": "coordinate_checks",
+    "summary": "analytics_valid_summary.json",
+    "quality_control_table": "valid_quality_control.csv",
+    "validation_report": "validation_report.json"
+  }
+}

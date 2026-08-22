@@ -1,0 +1,58 @@
+{
+  "protocol_id": "claim-verification-v0.1.0-train",
+  "status": "complete-validated-train-development",
+  "source_protocol_id": "reference-windows-v0.1.0-train",
+  "split": "train",
+  "minimum_distribution_observations": 30,
+  "absolute_thresholds": {
+    "low_percentile": 0.10,
+    "high_percentile": 0.90
+  },
+  "change_thresholds": {
+    "meaningful_absolute_change_percentile": 0.75
+  },
+  "metrics": [
+    {"name": "team_width", "family": "shape", "window_field": "median_width_m"},
+    {"name": "team_depth", "family": "shape", "window_field": "median_depth_m"},
+    {"name": "team_compactness", "family": "shape", "window_field": "median_compactness_m"},
+    {"name": "nearest_team_athlete_to_ball", "family": "ball", "window_field": "median_nearest_athlete_to_ball_m"},
+    {"name": "team_athletes_within_10m_of_ball", "family": "ball", "window_field": "mean_athletes_within_10m_of_ball"}
+  ],
+  "transitions": [
+    {"name": "before_to_around", "from_window": "before", "to_window": "around"},
+    {"name": "around_to_after", "from_window": "around", "to_window": "after"},
+    {"name": "before_to_after", "from_window": "before", "to_window": "after"}
+  ],
+  "claim_rules": [
+    {"rule_id": "too_wide", "metrics": ["team_width"], "mode": "absolute_high"},
+    {"rule_id": "too_narrow", "metrics": ["team_width"], "mode": "absolute_low"},
+    {"rule_id": "too_deep", "metrics": ["team_depth"], "mode": "absolute_high"},
+    {"rule_id": "poor_compactness", "metrics": ["team_compactness"], "mode": "absolute_high"},
+    {"rule_id": "insufficient_pressure", "metrics": ["nearest_team_athlete_to_ball"], "mode": "absolute_high", "prerequisite": "the mapped reference team is verified as defending in the selected window"},
+    {"rule_id": "strong_pressure", "metrics": ["nearest_team_athlete_to_ball"], "mode": "absolute_low", "prerequisite": "the mapped reference team is verified as defending in the selected window"},
+    {"rule_id": "insufficient_support", "metrics": ["team_athletes_within_10m_of_ball"], "mode": "absolute_low", "prerequisite": "the mapped reference team is verified as attacking or in possession; metric is a local-presence proxy that may include the ball carrier"},
+    {"rule_id": "strong_support", "metrics": ["team_athletes_within_10m_of_ball"], "mode": "absolute_high", "prerequisite": "the mapped reference team is verified as attacking or in possession; metric is a local-presence proxy that may include the ball carrier"},
+    {"rule_id": "became_more_stretched", "metrics": ["team_width", "team_depth", "team_compactness"], "mode": "change_increase", "minimum_agreeing_metrics": 2},
+    {"rule_id": "became_more_compact", "metrics": ["team_width", "team_depth", "team_compactness"], "mode": "change_decrease", "minimum_agreeing_metrics": 2},
+    {"rule_id": "pressure_decreased", "metrics": ["nearest_team_athlete_to_ball"], "mode": "change_increase", "prerequisite": "the same mapped reference team is verified as defending across both windows"},
+    {"rule_id": "pressure_increased", "metrics": ["nearest_team_athlete_to_ball"], "mode": "change_decrease", "prerequisite": "the same mapped reference team is verified as defending across both windows"},
+    {"rule_id": "support_decreased", "metrics": ["team_athletes_within_10m_of_ball"], "mode": "change_decrease", "prerequisite": "the same mapped reference team is verified as attacking or in possession across both windows; metric is a local-presence proxy"},
+    {"rule_id": "support_increased", "metrics": ["team_athletes_within_10m_of_ball"], "mode": "change_increase", "prerequisite": "the same mapped reference team is verified as attacking or in possession across both windows; metric is a local-presence proxy"}
+  ],
+  "always_not_measurable_without_additional_methods": [
+    "overall coaching quality",
+    "player intent or communication",
+    "generic poor decision making",
+    "generic transition response without a measurable subclaim",
+    "goalkeeper positioning",
+    "penalty-area occupation",
+    "ball progression toward goal",
+    "xT or EPV"
+  ],
+  "outputs": {
+    "source_window_metrics": "data/processed/reference_analytics/train/window_metrics.csv",
+    "threshold_table": "data/processed/reference_analytics/train/metric_thresholds.csv",
+    "threshold_json": "data/processed/reference_analytics/train/metric_thresholds.json",
+    "validation_report": "data/processed/reference_analytics/train/metric_thresholds_validation.json"
+  }
+}

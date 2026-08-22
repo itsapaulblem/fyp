@@ -7,6 +7,10 @@ from pathlib import Path
 from typing import Sequence
 
 from football_dataset.manifest import build_manifest, validate_manifest
+from football_dataset.analytics_index import (
+    build_reference_analytics_index,
+    validate_reference_analytics_index,
+)
 from football_dataset.pilot import compare_pilot, prepare_pilot_inputs, run_pilot
 from football_dataset.recognition import (
     RECOGNITION_CONDITIONS,
@@ -14,7 +18,29 @@ from football_dataset.recognition import (
     run_recognition_gate,
     summarize_recognition_gate,
 )
+from football_dataset.reference_analytics import (
+    run_reference_analytics_pilot,
+    run_reference_analytics_test,
+    run_reference_analytics_train,
+    run_reference_analytics_valid,
+    validate_reference_analytics_pilot,
+    validate_reference_analytics_test,
+    validate_reference_analytics_train,
+    validate_reference_analytics_valid,
+)
 from football_dataset.review_video import build_review_videos
+from football_dataset.claim_thresholds import (
+    generate_train_metric_thresholds,
+    validate_train_metric_thresholds,
+)
+from football_dataset.temporal_analytics import (
+    generate_test_window_metrics,
+    generate_train_window_metrics,
+    generate_valid_window_metrics,
+    validate_test_window_metrics,
+    validate_train_window_metrics,
+    validate_valid_window_metrics,
+)
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -114,6 +140,63 @@ def build_parser() -> argparse.ArgumentParser:
     )
     review_videos.add_argument("--limit", type=int)
     review_videos.add_argument("--overwrite", action="store_true")
+    subparsers.add_parser(
+        "analytics-pilot",
+        help="Build direct spatial reference analytics for the configured train clips",
+    )
+    subparsers.add_parser(
+        "analytics-validate",
+        help="Validate the generated direct-spatial analytics pilot",
+    )
+    subparsers.add_parser(
+        "analytics-train",
+        help="Build direct spatial reference analytics for all 57 train clips",
+    )
+    subparsers.add_parser(
+        "analytics-train-validate",
+        help="Run train-wide structural and coverage quality control",
+    )
+    subparsers.add_parser(
+        "analytics-train-windows",
+        help="Aggregate train frame metrics into fixed event-relative windows",
+    )
+    subparsers.add_parser(
+        "analytics-train-windows-validate",
+        help="Validate train event-relative window summaries",
+    )
+    for split, count in (("valid", 58), ("test", 49)):
+        subparsers.add_parser(
+            f"analytics-{split}",
+            help=f"Build hidden reference analytics for all {count} {split} clips",
+        )
+        subparsers.add_parser(
+            f"analytics-{split}-validate",
+            help=f"Run structural and coverage quality control for {split}",
+        )
+        subparsers.add_parser(
+            f"analytics-{split}-windows",
+            help=f"Aggregate {split} frame metrics into fixed event-relative windows",
+        )
+        subparsers.add_parser(
+            f"analytics-{split}-windows-validate",
+            help=f"Validate {split} event-relative window summaries",
+        )
+    subparsers.add_parser(
+        "analytics-train-thresholds",
+        help="Derive train-only claim-verification metric thresholds",
+    )
+    subparsers.add_parser(
+        "analytics-train-thresholds-validate",
+        help="Validate train-only claim-verification thresholds",
+    )
+    subparsers.add_parser(
+        "analytics-index",
+        help="Build the hidden 164-clip reference-analytics master index",
+    )
+    subparsers.add_parser(
+        "analytics-index-validate",
+        help="Validate the master index, linked files, and quality tiers",
+    )
     return parser
 
 
@@ -178,6 +261,42 @@ def main(argv: Sequence[str] | None = None) -> int:
                 indent=2,
             )
         )
+    elif args.command == "analytics-pilot":
+        print(json.dumps(run_reference_analytics_pilot(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-validate":
+        print(json.dumps(validate_reference_analytics_pilot(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-train":
+        print(json.dumps(run_reference_analytics_train(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-train-validate":
+        print(json.dumps(validate_reference_analytics_train(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-train-windows":
+        print(json.dumps(generate_train_window_metrics(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-train-windows-validate":
+        print(json.dumps(validate_train_window_metrics(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-valid":
+        print(json.dumps(run_reference_analytics_valid(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-valid-validate":
+        print(json.dumps(validate_reference_analytics_valid(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-valid-windows":
+        print(json.dumps(generate_valid_window_metrics(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-valid-windows-validate":
+        print(json.dumps(validate_valid_window_metrics(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-test":
+        print(json.dumps(run_reference_analytics_test(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-test-validate":
+        print(json.dumps(validate_reference_analytics_test(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-test-windows":
+        print(json.dumps(generate_test_window_metrics(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-test-windows-validate":
+        print(json.dumps(validate_test_window_metrics(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-train-thresholds":
+        print(json.dumps(generate_train_metric_thresholds(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-train-thresholds-validate":
+        print(json.dumps(validate_train_metric_thresholds(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-index":
+        print(json.dumps(build_reference_analytics_index(PROJECT_ROOT), indent=2))
+    elif args.command == "analytics-index-validate":
+        print(json.dumps(validate_reference_analytics_index(PROJECT_ROOT), indent=2))
     return 0
 
 

@@ -1,0 +1,7 @@
+clip_id,run_id,model_team_visual_description,reference_team_side,mapping_evidence,verified_by,verification_date,notes
+SNGS-062,coach-eval-v0.1.1__uniform__SNGS-062,white/blue,left,White/blue outfield players have blue annotation outlines,sole_reviewer,2026-08-22,Human-provided mapping; ignore goalkeeper and referee kits
+SNGS-062,coach-eval-v0.1.1__uniform__SNGS-062,green,right,Green outfield players have red annotation outlines,sole_reviewer,2026-08-22,Human-provided mapping
+SNGS-074,coach-eval-v0.1.1__uniform__SNGS-074,white/blue,right,White/blue outfield players have red annotation outlines,sole_reviewer,2026-08-22,Human-provided mapping; white/blue loses possession in approximately the first second
+SNGS-074,coach-eval-v0.1.1__uniform__SNGS-074,green,left,Green outfield players have blue annotation outlines,sole_reviewer,2026-08-22,Human-provided mapping; green then holds most possession
+SNGS-112,coach-eval-v0.1.1__uniform__SNGS-112,red/white,left,Red/white outfield players have blue annotation outlines,sole_reviewer,2026-08-22,Human-provided mapping; red/white attacks in possession
+SNGS-112,coach-eval-v0.1.1__uniform__SNGS-112,black,right,Black outfield players have red annotation outlines,sole_reviewer,2026-08-22,Human-provided mapping; black defends

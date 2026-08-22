@@ -27,6 +27,25 @@ The separate recognition-only gate is defined in
 pass/fail result is pending. Do not replace the sole reviewer's judgement with
 automatic anchor-term matching.
 
+Train-wide direct reference analytics are complete under
+`reference-analytics-v0.2.0-train`; see
+`docs/TRAIN_REFERENCE_ANALYTICS_RESULTS.md`. Event-relative aggregation is
+complete under `reference-windows-v0.1.0-train`; see
+`docs/TEMPORAL_WINDOW_RESULTS.md`. Its non-overlapping train-development
+windows are before `[-5,-2)`, around `[-2,+2)`, and after `[+2,+5)` seconds
+relative to the hidden SoccerNet anchor. A summary requires a complete window
+and at least 80% eligible frames for that team and metric. Do not replace
+missing/ineligible summaries with zero, and do not expose anchor timing or
+window analytics to the MLLM.
+
+Train-derived claim thresholds are complete under
+`claim-verification-v0.1.0-train`; read
+`docs/CLAIM_VERIFICATION_RULES.md` before classifying any model claim. A shirt
+colour must be human-verified as reference `left`/`right`, and pressure/support
+also require the team's phase role to be verified. Missing prerequisites yield
+`not_measurable`. Do not automatically select whichever window best supports a
+claim, and do not describe the percentile rules as football ground truth.
+
 Human pilot references live in `human_evaluation/pilot_references`. The project
 has one reviewer; never claim inter-rater agreement or invent a second rating.
 
