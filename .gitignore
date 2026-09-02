@@ -1,0 +1,40 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+dist/
+build/
+
+# SoccerNet is access-controlled and must never be committed
+data/raw/
+data/working/
+data/review/
+
+# Generated manifests, model inputs, responses, and reports
+data/manifests/*.csv
+data/manifests/*.json
+!data/manifests/.gitkeep
+artifacts/
+output/*
+!output/.gitkeep
+
+# Human references may contain embargoed test answers
+annotations/private/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# The prior project is retained locally, not versioned in the restart
+archive/

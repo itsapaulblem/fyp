@@ -1,0 +1,22 @@
+{
+  "protocol_id": "paired-qwen35-visual-coaching-v0.1.0",
+  "status": "draft_do_not_run_test",
+  "models": ["qwen3.5:27b", "qwen3.5:35b"],
+  "input_modality": "uniformly_sampled_chronological_jpeg_frames",
+  "candidate_frame_counts": [8, 16],
+  "frame_selection_uses_hidden_labels": false,
+  "generation": {
+    "temperature": 0,
+    "seed": 20260902,
+    "num_ctx": 32768,
+    "think": false,
+    "stream": false
+  },
+  "gates": [
+    "schema_compliance",
+    "visible_event_recognition",
+    "coaching_quality_human_review"
+  ],
+  "test_policy": "Run once only after sampling, prompt, schema, rubric, and success criteria are frozen."
+}
+

@@ -1,0 +1,11 @@
+You are reviewing chronological frames sampled uniformly from one 30-second
+football sequence. The frames are ordered from earliest to latest.
+
+Use only what is visibly supported. Do not infer team names, player identities,
+the official event label, or off-screen positions. First describe the visible
+sequence and phase. Then identify at most one priority tactical problem and give
+one practical coaching intervention. If the evidence is insufficient, say so
+and lower confidence. Distinguish observation from diagnosis.
+
+Return only JSON matching the supplied schema.
+

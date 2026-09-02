@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/coaching_annotation.schema.json",
+  "title": "Human football coaching reference",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "clip_id", "split", "reviewer", "observation", "coaching_problem",
+    "intervention", "uncertainty", "source_references", "review_status"
+  ],
+  "properties": {
+    "clip_id": {"type": "string", "pattern": "^SNGS-[0-9]{3}$"},
+    "split": {"enum": ["train", "valid", "test"]},
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pseudonym", "qualification", "reviewed_at"],
+      "properties": {
+        "pseudonym": {"type": "string", "minLength": 1},
+        "qualification": {"type": "string", "minLength": 1},
+        "reviewed_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase", "possession_team_description", "visible_evidence"],
+      "properties": {
+        "phase": {"enum": ["in_possession", "out_of_possession", "attacking_transition", "defensive_transition", "set_piece", "unclear"]},
+        "possession_team_description": {"type": "string", "minLength": 1},
+        "visible_evidence": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "coaching_problem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["team", "problem", "why_it_matters"],
+      "properties": {
+        "team": {"enum": ["attacking", "defending", "both", "not_identifiable"]},
+        "problem": {"type": "string", "minLength": 1},
+        "why_it_matters": {"type": "string", "minLength": 1}
+      }
+    },
+    "intervention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objective", "coach_message", "practice_design", "success_cues"],
+      "properties": {
+        "objective": {"type": "string", "minLength": 1},
+        "coach_message": {"type": "string", "minLength": 1},
+        "practice_design": {"type": "string", "minLength": 1},
+        "success_cues": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "uncertainty": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["visibility_limits", "confidence"],
+      "properties": {
+        "visibility_limits": {"type": "array", "items": {"type": "string"}},
+        "confidence": {"enum": ["low", "medium", "high"]}
+      }
+    },
+    "source_references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "url", "applied_principle"],
+        "properties": {
+          "title": {"type": "string", "minLength": 1},
+          "url": {"type": "string", "format": "uri"},
+          "applied_principle": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "review_status": {"enum": ["draft", "adjudication_required", "approved"]}
+  }
+}
+

@@ -1,0 +1,24 @@
+{
+  "protocol_id": "football-coaching-120-v0.1.0",
+  "source": "SoccerNet Game State Reconstruction v1.3",
+  "seed": 20260902,
+  "selection": {
+    "method": "proportional_action_stratification_with_minimum_one_per_present_class",
+    "train": 40,
+    "valid": 40,
+    "test": 40
+  },
+  "source_archives": {
+    "train": "data/raw/gamestate/gamestate-2024/train.zip",
+    "valid": "data/raw/gamestate/gamestate-2024/valid.zip",
+    "test": "data/raw/gamestate/gamestate-2024/test.zip"
+  },
+  "expected": {
+    "source_clip_count": 164,
+    "frame_rate": 25,
+    "frames_per_clip": 750,
+    "duration_seconds": 30,
+    "annotation_version": "1.3"
+  }
+}
+
