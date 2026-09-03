@@ -29,9 +29,13 @@
     "B5_advice_only"
   ],
   "input_feasibility": {
-    "frame_counts_per_video": [4, 8, 12],
-    "maximum_edges": [672, 896, 1344],
-    "selection": "uniform_without_hidden_event_timing"
+    "considered_frame_counts": [10, 20, 30, 60],
+    "considered_maximum_edges": [672, 896, 1344],
+    "selection": "uniform_without_hidden_event_timing",
+    "chosen_dataset_b_frame_count": 60,
+    "chosen_maximum_edge": 672,
+    "chosen_status": "provisional_pending_train_pilot",
+    "decision_note": "Skipped the F10/F20/F30 comparison and went straight to 60 uniform frames (~2 fps of a 25 fps/750-frame clip) at max edge 672 to match Dataset A resizing. Still frozen only after the train pilot and validation check per protocol step 9; not yet used for validation or test."
   },
   "retrieval": {
     "metric": "cosine_similarity",

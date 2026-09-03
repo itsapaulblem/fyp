@@ -16,12 +16,21 @@ from .pairing import deterministic_control_case, normalize_action
 from .prompting import build_messages, readable_transcript
 from .provenance import sha256_file, timestamp_utc, write_run
 from .retrieval import EmbeddingIndex
-from .soccernet import index_dataset_b, read_manifest, write_manifest
+from .soccernet import (
+    audit_dataset_b,
+    index_dataset_b,
+    read_manifest,
+    write_integrity_report,
+    write_private_manifest,
+    write_public_manifest,
+)
 
 app = typer.Typer(no_args_is_help=True)
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONFIG = ROOT / "config/project_v0.2.0.json"
-DEFAULT_B_MANIFEST = ROOT / "data/video_b/manifests/soccernet_gsr_v1.3.csv"
+DEFAULT_B_MANIFEST = ROOT / "data/video_b/private/soccernet_gsr_v1.3_reference.csv"
+DEFAULT_B_PUBLIC_MANIFEST = ROOT / "data/video_b/manifests/soccernet_gsr_v1.3_public.csv"
+DEFAULT_B_INTEGRITY_REPORT = ROOT / "data/video_b/private/integrity_v1.3.json"
 
 
 def load_json(path: Path) -> dict:
@@ -67,18 +76,33 @@ def approved_case(case_id: str) -> CaseARecord:
 @app.command("index-b")
 def index_b(
     config_path: Path = typer.Option(DEFAULT_CONFIG),
-    output: Path = typer.Option(DEFAULT_B_MANIFEST),
+    public_output: Path = typer.Option(DEFAULT_B_PUBLIC_MANIFEST),
+    private_output: Path = typer.Option(DEFAULT_B_MANIFEST),
+    report_output: Path = typer.Option(DEFAULT_B_INTEGRITY_REPORT),
 ) -> None:
-    """Index and verify the immutable SoccerNet Dataset B archives."""
+    """Index and fully verify immutable SoccerNet Dataset B archives."""
     records = index_dataset_b(load_json(config_path), ROOT)
-    write_manifest(records, output)
+    write_public_manifest(records, public_output)
+    write_private_manifest(records, private_output)
     counts = {
         split: sum(record.split == split for record in records)
         for split in ("train", "valid", "test")
     }
-    typer.echo(f"Wrote {len(records)} Dataset B records to {output}")
+    typer.echo(f"Wrote model-visible manifest to {public_output}")
+    typer.echo(f"Wrote private reference crosswalk to {private_output}")
     typer.echo(f"split_counts={json.dumps(counts)}")
-    typer.echo(f"manifest_sha256={sha256_file(output)}")
+    typer.echo(f"public_manifest_sha256={sha256_file(public_output)}")
+    typer.echo(f"private_manifest_sha256={sha256_file(private_output)}")
+    report = audit_dataset_b(records, ROOT, progress=typer.echo)
+    write_integrity_report(report, report_output)
+    typer.echo(f"Wrote integrity report to {report_output}")
+    typer.echo(
+        f"integrity_status={report['status']} "
+        f"decoded_frames={report['decoded_frame_count']}/"
+        f"{report['expected_frame_count']}"
+    )
+    if report["status"] != "pass":
+        raise typer.Exit(code=1)
 
 
 @app.command("init-case-a")
@@ -120,7 +144,7 @@ def validate_a() -> None:
 @app.command("sample-a")
 def sample_a(
     case_id: str,
-    count: int = typer.Option(4, min=1, max=32),
+    count: int = typer.Option(20, min=1, max=32),
     maximum_edge: int = typer.Option(672, min=224, max=1920),
 ) -> None:
     """Sample chronological frames from one approved Dataset A case."""
@@ -143,7 +167,7 @@ def sample_a(
 @app.command("sample-b")
 def sample_b(
     clip_id: str,
-    count: int = typer.Option(4, min=1, max=32),
+    count: int = typer.Option(60, min=1, max=750),
     maximum_edge: int = typer.Option(672, min=224, max=1920),
     manifest: Path = typer.Option(DEFAULT_B_MANIFEST),
 ) -> None:
@@ -186,7 +210,8 @@ def run_pair(
     pairing_note: str = typer.Option(""),
     retrieval_score: float | None = typer.Option(None),
     retrieval_index_path: Path | None = typer.Option(None),
-    frame_count: int = typer.Option(4, min=1, max=16),
+    frame_count_b: int = typer.Option(60, min=1, max=750, help="Dataset B frames"),
+    frame_count_a: int = typer.Option(20, min=1, max=32, help="Dataset A frames"),
     maximum_edge: int = typer.Option(672, min=224, max=1344),
     config_path: Path = typer.Option(DEFAULT_CONFIG),
     manifest: Path = typer.Option(DEFAULT_B_MANIFEST),
@@ -249,11 +274,11 @@ def run_pair(
             frames_a = sample_dataset_a(
                 ROOT / cast(str, case.source.local_media_path),
                 ROOT / "artifacts/model_inputs/dataset_a" / case.case_id / (
-                    f"uniform_{frame_count}_edge_{maximum_edge}"
+                    f"uniform_{frame_count_a}_edge_{maximum_edge}"
                 ),
                 case.source.clip_start_seconds,
                 case.source.clip_end_seconds,
-                frame_count,
+                frame_count_a,
                 maximum_edge,
             )
 
@@ -261,9 +286,9 @@ def run_pair(
         record_b,
         ROOT,
         ROOT / "artifacts/model_inputs/dataset_b" / record_b.clip_id / (
-            f"uniform_{frame_count}_edge_{maximum_edge}"
+            f"uniform_{frame_count_b}_edge_{maximum_edge}"
         ),
-        frame_count,
+        frame_count_b,
         maximum_edge,
     )
     case_template_path = ROOT / "input_prompts/dataset_a_case_v0.2.0.txt"
@@ -321,7 +346,8 @@ def run_pair(
         ),
         "model": model,
         "model_digest": model_metadata.get("digest"),
-        "frame_count_per_included_video": frame_count,
+        "dataset_b_frame_count": frame_count_b,
+        "dataset_a_frame_count": frame_count_a if case else None,
         "maximum_edge": maximum_edge,
         "frame_sha256": {
             path.relative_to(ROOT).as_posix(): sha256_file(path) for path in all_frames

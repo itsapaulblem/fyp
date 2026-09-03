@@ -21,6 +21,7 @@ data/video_a/frames/
 data/video_a/private/
 data/video_b/frames/
 data/video_b/review/
+data/video_b/private/
 
 # Generated manifests, embeddings, model inputs, responses, and reports
 data/video_b/manifests/*.csv

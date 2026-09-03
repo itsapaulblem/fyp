@@ -144,6 +144,7 @@ class CaseARecord(BaseModel):
 @dataclass(frozen=True)
 class SoccerNetClip:
     clip_id: str
+    source_clip_id: str
     split: str
     action_class: str
     frame_rate: int
