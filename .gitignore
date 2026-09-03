@@ -14,21 +14,26 @@ __pycache__/
 dist/
 build/
 
-# SoccerNet is access-controlled and must never be committed
+# Access-controlled/private media must never be committed
 data/raw/
-data/working/
-data/review/
+data/video_a/media/
+data/video_a/frames/
+data/video_a/private/
+data/video_b/frames/
+data/video_b/review/
 
-# Generated manifests, model inputs, responses, and reports
-data/manifests/*.csv
-data/manifests/*.json
-!data/manifests/.gitkeep
+# Generated manifests, embeddings, model inputs, responses, and reports
+data/video_b/manifests/*.csv
+data/video_b/manifests/*.json
+!data/video_b/manifests/.gitkeep
+data/embeddings/*
+!data/embeddings/.gitkeep
 artifacts/
 output/*
 !output/.gitkeep
 
-# Human references may contain embargoed test answers
-annotations/private/
+# Private human references and pair judgements
+data/pairs/private/
 
 # Editors and operating systems
 .vscode/

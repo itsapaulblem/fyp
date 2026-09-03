@@ -1,0 +1,6 @@
+Write human coaching advice for the exact Dataset A clip here.
+
+It should identify the team/role being coached, give a concise intervention,
+and remain consistent with the visible evidence and outcome. This placeholder
+is not an approved coaching reference.
+

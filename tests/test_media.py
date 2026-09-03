@@ -1,16 +1,17 @@
 import pytest
 
-from football_coach.media import uniform_indices
+from football_coach.media import uniform_positions
 
 
-def test_uniform_indices_include_first_and_last_frame() -> None:
-    indices = uniform_indices(750, 8)
-    assert indices[0] == 1
-    assert indices[-1] == 750
-    assert indices == sorted(set(indices))
+def test_uniform_positions_cover_sequence_boundaries() -> None:
+    assert uniform_positions(750, 4) == [0, 250, 499, 749]
 
 
-def test_uniform_indices_reject_invalid_count() -> None:
+def test_single_position_uses_middle() -> None:
+    assert uniform_positions(9, 1) == [4]
+
+
+def test_invalid_uniform_request_fails() -> None:
     with pytest.raises(ValueError):
-        uniform_indices(8, 9)
+        uniform_positions(4, 5)
 

@@ -1,0 +1,38 @@
+{
+  "case_id": "A-0001",
+  "status": "draft",
+  "source": {
+    "title": "",
+    "provider": "",
+    "url": "https://example.com/replace-me",
+    "accessed_on": "2026-09-03",
+    "rights_status": "unknown",
+    "local_media_path": "data/video_a/media/A-0001.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 30.0
+  },
+  "situation": {
+    "phase": "unclear",
+    "action_family": "other",
+    "team_role": "unclear",
+    "pitch_area": "unclear",
+    "outcome": "unclear",
+    "human_observation": "",
+    "priority_problem": "",
+    "visible_evidence": [],
+    "tags": []
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0001.txt",
+    "objective": "",
+    "practice_design": "",
+    "success_cues": [],
+    "reference_author": "",
+    "reference_author_qualification": "",
+    "reviewer_pseudonym": "",
+    "reviewer_qualification": "",
+    "reviewed_at": ""
+  },
+  "limitations": []
+}
+

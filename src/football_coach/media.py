@@ -5,86 +5,93 @@ from pathlib import Path
 
 import cv2
 import numpy as np
-from PIL import Image, ImageDraw
 
-from .dataset import ClipRecord
-
-
-def uniform_indices(frame_count: int, sample_count: int) -> list[int]:
-    if sample_count < 2:
-        raise ValueError("sample_count must be at least 2")
-    if sample_count > frame_count:
-        raise ValueError("sample_count cannot exceed frame_count")
-    return [
-        round(index * (frame_count - 1) / (sample_count - 1)) + 1
-        for index in range(sample_count)
-    ]
+from .domain import SoccerNetClip
 
 
-def extract_sampled_frames(
-    record: ClipRecord, project_root: Path, output_dir: Path, count: int
+def uniform_positions(total: int, count: int) -> list[int]:
+    if total < 1 or count < 1 or count > total:
+        raise ValueError("Require 1 <= count <= total")
+    if count == 1:
+        return [total // 2]
+    return [round(index * (total - 1) / (count - 1)) for index in range(count)]
+
+
+def resize_max_edge(frame: np.ndarray, maximum_edge: int) -> np.ndarray:
+    height, width = frame.shape[:2]
+    scale = min(1.0, maximum_edge / max(height, width))
+    if scale == 1.0:
+        return frame
+    return cv2.resize(
+        frame,
+        (round(width * scale), round(height * scale)),
+        interpolation=cv2.INTER_AREA,
+    )
+
+
+def sample_dataset_b(
+    record: SoccerNetClip,
+    project_root: Path,
+    destination: Path,
+    count: int,
+    maximum_edge: int,
 ) -> list[Path]:
-    indices = uniform_indices(record.frame_count, count)
-    archive_path = project_root / record.archive_path
-    clip_dir = output_dir / record.split / record.clip_id / f"uniform_{count}"
-    clip_dir.mkdir(parents=True, exist_ok=True)
+    positions = uniform_positions(record.frame_count, count)
+    destination.mkdir(parents=True, exist_ok=True)
     outputs: list[Path] = []
-    with zipfile.ZipFile(archive_path) as archive:
-        for order, frame_index in enumerate(indices, start=1):
-            member = record.frame_member_pattern % frame_index
-            destination = clip_dir / f"{order:02d}_frame_{frame_index:06d}.jpg"
-            destination.write_bytes(archive.read(member))
-            outputs.append(destination)
+    with zipfile.ZipFile(project_root / record.archive_path) as archive:
+        for order, position in enumerate(positions, start=1):
+            frame_number = position + 1
+            member = record.frame_member_pattern % frame_number
+            encoded = np.frombuffer(archive.read(member), dtype=np.uint8)
+            frame = cv2.imdecode(encoded, cv2.IMREAD_COLOR)
+            if frame is None:
+                raise ValueError(f"Could not decode {member}")
+            frame = resize_max_edge(frame, maximum_edge)
+            output = destination / f"{order:02d}_frame_{frame_number:06d}.jpg"
+            if not cv2.imwrite(str(output), frame, [cv2.IMWRITE_JPEG_QUALITY, 92]):
+                raise OSError(f"Could not write {output}")
+            outputs.append(output)
     return outputs
 
 
-def make_contact_sheet(frames: list[Path], destination: Path, columns: int = 4) -> Path:
-    if not frames:
-        raise ValueError("No frames supplied")
-    thumbnails: list[Image.Image] = []
-    for index, frame in enumerate(frames, start=1):
-        image = Image.open(frame).convert("RGB")
-        image.thumbnail((480, 270))
-        canvas = Image.new("RGB", (480, 300), "black")
-        canvas.paste(image, ((480 - image.width) // 2, 24))
-        ImageDraw.Draw(canvas).text((8, 6), f"Frame {index:02d}", fill="white")
-        thumbnails.append(canvas)
-    rows = (len(thumbnails) + columns - 1) // columns
-    sheet = Image.new("RGB", (columns * 480, rows * 300), "black")
-    for index, image in enumerate(thumbnails):
-        sheet.paste(image, ((index % columns) * 480, (index // columns) * 300))
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    sheet.save(destination, quality=92)
-    return destination
-
-
-def make_review_video(record: ClipRecord, project_root: Path, destination: Path) -> Path:
-    """Render the complete official JPEG sequence for private human review."""
-    archive_path = project_root / record.archive_path
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    writer: cv2.VideoWriter | None = None
+def sample_dataset_a(
+    video_path: Path,
+    destination: Path,
+    start_seconds: float,
+    end_seconds: float,
+    count: int,
+    maximum_edge: int,
+) -> list[Path]:
+    capture = cv2.VideoCapture(str(video_path))
+    if not capture.isOpened():
+        raise ValueError(f"Could not open Dataset A video: {video_path}")
+    fps = capture.get(cv2.CAP_PROP_FPS)
+    total_frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
+    if fps <= 0 or total_frames <= 0:
+        capture.release()
+        raise ValueError(f"Invalid video metadata: {video_path}")
+    first = max(0, round(start_seconds * fps))
+    last = min(total_frames - 1, round(end_seconds * fps) - 1)
+    if last < first:
+        capture.release()
+        raise ValueError("Dataset A clip boundaries contain no frames")
+    relative_positions = uniform_positions(last - first + 1, count)
+    destination.mkdir(parents=True, exist_ok=True)
+    outputs: list[Path] = []
     try:
-        with zipfile.ZipFile(archive_path) as archive:
-            for frame_index in range(1, record.frame_count + 1):
-                member = record.frame_member_pattern % frame_index
-                encoded = np.frombuffer(archive.read(member), dtype=np.uint8)
-                frame = cv2.imdecode(encoded, cv2.IMREAD_COLOR)
-                if frame is None:
-                    raise ValueError(f"Could not decode {member}")
-                if writer is None:
-                    height, width = frame.shape[:2]
-                    writer = cv2.VideoWriter(
-                        str(destination),
-                        cv2.VideoWriter_fourcc(*"mp4v"),
-                        record.frame_rate,
-                        (width, height),
-                    )
-                    if not writer.isOpened():
-                        raise RuntimeError(f"Could not open video writer for {destination}")
-                writer.write(frame)
+        for order, relative in enumerate(relative_positions, start=1):
+            frame_number = first + relative
+            capture.set(cv2.CAP_PROP_POS_FRAMES, frame_number)
+            ok, frame = capture.read()
+            if not ok or frame is None:
+                raise ValueError(f"Could not read frame {frame_number} from {video_path}")
+            frame = resize_max_edge(frame, maximum_edge)
+            output = destination / f"{order:02d}_frame_{frame_number:06d}.jpg"
+            if not cv2.imwrite(str(output), frame, [cv2.IMWRITE_JPEG_QUALITY, 92]):
+                raise OSError(f"Could not write {output}")
+            outputs.append(output)
     finally:
-        if writer is not None:
-            writer.release()
-    if not destination.is_file() or destination.stat().st_size == 0:
-        raise RuntimeError(f"Review video was not created: {destination}")
-    return destination
+        capture.release()
+    return outputs
+

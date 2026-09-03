@@ -2,73 +2,70 @@
 
 ## Research question
 
-This project tests whether a multimodal large language model can observe a short
-football sequence, correctly identify visible game state and tactical problems,
-and produce useful coaching advice. Fluent advice is not evidence of visual
-understanding.
+Test whether a human-annotated analogous football case retrieved from Dataset A
+improves an MLLM's recognition and coaching advice for a new Dataset B sequence.
+Do not describe retrieval-assisted performance as independent video understanding.
 
 ## FYP standard
 
-- The work must demonstrate independent learning of useful new material, not
-  merely apply a pre-provided course template.
-- Failed experiments are valid evidence. Preserve them, diagnose why they
-  failed, and use the diagnosis to justify the next design.
-- Present every design choice with its rationale, advantages, limitations,
-  evidence, and outstanding issues.
-- Keep presentation-facing prompts and model answers as human-readable text
-  files under `input_prompts` and `output`.
-- Prefer explaining design decisions in the conversation. Do not create extra
-  Markdown documents unless documentation is genuinely needed or requested.
+- Demonstrate independent learning and justify every material design choice.
+- Preserve failed experiments and use diagnosed failures to motivate changes.
+- Present rationale, advantages, evidence, limitations, and outstanding issues.
+- Keep prompts and exact model answers human-readable under `input_prompts` and
+  `output`.
+- Explain decisions in chat; avoid unnecessary Markdown documents.
 
-## Dataset facts and boundaries
+## Dataset A: coaching case library
 
-- The local source is SoccerNet Game State Reconstruction v1.3.
-- The verified local release has 164 clips: 57 train, 58 valid, and 49 test.
-- Each clip is 30 seconds represented by 750 ordered JPEG frames at 25 fps.
-- SoccerNet annotations are reference data for recognition/analytics; SoccerNet
-  does not provide coaching-advice ground truth.
-- `data/raw` is immutable, access-controlled source data. Never commit, modify,
-  redistribute, or upload it to an external service.
-- `archive/20260902-180846` is historical provenance. Do not import its model
-  responses, scores, prompts, or conclusions into the new experiment.
+- Every approved case must pair advice with the exact referenced video segment.
+- Record URL/provider, clip boundaries, rights status, access date, human
+  observation, tactical tags, advice, reviewer identity/qualification, and date.
+- Federation material may inform terminology, but unrelated advice is not a
+  valid label.
+- Unknown rights or incomplete human review means the case remains `draft`.
+- Start with a 20–30 case feasibility pilot; scale beyond 100 only if justified.
+
+## Dataset B: SoccerNet queries
+
+- Source is immutable SoccerNet GSR v1.3: 57 train, 58 valid, 49 test.
+- Each clip is 750 ordered JPEGs at 25 fps (30 seconds).
+- SoccerNet labels are hidden reference/oracle data, not model input or coaching
+  ground truth.
+- Never expose action labels, tracking, coordinates, IDs, filenames revealing
+  events, human references, or prior answers in an automatic visual condition.
+
+## Retrieval and leakage discipline
+
+- Automatic retrieval may use only B pixels or embeddings derived from pixels.
+- Hidden B action labels may select A only in `B2_action_oracle` and must be
+  reported as oracle leakage, not an end-to-end system.
+- Human-selected pairs are `B3_human_oracle`, not automatic retrieval.
+- Use cosine k-nearest neighbours for direct matching. K-means is optional
+  exploratory clustering, not a substitute for nearest-neighbour retrieval.
+- Fit/tune encoders, projections, normalization, tags, and k using B train only;
+  select the final method on validation; run test once after freeze.
 
 ## Experimental discipline
 
-- Keep `model_input`, `reference_annotations`, `human_coaching_reference`, and
-  `model_output` as separate evidence layers.
-- Never expose SoccerNet action labels, tracking, coordinates, IDs, filenames,
-  human advice, or prior responses to a frames-only model condition.
-- Ollama vision consumes sampled images, not native video. Always report the
-  sampling method and never describe a frame/contact-sheet condition as native
-  video understanding.
-- Run recognition scoring before coaching-quality scoring.
-- Use the same frozen inputs, prompt, schema, and generation settings for paired
-  Qwen3.5 27B/35B comparisons. Record exact model tag/digest and raw output.
-- Preserve schema-noncompliant output; never silently repair it.
-
-## Split discipline
-
-- Train: prompt and protocol development.
-- Validation: sampling/method selection and calibration.
-- Test: one final run only after protocol freeze.
-- Do not tune on test clips or reveal test coaching references before freeze.
-- Dataset membership is versioned and deterministic. Any change requires a new
-  dataset version and written rationale.
-
-## Human coaching references
-
-- Clip-specific advice must be written after viewing the full 30-second clip by
-  a qualified human reviewer and must include visible evidence and uncertainty.
-- Online federation coaching resources may support terminology and intervention
-  design, but text from unrelated examples is not a label for a SoccerNet clip.
-- Record reviewer identity pseudonym, qualification, date, source links, and
-  conflicts. Do not claim expert consensus or inter-rater reliability without
-  the required independent reviewers.
+- Maintain B0 frames-only, B1 random-case, B2 action-oracle, B3 human-oracle,
+  B4 embedding-kNN, and B5 advice-only controls.
+- Use identical B frames, prompts, schemas, and generation settings across paired
+  model comparisons except for the intended independent variable.
+- Score B recognition before coaching quality. Separately score retrieval
+  relevance, blind copying, hallucination, and calibrated uncertainty.
+- Ollama accepts sampled images rather than native video. Report exact frame
+  count, indices, resolution, and construction method.
+- Preserve raw schema failures, crashes, timing, model tag/digest, config/prompt
+  hashes, frame hashes, and retrieval provenance. Never silently repair output.
+- The Qwen 2B model is retired. Current candidates are exact Qwen3.5 27B/35B tags.
 
 ## Repository safety
 
-- Store secrets only in environment variables; commit only `.env.example`.
-- Generated media, raw data, annotations under `annotations/private`, and model
-  outputs are Git-ignored.
-- Do not invent clips, labels, reviewer scores, citations, or metric values.
-- Preserve raw responses and provenance before parsing or scoring.
+- `data/raw` is immutable and access-controlled. Never commit or redistribute it.
+- `archive/20260902-180846` is historical provenance. Never modify or import its
+  prompts, outputs, scores, or conclusions into a new result.
+- Store secrets only in `.env`; commit only `.env.example`.
+- Generated media, embeddings, private references, and outputs are Git-ignored.
+- Do not invent cases, coaching advice, reviewer credentials, links, labels,
+  pair relevance, scores, or metric values.
+
