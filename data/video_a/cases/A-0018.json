@@ -1,0 +1,58 @@
+{
+  "case_id": "A-0018",
+  "status": "approved",
+  "source": {
+    "title": "Regaining possession high up the pitch — clip 1 (England v Scotland)",
+    "provider": "FIFA Training Centre",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/transition-to-defending/regaining-possession-high-up-the-pitch.php",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0018.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 37.24
+  },
+  "situation": {
+    "phase": "transition after losing possession",
+    "action_family": "counterpress",
+    "team_role": "England attacking/pressing unit",
+    "pitch_area": "Scotland's penalty area and its immediate perimeter",
+    "outcome": "England's counter-press forces a poor clearance straight to a supporting player, and England score within seven seconds of losing the ball",
+    "human_observation": "This clip is from the England v Scotland match at the FIFA Women's World Cup 2019. Per the article, England had five players either inside or on the edge of the box, with five others providing defensive balance behind them. England lose the ball in the Scotland penalty area, but their counter-pressing forces a poor clearance from a Scotland defender straight to an England player who was providing defensive balance outside the box. England score within seven seconds of losing possession. April Heinrichs, Head of FIFA's Technical Study Group for the tournament, is quoted: 'effective high pressure only works if you have a well-oiled machine,' referring to the organisation that led to this regain and goal. The article also notes that, tournament-wide per the technical report, 61% of ball recoveries occurred within seven seconds of the ball being lost.",
+    "priority_problem": "How to maintain defensive balance (correct player positioning both inside/around the box and providing cover behind) before possession is lost, so that when the ball is lost, the team can counter-press immediately and force the opposition into an error rather than conceding space to counter-attack.",
+    "visible_evidence": [
+      "England position five players either inside or on the edge of the penalty box before losing the ball.",
+      "Five further England players are positioned to provide defensive balance/cover behind that front group.",
+      "England lose the ball inside the Scotland penalty area.",
+      "England's players react immediately with a coordinated counter-press rather than retreating.",
+      "The press forces the Scotland defender into a poor clearance.",
+      "The clearance goes straight to an England player who was providing defensive balance outside the box.",
+      "England convert the resulting possession into a goal within seven seconds of the original turnover."
+    ],
+    "tags": [
+      "counterpress",
+      "gegenpressing",
+      "defensive-balance",
+      "regain",
+      "transition",
+      "forward-progression"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0018.txt",
+    "objective": "Maintain defensive balance in possession (players positioned to press immediately and others providing cover) so that losing the ball high up the pitch triggers an immediate, organised counter-press capable of forcing an error and converting the regain quickly.",
+    "practice_design": "Representative general practice for the coaching intervention illustrated by this example: set up phase-of-play practices where an attacking team commits players forward (e.g. five inside/around the box) while a deliberately reduced group holds deeper defensive-balance positions. On a coached or random turnover, require the front group to counter-press immediately and the balance group to close space in support, with a clock (e.g. aiming to regain possession within seven seconds, per the tournament's average regain time) to create urgency. Reward regains that lead directly to a shooting opportunity, and review moments where poor balance allowed the opposition to play through the press into space between the lines.",
+    "success_cues": [
+      "Players closest to the ball react immediately upon losing possession, rather than retreating passively.",
+      "Players providing defensive balance are correctly positioned to support the press and prevent the opposition playing through the gaps.",
+      "The press forces a rushed or poor action (e.g. a hurried clearance) from the opponent rather than allowing them time on the ball.",
+      "The regain is converted quickly into a attacking opportunity, ideally within a similar timeframe to the tournament benchmark (seven seconds).",
+      "The team's overall shape does not leave large gaps between units during the press."
+    ],
+    "reference_author": "April Heinrichs",
+    "reference_author_qualification": "Head of FIFA's Technical Study Group for the FIFA Women's World Cup 2019"
+  },
+  "limitations": [
+    "Local incident segment extracted from the full source video at 80.400–117.640 seconds.",
+    "The 61%-of-recoveries-within-seven-seconds statistic is a tournament-wide figure from the technical report, not specific to this individual clip."
+  ]
+}

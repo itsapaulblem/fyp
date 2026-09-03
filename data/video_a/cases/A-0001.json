@@ -1,0 +1,54 @@
+{
+  "case_id": "A-0001",
+  "status": "approved",
+  "source": {
+    "title": "Argentina attacking corners: freeing the edge — clip 1 vs Netherlands",
+    "provider": "FIFA Training Centre",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/set-plays/corners/attacking-corners.php",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0001.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 17.408
+  },
+  "situation": {
+    "phase": "attacking corner",
+    "action_family": "corner",
+    "team_role": "Argentina attacking unit",
+    "pitch_area": "corner area and edge of penalty area",
+    "outcome": "Messi finds Enzo Fernández for an unchallenged left-foot shot that is deflected over",
+    "human_observation": "Three Argentina attackers hold near the back post while the two centre-backs jog up slowly to arrive late in that area, manufacturing a back-post threat. This draws defensive attention away from the edge of the box, where only one Dutch defender is left to mark Messi at the short corner. Fernández drifts late from a deeper starting position into the vacated edge-of-box space, timing his move to arrive only once opponents have committed to their starting positions.",
+    "priority_problem": "How to isolate and occupy the single defender assigned to the edge of the box (via the short-corner threat to Messi) so that a second attacker (Fernández) can arrive into that same zone unmarked.",
+    "visible_evidence": [
+      "Three Argentina players start grouped near the back post; two centre-backs jog up late to join them, delaying their arrival to sustain the back-post threat.",
+      "The lone Dutch defender on the edge of the box tracks and marks Messi as he sets up for a short corner.",
+      "Fernández starts from a deeper position and holds back, only drifting into the open edge-of-box space once opponents are committed.",
+      "Argentina play the ball quickly to Messi before the two jogging centre-backs arrive.",
+      "The defender marking Messi recognises the edge of the box is now unprotected, hands Messi off to a teammate, and tries to recover back to the edge — but is too late.",
+      "Messi lays the ball off to the now-unmarked Fernández on the edge of the area, who strikes with his left foot; the shot is deflected over the bar."
+    ],
+    "tags": [
+      "corner",
+      "short-corner",
+      "decoy",
+      "edge-of-box",
+      "shot"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0001.txt",
+    "objective": "Create and exploit a numbers-up situation on the edge of the penalty area at a short corner, using a delayed back-post grouping as a decoy and a late, disguised run to the edge as the release option.",
+    "practice_design": "Small-sided corner-kick rehearsal (attackers vs. defenders) isolating one flank of the box. Have a cluster of attackers (plus 1-2 'late joiners') occupy the back post on a delay while one attacker sets up for a short corner near the corner flag and a second attacker starts deep and holds his run. Coach freezes/rewinds reps to check defensive shape is drawn toward the back post before releasing the short-corner pass, then rehearses the hand-off/lay-off to the edge-of-box runner and the first-time strike.",
+    "success_cues": [
+      "Back-post decoy group visibly holds the attention of multiple defenders (including at least one centre-back) before the short corner is played.",
+      "Edge-of-box defender is drawn toward the short-corner ball-carrier, leaving the edge open.",
+      "Second attacker's run into the edge space is delayed until opponents have committed, not started early.",
+      "Ball reaches the edge-of-box attacker with no immediate pressure, allowing a clean strike on goal."
+    ],
+    "reference_author": "FIFA Training Centre — individual author",
+    "reference_author_qualification": "FIFA Training Centre source"
+  },
+  "limitations": [
+    "Broadcast framing may not show every player's initial position."
+  ]
+}

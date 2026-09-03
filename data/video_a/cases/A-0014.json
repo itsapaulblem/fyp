@@ -1,0 +1,52 @@
+{
+  "case_id": "A-0014",
+  "status": "approved",
+  "source": {
+    "title": "Champions League tactical insights: Chelsea counterpressing — Cucurella clip 1",
+    "provider": "UEFA",
+    "url": "https://www.uefa.com/uefachampionsleague/news/029f-1f4ff3a2dfa2-8f711ec7d108-1000--champions-league-performance-insights-marc-cucurella-s-1v1-d/",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0014.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 15.7
+  },
+  "situation": {
+    "phase": "defending",
+    "action_family": "one_v_one_defending",
+    "team_role": "Chelsea left-back (Marc Cucurella)",
+    "pitch_area": "defensive left side, vs Lamine Yamal",
+    "outcome": "Cucurella delays committing and challenges when the opportunity appears",
+    "human_observation": "This clip is the first in a five-clip UEFA video series on Cucurella's 1v1 defending against Barcelona's Lamine Yamal, in a match UEFA's game insights unit credits as central to Chelsea's biggest-ever win over Barcelona (3-0) and Cucurella's Player of the Match award. Per the article, clip one 'showcases his low centre of gravity and his patience as he does not commit himself early but waits for the right moment before snapping into the challenge.' No single named individual is quoted specifically on this clip (Rui Faria is quoted on clips three and four; Roberto Martínez on clip five), but the article notes UEFA's technical observers found much to admire in Cucurella's defending across all pitch zones, from a low block (clip two) to higher up the pitch.",
+    "priority_problem": "How to maintain a low, balanced defensive stance and resist the urge to commit to a challenge prematurely, instead waiting for the optimal moment to engage a 1v1 attacker.",
+    "visible_evidence": [
+      "Cucurella adopts and maintains a low centre of gravity throughout the 1v1 situation.",
+      "He does not commit to the tackle or challenge early.",
+      "He shows patience, waiting for the right moment before engaging.",
+      "He 'snaps into' the challenge only once that moment arrives, rather than lunging or closing down prematurely."
+    ],
+    "tags": [
+      "1v1-defending",
+      "patience",
+      "body-shape",
+      "challenge"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0014.txt",
+    "objective": "Develop the balance and patience to hold a low defensive stance without committing early in a 1v1, engaging only at the optimal moment to win the ball.",
+    "practice_design": "Per Rui Faria's (UEFA Technical Observer) general coaching drill described in the article, used as a representative intervention for this example: use a small-sided pitch to create 1v1, 2v2, or 3v3 situations, with the coach calling the numbers each time. Add two or three 'neutral players' on the side of the pitch to create numerical variations (e.g. 2v1, 3v2). The attacking side (with any numerical advantage) aims to finish quickly; the defending side practices the balance between patience (when defending with fewer numbers) and pressing (when numbers are equal). Faria's stated core principles for 1v1 defending: body positioning and balance; focus on ball and space; and identifying the opponent's weaker side.",
+    "success_cues": [
+      "Defender maintains a consistently low centre of gravity and balanced stance throughout the approach.",
+      "Defender does not lunge or commit to contact prematurely.",
+      "Defender closes the gap only as the right moment to challenge arises.",
+      "Challenge, when made, is timed to win the ball rather than simply react to the attacker's movement."
+    ],
+    "reference_author": "UEFA Technical Observers (general); Rui Faria (drill/principles cited)",
+    "reference_author_qualification": "UEFA Technical Observer"
+  },
+  "limitations": [
+    "Broadcast camera changes restrict continuous viewing of every defender.",
+    "This article contains two separate embedded videos ('Cucurella excels' and 'Chelsea counterpressing'); this case draws from the second video's clip one. No individual observer is quoted specifically on clip one — the practice_design draws on Rui Faria's general drill/principles from later in the same article, which are not written specifically about this clip."
+  ]
+}

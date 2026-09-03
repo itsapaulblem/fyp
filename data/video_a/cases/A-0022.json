@@ -1,0 +1,57 @@
+{
+  "case_id": "A-0022",
+  "status": "approved",
+  "source": {
+    "title": "FU20WC25: Goalkeeper considerations when defending corners — clip 1 (Norway, Einar Fauskanger)",
+    "provider": "FIFA Training Centre",
+    "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fu20wc/2025/goalkeeper-considerations-when-defending-corners.php",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0022.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 22.293
+  },
+  "situation": {
+    "phase": "defending a corner (first phase, delivery into the six-yard box)",
+    "action_family": "corner",
+    "team_role": "Norway goalkeeper (Einar Fauskanger)",
+    "pitch_area": "six-yard box / goal area",
+    "outcome": "Fauskanger manoeuvres around his man-marker and punches the inswinging ball clear",
+    "human_observation": "Per FIFA's senior football and goalkeeping expert Pascal Zuberbühler, this clip shows Norway goalkeeper Einar Fauskanger being marked by an attacking player standing in his immediate vicinity. Before the ball is kicked, Fauskanger is positioned close to his goal line (consistent with defending an inswinger), holds an open body shape, and has a good view of the ball. As the inswinger is delivered, he patiently times his response before manoeuvring around the man-marker to create space, then attacks and punches the ball clear. This is presented as an example of the constant goalkeeper responsibilities the article describes: having a clear view of the ball, judging its height, showing patience to read the trajectory before moving, maintaining an open body shape, setting a starting position based on whether the delivery is an inswinger or outswinger, and ensuring space to claim/interact with the ball near the goal area.",
+    "priority_problem": "How a goalkeeper being man-marked by an attacker in their immediate vicinity can maintain a clear view of the ball's trajectory, read the type of delivery (inswinger vs outswinger) to set the correct starting position, and time a movement to create separation from the marker in order to attack and claim the ball.",
+    "visible_evidence": [
+      "An attacking player positions himself close to Fauskanger before the corner is taken.",
+      "Fauskanger starts close to his goal line, consistent with the article's stated positioning principle for defending an inswinger.",
+      "Fauskanger maintains an open body shape before the delivery, allowing him to see the ball and the space around him.",
+      "As the inswinging corner is delivered, Fauskanger does not move immediately but patiently times his response.",
+      "Fauskanger manoeuvres around the attacker marking him to create space to attack the ball.",
+      "Fauskanger punches the ball clear as his first contact."
+    ],
+    "tags": [
+      "goalkeeping",
+      "corners",
+      "man-marking",
+      "positioning",
+      "timing",
+      "punch-clear"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0022.txt",
+    "objective": "Develop a goalkeeper's ability to maintain visual and spatial control when man-marked at a corner — reading the delivery type to set the correct starting position, holding patience before committing, and timing a movement to create separation from a marker before attacking the ball.",
+    "practice_design": "Per Pascal Zuberbühler's stated principles in the article (general guidance applicable to this clip): train goalkeepers to set their starting position based on whether the delivery is an inswinger (closer to the goal line) or an outswinger (slightly further out), always maintaining an open body shape to preserve a view of the ball and surrounding space. Add a mannequin or live attacker standing in the goalkeeper's immediate vicinity to simulate being man-marked, and coach the goalkeeper to judge why the attacker is positioned in front of or behind them (as this can indicate the intended ball trajectory), while working to ensure the attacker's positioning does not impede their movement. Rehearse the specific technique of manoeuvring/creating space away from the marker with correct timing (not moving too early) before attacking crosses of varying delivery types and heights.",
+    "success_cues": [
+      "Goalkeeper's starting position correctly reflects the type of delivery expected (closer to goal line for inswingers, slightly further out for outswingers).",
+      "Goalkeeper maintains an open body shape, preserving visual contact with both the ball and the attacker marking them.",
+      "Goalkeeper does not commit to movement early, showing patience to read the ball's trajectory first.",
+      "Goalkeeper successfully creates separation from the marking attacker through well-timed movement.",
+      "Goalkeeper is able to attack and claim/punch the ball clear despite the attacker's proximity."
+    ],
+    "reference_author": "Pascal Zuberbühler",
+    "reference_author_qualification": "FIFA's senior football and goalkeeping expert"
+  },
+  "limitations": [
+    "The local clip boundary was confirmed against the video file; clip_end_seconds is 22.293.",
+    "Broadcast framing may not show every defending player's position at the moment of delivery."
+  ]
+}

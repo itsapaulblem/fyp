@@ -1,0 +1,53 @@
+{
+  "case_id": "A-0008",
+  "status": "approved",
+  "source": {
+    "title": "Botafogo wide free kick: avoiding the last-defender block",
+    "provider": "FIFA Training Centre",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/set-plays/set-play-routines/wide-free-kicks-blocking-the-last-defender-in-the-line.php",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0008.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 19.883
+  },
+  "situation": {
+    "phase": "defending a wide free kick",
+    "action_family": "free_kick",
+    "team_role": "Botafogo last defender",
+    "pitch_area": "far-post side of defensive line",
+    "outcome": "The wider starting position and open body orientation help the defender negotiate the blocking action",
+    "human_observation": "This clip is presented as one of four defensive counter-strategies to the last-defender blocking tactic described elsewhere in the article (see A-0007, PSG vs Inter Miami). The article frames it as a subtler, more proactive adjustment compared to simply shifting the whole line towards the far post, which can leave the front-post zone exposed instead. The Botafogo clip specifically highlights two adjustments from the last defender: an open body orientation, which helps him maintain visual contact with the attacker on his blindside, and starting a few steps wider from the rest of the line, which gives him more room to negotiate/avoid the block when it comes.",
+    "priority_problem": "How the last defender in a zonal line can individually protect himself against a blocking action (as exploited in cases like PSG vs Inter Miami) through body positioning and starting position alone, without requiring a wholesale change to the team's defensive shape or line height.",
+    "visible_evidence": [
+      "The last defender in Botafogo's zonal line adopts an open body orientation rather than a closed one.",
+      "This open orientation allows him to keep visual contact with both the ball and the attacker approaching from his blindside.",
+      "The same defender starts his position a few steps wider than the rest of the zonal line.",
+      "This wider starting position gives him additional room/space to negotiate or avoid the blocking action when an attacker attempts it."
+    ],
+    "tags": [
+      "wide-free-kick",
+      "defending",
+      "body-orientation",
+      "far-post",
+      "avoid-block"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0008.txt",
+    "objective": "Enable the last defender in a zonal free-kick line to individually resist blocking actions through open body orientation and a wider starting position, preserving blindside awareness and manoeuvring room without needing to alter the team's overall defensive shape or line height.",
+    "practice_design": "Individual/unit defending practice for the last defender in a zonal wide-free-kick line: rehearse holding an open body shape (rather than square-on/closed to the play) so the defender can track both the ball and any blindside attacker simultaneously. Pair this with a starting position a few steps wider than the rest of the zonal line, giving room to step around or resist an incoming screen/block. Run repeated reps against an attacker attempting a blocking run so the defender practises recognising the block early (due to better visual contact) and adjusting his body/footwork to get past it, rather than being caught passively.",
+    "success_cues": [
+      "Last defender maintains visual contact with the blindside attacker throughout the delivery, not just the ball.",
+      "Defender's starting position is visibly wider than the rest of the zonal line, without compromising overall line coverage.",
+      "Defender recognises an incoming block early enough to adjust his body position or footwork.",
+      "Defender is able to negotiate around or resist the block rather than being pinned/screened out of the play.",
+      "The far-post zone remains covered without requiring the whole line to shift or drop, preserving front-post coverage as well."
+    ],
+    "reference_author": "FIFA Training Centre — individual author",
+    "reference_author_qualification": "FIFA Training Centre source"
+  },
+  "limitations": [
+    "The article gives this example relatively brief treatment (two sentences) compared to the detailed PSG/Inter Miami breakdown in A-0007; some contextual detail (e.g. Botafogo's opponent, match context, outcome of the specific free kick) is not stated in the source text."
+  ]
+}

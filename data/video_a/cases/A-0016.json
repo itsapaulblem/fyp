@@ -1,0 +1,52 @@
+{
+  "case_id": "A-0016",
+  "status": "approved",
+  "source": {
+    "title": "Champions League tactical insights: Chelsea counterpressing — Cucurella clip 3",
+    "provider": "UEFA",
+    "url": "https://www.uefa.com/uefachampionsleague/news/029f-1f4ff3a2dfa2-8f711ec7d108-1000--champions-league-performance-insights-marc-cucurella-s-1v1-d/",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0016.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 16.233333
+  },
+  "situation": {
+    "phase": "high defending",
+    "action_family": "high_press",
+    "team_role": "Chelsea left-back (Marc Cucurella)",
+    "pitch_area": "middle-to-attacking third",
+    "outcome": "Cucurella anticipates the pass, presses Yamal and wins a throw-in",
+    "human_observation": "UEFA Technical Observer Rui Faria identified in this clip Cucurella's excellent anticipation, which allowed him to judge the distance and step out to press Lamine Yamal, winning a throw-in. Faria's stated commentary: 'He presses aggressively, not giving him the time and space to receive and turn for a 1v1 situation or even to keep the ball.'",
+    "priority_problem": "How to read the flight and timing of an incoming pass early enough to close down the distance and press the receiver before he can control, turn, and either engage in a 1v1 or retain possession.",
+    "visible_evidence": [
+      "Cucurella anticipates a pass being played to Yamal.",
+      "He judges the distance correctly and steps out to close down before the ball arrives.",
+      "He presses Yamal aggressively upon/before reception.",
+      "This press denies Yamal the time and space to receive and turn, or to otherwise keep the ball.",
+      "The outcome of the press is winning a throw-in for Chelsea."
+    ],
+    "tags": [
+      "anticipation",
+      "pressing",
+      "distance",
+      "prevent-turn"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0016.txt",
+    "objective": "Develop the anticipation to read an incoming pass early and correctly judge closing distance, so as to press the receiver aggressively before he can control, turn, or retain the ball.",
+    "practice_design": "Anticipation-and-press practice: set up scenarios where a passer plays into a receiver under varying distances/angles, with the defender starting slightly off the receiver and coached to read the pass's flight and trajectory as the trigger to close down, rather than waiting for the ball to arrive. Reward presses that arrive tight enough to prevent the receiver from taking a controlling first touch that allows a turn. Vary the pass speed/distance to sharpen the defender's judgment of when to commit to the press versus hold position. This connects to Rui Faria's general 1v1 defending principles cited elsewhere in the article: body positioning and balance; focus on ball and space; and identifying the opponent's weaker side.",
+    "success_cues": [
+      "Defender reads the pass early, beginning to close distance before or as the ball is played, not after it arrives.",
+      "Defender's press denies the receiver time to take a controlling touch and turn.",
+      "Receiver is forced away from goal, into a poor touch, or dispossessed/forced out of play.",
+      "Press does not concede space in behind, reflecting sound judgement of when to commit."
+    ],
+    "reference_author": "Rui Faria",
+    "reference_author_qualification": "UEFA Technical Observer"
+  },
+  "limitations": [
+    "Broadcast camera changes restrict continuous viewing of every defender."
+  ]
+}

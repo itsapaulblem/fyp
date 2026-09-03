@@ -1,0 +1,52 @@
+{
+  "case_id": "A-0011",
+  "status": "approved",
+  "source": {
+    "title": "Champions League performance insights: Güler contribution — clip 2",
+    "provider": "UEFA",
+    "url": "https://www.uefa.com/uefachampionsleague/news/029f-1f1f7f9745be-b4346e769d91-1000--champions-league-performance-insights-finding-space-between/",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0011.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 39.352064
+  },
+  "situation": {
+    "phase": "attacking organisation",
+    "action_family": "between_lines",
+    "team_role": "Real Madrid attacking midfielder (Arda Güler)",
+    "pitch_area": "central midfield and attacking half-space",
+    "outcome": "Güler drops to receive and plays a first-time flick to Brahim Díaz",
+    "human_observation": "This clip is discussed by UEFA Technical Observer Jan Peder Jalland as a second example of Güler's contribution, distinct from the 1v1 creation for Vinícius Júnior shown in clip one (A-0010). Jalland's stated commentary: Güler exhibits excellent movement and awareness by dropping down and producing a first-time flick to Brahim Díaz. The wider article notes Güler ranked second among Real Madrid players for both key passes (six) and passes into the final third (nine) in the match, and was the second-most frequent Real Madrid player (after Bellingham) to receive the ball between the lines (12 times).",
+    "priority_problem": "How to read the moment to drop into space between the lines to receive, and execute an immediate first-time pass (rather than taking a touch to control) to keep the combination moving quickly and maintain tempo/surprise in the attack.",
+    "visible_evidence": [
+      "Güler changes depth, dropping into space to become available to receive.",
+      "He shows awareness of the position of Brahim Díaz and the surrounding play before receiving.",
+      "He receives the ball and, without taking a controlling touch, plays a first-time flick.",
+      "The flick connects directly to Brahim Díaz, continuing the attacking move."
+    ],
+    "tags": [
+      "awareness",
+      "dropping-movement",
+      "first-time-pass",
+      "combination"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0011.txt",
+    "objective": "Develop the awareness and technical execution needed to drop into space between the lines and release an immediate first-time pass to a teammate, maintaining tempo and disguise in combination play.",
+    "practice_design": "Per Jalland's general coaching reflections in the article (used as general coaching advice illustrated by this example): begin with mannequins and passes played between the lines, with a player moving to find a striker or winger in behind, then progress to combination play and finishing. Add central defenders as mannequins for midfielders, then gradually introduce live opposition. For this particular skill, emphasise reps where the receiving player must decide in the moment whether to take a touch or play first-time, rewarding correct first-time execution when tempo/space demands it. Vary pitch size and player numbers to adjust the difficulty and time pressure involved in that decision.",
+    "success_cues": [
+      "Player recognises the right moment to drop and create a passing option between the lines.",
+      "Player scans and is aware of a teammate's position before the ball arrives.",
+      "Player executes a clean first-time pass/flick without needing a controlling touch.",
+      "The pass finds the intended teammate accurately, sustaining the tempo of the attacking move."
+    ],
+    "reference_author": "Jan Peder Jalland",
+    "reference_author_qualification": "UEFA Technical Observer; coach of Norway's Under-21 men's national team"
+  },
+  "limitations": [
+    "Broadcast framing may not show all off-ball players.",
+    "The key-passes/final-third-passes/between-lines-receptions figures are match-wide statistics, not specific to this individual clip."
+  ]
+}

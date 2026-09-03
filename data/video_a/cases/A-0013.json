@@ -1,0 +1,57 @@
+{
+  "case_id": "A-0013",
+  "status": "approved",
+  "source": {
+    "title": "Champions League Performance Insight: Arsenal's right-sided overload — clip 2",
+    "provider": "UEFA",
+    "url": "https://www.uefa.com/uefachampionsleague/news/0293-1c7386e765b9-68b052b1fe83-1000--champions-league-performance-insights-how-arsenal-s-overlo/",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0013.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 38.931293
+  },
+  "situation": {
+    "phase": "positional attack",
+    "action_family": "overload",
+    "team_role": "Arsenal attacking unit",
+    "pitch_area": "right channel and five-metre box",
+    "outcome": "Arsenal exploit a 5v4; Timber runs behind and Martinelli finishes across the goal",
+    "human_observation": "Per UEFA's technical analysis unit, this clip shows the build-up to Arsenal's first goal, starting with a 5v4 overload Arsenal create on the right. Declan Rice creates space by deliberately avoiding movement toward the ball, instead positioning himself to exploit gaps. Martin Ødegaard then plays a precise pass to Rice's right foot, set up so Rice needs only one touch before delivering a through ball, timed perfectly for Jurriën Timber's run in behind. Gabriel Martinelli cuts across from the back post to attack the five-metre box and score the goal.",
+    "priority_problem": "How to synchronise a numerical overload (5v4) on one side of the pitch with a receiving player's positioning discipline (avoiding the ball to hold space), a precisely weighted one-touch setup pass, a timed run in behind, and a supporting run across the box to convert the resulting chance.",
+    "visible_evidence": [
+      "Arsenal establish a 5v4 numerical overload on the right side of the pitch.",
+      "Declan Rice deliberately avoids moving toward the ball, instead holding a position that exploits space/gaps in the defensive structure.",
+      "Martin Ødegaard plays a pass specifically weighted and directed to Rice's right foot.",
+      "This pass placement allows Rice to play a first-time (one-touch) through ball rather than needing to control it first.",
+      "Rice's through ball is timed perfectly for Jurriën Timber's run in behind the defence.",
+      "Gabriel Martinelli makes a run cutting across from the back post to attack the five-metre box.",
+      "Martinelli finishes the move to score the goal."
+    ],
+    "tags": [
+      "overload",
+      "right-channel",
+      "third-player-run",
+      "timing",
+      "finish"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0013.txt",
+    "objective": "Combine a numerical overload on one side of the pitch with disciplined off-ball positioning, a precisely weighted one-touch setup pass, and synchronised timed runs (one in behind, one across the box) to convert a created overload into a goal.",
+    "practice_design": "Overload-to-finish practice (e.g. 5v4 in a wide channel progressing to goal): one player is coached specifically to hold a position away from the ball, reading gaps rather than checking to receive, to stay available for a one-touch lay-off. A supplying player rehearses playing accurately weighted passes to the receiving player's stronger foot so a first-time through ball is possible without a controlling touch. A third player times a run in behind off that through ball, while a fourth player rehearses a supporting run across the face of goal (back post to five-metre box) to arrive for the finish. Progress from unopposed shape work to a defending back four to replicate the numerical overload being exploited.",
+    "success_cues": [
+      "Attacking side establishes a genuine numerical overload (more attackers than defenders) in the working area before the key pass.",
+      "The link player holds position intelligently rather than checking to the ball, staying available for a one-touch pass.",
+      "Setup pass is weighted and directed to the receiving player's stronger foot, enabling an immediate one-touch release.",
+      "The through ball is timed precisely for the runner's break in behind, neither too early nor too late.",
+      "A supporting player arrives across the box (e.g. back post to five-metre area) in time to convert the resulting chance."
+    ],
+    "reference_author": "UEFA Technical Analysis Unit / UEFA Technical Observer Group (unnamed individual for this specific clip)",
+    "reference_author_qualification": "UEFA's official match analysis unit, as credited in the source article"
+  },
+  "limitations": [
+    "The sequence includes UEFA graphical overlays and replay material.",
+    "No single named individual is quoted discussing this specific clip — attribution is to UEFA's technical analysis unit generically, as stated in the source text."
+  ]
+}

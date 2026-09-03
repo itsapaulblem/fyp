@@ -126,7 +126,7 @@ def sample_a(
     """Sample chronological frames from one approved Dataset A case."""
     case = approved_case(case_id)
     media_path = ROOT / cast(str, case.source.local_media_path)
-    destination = ROOT / "artifacts/model_inputs/dataset_a" / case_id / (
+    destination = ROOT / "data/video_a/frames" / case_id / (
         f"uniform_{count}_edge_{maximum_edge}"
     )
     frames = sample_dataset_a(

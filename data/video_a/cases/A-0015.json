@@ -1,0 +1,49 @@
+{
+  "case_id": "A-0015",
+  "status": "approved",
+  "source": {
+    "title": "Champions League tactical insights: Chelsea counterpressing — Cucurella clip 2",
+    "provider": "UEFA",
+    "url": "https://www.uefa.com/uefachampionsleague/news/029f-1f4ff3a2dfa2-8f711ec7d108-1000--champions-league-performance-insights-marc-cucurella-s-1v1-d/",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0015.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 27.5
+  },
+  "situation": {
+    "phase": "low-block defending",
+    "action_family": "low_block",
+    "team_role": "Chelsea left-back (Marc Cucurella)",
+    "pitch_area": "defensive third",
+    "outcome": "Cucurella contributes to stopping the attack from Chelsea's low block",
+    "human_observation": "The article gives minimal detail on this clip specifically — it is referenced only in passing as an example of Cucurella defending 'from a low block,' within a general statement that UEFA's technical observers admired his defending 'in all areas... from a low block, as seen in clip two, to higher up the pitch.' No specific description of the individual duel, the attacker involved, or the outcome of this particular 1v1 is given in the source text.",
+    "priority_problem": "Not specified with clip-specific detail in the source text. At a general level, the article frames this as an example of maintaining effective individual defending discipline while part of a deeper, more compact team shape (a low block), as opposed to the higher-up-the-pitch defending shown elsewhere in the series.",
+    "visible_evidence": [
+      "Article confirms this clip shows Cucurella defending from a low block (a deeper defensive team shape), in contrast to other clips showing him defending higher up the pitch.",
+      "No further detail on the specific attacker, duel outcome, or defensive technique is given in the source text for this clip."
+    ],
+    "tags": [
+      "low-block",
+      "1v1-defending",
+      "compactness",
+      "defensive-third"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0015.txt",
+    "objective": "General coaching objective illustrated by this example: maintain sound individual 1v1 defending technique and discipline while operating within a deeper, more compact team defensive shape (low block), where errors are more costly due to reduced space behind.",
+    "practice_design": "Representative general practice for the coaching intervention illustrated by this example: adapt Rui Faria's 1v1 defending drill described in the same article by using small-sided 1v1, 2v2, or 3v3 situations with neutral players to vary numerical superiority. Emphasise body positioning, balance, focus on ball and space, and identifying the opponent's weaker side, within a deeper low-block context that recreates reduced space.",
+    "success_cues": [
+      "Defender maintains individual 1v1 discipline (body positioning, balance) even while part of a deeper team shape.",
+      "Defensive action does not break the team's compactness or create gaps behind the low block.",
+      "Individual duel is resolved (won, delayed, or forced wide) without conceding a clear scoring opportunity."
+    ],
+    "reference_author": "UEFA Technical Observers (general, unnamed for this specific clip)",
+    "reference_author_qualification": "UEFA's official technical observer group, as credited in the source article"
+  },
+  "limitations": [
+    "Broadcast camera changes restrict continuous viewing of every defender.",
+    "The article gives minimal clip-specific detail for this instance (one clause, no description of the duel or outcome), unlike clips one, three, four, and five in the same series. Coaching fields here are largely unfillable from the source text alone and require actual video review."
+  ]
+}

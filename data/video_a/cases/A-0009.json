@@ -1,0 +1,53 @@
+{
+  "case_id": "A-0009",
+  "status": "approved",
+  "source": {
+    "title": "Champions League performance insights: Bellingham between the lines — clip 1",
+    "provider": "UEFA",
+    "url": "https://www.uefa.com/uefachampionsleague/news/029f-1f1f7f9745be-b4346e769d91-1000--champions-league-performance-insights-finding-space-between/",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0009.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 21.1
+  },
+  "situation": {
+    "phase": "attacking organisation",
+    "action_family": "between_lines",
+    "team_role": "Real Madrid attacking midfielder (Jude Bellingham)",
+    "pitch_area": "central space between midfield and defence",
+    "outcome": "Bellingham receives and continues the attack",
+    "human_observation": "This clip is discussed by UEFA Technical Observer Jan Peder Jalland as an example of Bellingham adjusting his position to receive between the lines against Juventus. Jalland's stated commentary: Bellingham has found space and adjusts very well; his awareness is very good; he is probably expecting the ball to his left foot, but it comes to his right, yet he has the body control to go both ways depending on the pass. The wider article context frames this within Real Madrid manager Xabi Alonso's description of Bellingham as a 'complete' player whose work between the lines was integral to the win, and notes Bellingham received the ball between the lines more times (17) than any other player in the match.",
+    "priority_problem": "How to maintain the body control and positional adjustment needed to receive a pass on either foot when the actual pass direction/foot differs from what was anticipated, while occupying space between the opposition's lines.",
+    "visible_evidence": [
+      "Bellingham adjusts his position to find space between Juventus's lines.",
+      "He appears to anticipate receiving the ball to his left foot.",
+      "The ball instead arrives to his right foot.",
+      "He has sufficient body control to adapt and receive/go either way depending on which foot the pass actually reaches.",
+      "Statistical context (not clip-specific but match-wide): Bellingham received the ball between the lines 17 times in the match, the most of any player, and ranked first among Real Madrid players for receiving line-breaking passes (13) and second for runs in behind (10)."
+    ],
+    "tags": [
+      "between-lines",
+      "body-orientation",
+      "awareness",
+      "receiving"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0009.txt",
+    "objective": "Develop the body control and adaptability to receive a pass on either foot when the actual delivery differs from the anticipated side, while maintaining good positional awareness in the space between opposition lines.",
+    "practice_design": "Per Jalland's own coaching reflections in the article (general coaching guidance illustrated by this clip): start with mannequins and passes played in between the lines, with a player moving to find a striker or winger in behind. Progress to combination plays and finishing. Add central defenders as mannequins for midfielders, then gradually introduce live defenders and midfielders, eventually allowing counter-attacking play. Vary pitch size and number of players to control repetition versus game-realism — smaller pitches with fewer players demand more awareness and technical ability with more repetitions; larger, fuller setups are closer to the real game but allow fewer reps.",
+    "success_cues": [
+      "Player adjusts body orientation (open stance, backing away, moving sideways, or standing still as needed) rather than only relying on running to find space.",
+      "Player can receive and control the ball effectively regardless of which foot the pass actually arrives on.",
+      "Player shows awareness of surrounding opposition shape before and while receiving the ball between the lines.",
+      "Player is not caught flat-footed or forced into a poor first touch when the pass direction differs from expectation."
+    ],
+    "reference_author": "Jan Peder Jalland",
+    "reference_author_qualification": "UEFA Technical Observer; coach of Norway's Under-21 men's national team"
+  },
+  "limitations": [
+    "Broadcast framing may not show all off-ball players.",
+    "The 17-times-received-between-lines and other match statistics are match-wide figures, not specific to this individual clip."
+  ]
+}

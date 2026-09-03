@@ -1,0 +1,59 @@
+{
+  "case_id": "A-0023",
+  "status": "approved",
+  "source": {
+    "title": "FU20WC25: Goalkeeper considerations when defending corners — clip 2 (Panama, Cecilio Burgess)",
+    "provider": "FIFA Training Centre",
+    "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fu20wc/2025/goalkeeper-considerations-when-defending-corners.php",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0023.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 32.213
+  },
+  "situation": {
+    "phase": "defending a corner (first phase, player-marking system)",
+    "action_family": "corner",
+    "team_role": "Panama goalkeeper (Cecilio Burgess)",
+    "pitch_area": "six-yard box / goal area",
+    "outcome": "Burgess times his movement perfectly to make space and claim the ball",
+    "human_observation": "Per Pascal Zuberbühler, this clip shows Panama matching Korea Republic in a 5v5 player-marking system, with one zonal player protecting the front of the goal area. A defender marks the attacker positioned near the goalkeeper, ensuring Burgess is free to manage the space and see the ball. Zuberbühler notes this matters because the goalkeeper can see the full scenario, knows all attackers are accounted for, and can focus on the ball. Just before the corner is kicked, the goalkeeper is penned in, but he is patient and makes a crucial movement with great timing, creating space so he can attack the ball, while his defender takes care of the attacker. The article separately notes that, up to and including the round of 16 at this tournament, first contacts made by goalkeepers using a player-marking system increased by 7% compared to the FIFA U-20 World Cup Argentina 2023.",
+    "priority_problem": "How a goalkeeper operating within a player-marking defensive corner setup can rely on a designated defender to occupy the attacker in his immediate vicinity, freeing him to focus entirely on reading the ball and timing a late movement to create space to attack it, despite initially being penned in.",
+    "visible_evidence": [
+      "Panama set up in a 5v5 player-marking system against Korea Republic, with one additional zonal player protecting the front of the goal area.",
+      "A Panama defender specifically marks the attacker positioned near goalkeeper Burgess.",
+      "This marking arrangement leaves Burgess free to manage his space and focus on the ball rather than the nearby attacker.",
+      "Burgess can see the full defensive scenario and is aware all opposition attackers are accounted for.",
+      "Just before the corner is taken, Burgess is initially penned in / restricted in his position.",
+      "Burgess shows patience and then makes a well-timed movement to create space.",
+      "Burgess successfully attacks and claims the ball as a result of that movement, while his defender continues to occupy the marked attacker."
+    ],
+    "tags": [
+      "goalkeeping",
+      "corners",
+      "player-marking",
+      "5v5",
+      "timing",
+      "claim"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0023.txt",
+    "objective": "Enable a goalkeeper in a player-marking defensive corner system to trust a designated defender to occupy a nearby attacker, so the goalkeeper can focus solely on the ball and time a late movement to create space to attack and claim it.",
+    "practice_design": "Per the article's general framing of player-marking systems (used as general coaching advice illustrated by this example): rehearse corner defending with a full player-marking setup (e.g. 5v5 plus a zonal player at the front of the goal area), explicitly assigning one defender to occupy any attacker stationed in the goalkeeper's immediate vicinity. Coach the goalkeeper to communicate and confirm all attackers are accounted for before the delivery, then to hold a disciplined starting position (even if initially restricted/penned in by the marker) and practice a late, precisely timed movement to create separation and attack the ball, rather than moving early and losing sight of the play.",
+    "success_cues": [
+      "A designated defender is clearly assigned to occupy the attacker nearest the goalkeeper, rather than leaving that responsibility ambiguous.",
+      "Goalkeeper communicates to confirm all attackers are accounted for before the ball is delivered.",
+      "Goalkeeper remains patient and does not move prematurely, even while initially restricted by the nearby attacker's positioning.",
+      "Goalkeeper's eventual movement is precisely timed, creating just enough space to attack the ball.",
+      "Goalkeeper successfully claims/wins the first contact on the delivered ball."
+    ],
+    "reference_author": "Pascal Zuberbühler",
+    "reference_author_qualification": "FIFA's senior football and goalkeeping expert"
+  },
+  "limitations": [
+    "The local clip boundary was confirmed against the video file; clip_end_seconds is 32.213.",
+    "Broadcast framing may not show every defending player's position at the moment of delivery.",
+    "The 7%-increase statistic is a tournament-wide figure for player-marking systems generally, not specific to this individual clip."
+  ]
+}

@@ -21,8 +21,7 @@ def test_case_template_is_created_without_overwrite(tmp_path: Path) -> None:
             "visible_evidence": [], "tags": []},
           "coaching": {"advice_path": "data/video_a/advice/A-0001.txt",
             "objective": "", "practice_design": "", "success_cues": [],
-            "reference_author": "", "reference_author_qualification": "",
-            "reviewer_pseudonym": "", "reviewer_qualification": "", "reviewed_at": ""},
+            "reference_author": "", "reference_author_qualification": ""},
           "limitations": []
         }""",
         encoding="utf-8",
@@ -35,4 +34,3 @@ def test_case_template_is_created_without_overwrite(tmp_path: Path) -> None:
     assert case.case_id == "A-0042"
     assert case.coaching.advice_path.endswith("A-0042.txt")
     assert advice_path.read_text(encoding="utf-8") == "placeholder"
-

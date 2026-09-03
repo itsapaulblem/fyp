@@ -1,0 +1,52 @@
+{
+  "case_id": "A-0020",
+  "status": "approved",
+  "source": {
+    "title": "Champions League tactical insights: Cucurella excels — clip 1 (Chelsea counterpressing)",
+    "provider": "UEFA",
+    "url": "https://www.uefa.com/uefachampionsleague/news/029f-1f4ff3a2dfa2-8f711ec7d108-1000--champions-league-performance-insights-marc-cucurella-s-1v1-d/",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0020.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 58.6
+  },
+  "situation": {
+    "phase": "transition after losing possession",
+    "action_family": "counterpress",
+    "team_role": "Chelsea team",
+    "pitch_area": "middle and attacking third",
+    "outcome": "Malo Gusto's challenge helps Chelsea regain and progress forward quickly",
+    "human_observation": "This is the opening clip of the first video in the article, illustrating Chelsea's collective intensity via counterpressing during their 3-0 win over Barcelona. Per the article: this was a team who, on losing the ball, worked aggressively to win it back, as seen with Malo Gusto's challenge to regain the ball — and once they had it back, they were quick and direct in progressing it forward. The article notes this intensity is a recurring theme for Chelsea under manager Enzo Maresca, also referencing a similar pattern in a prior UEFA Conference League final analysis against Real Betis.",
+    "priority_problem": "How to react immediately and aggressively upon losing the ball (rather than retreating passively), win it back through a committed individual challenge, and then transition quickly into direct forward progression rather than resetting into a slower buildup.",
+    "visible_evidence": [
+      "Chelsea lose possession in the middle/attacking third.",
+      "Players react immediately and aggressively to try to win the ball back rather than dropping off.",
+      "Malo Gusto makes the challenge that regains possession for Chelsea.",
+      "Following the regain, Chelsea progress the ball quickly and directly, rather than resetting possession slowly."
+    ],
+    "tags": [
+      "counterpress",
+      "regain",
+      "transition",
+      "forward-progression"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0020.txt",
+    "objective": "Develop the immediate, aggressive reaction needed to win the ball back quickly after losing it, and the decision-making to progress directly and quickly once possession is regained, rather than resetting into a slow buildup.",
+    "practice_design": "Small-sided possession-to-transition practice: on a coached or random turnover, the team without the ball must press immediately and aggressively to win it back (rather than retreat), with a specific emphasis on committing to challenges (as Gusto does in this clip) rather than delaying or standing off. Once the ball is regained, reward/require quick, direct forward passes or dribbles rather than safe sideways/backward passes, reinforcing the 'regain and go' pattern. Time-pressure constraints (e.g. must play forward within 1-2 touches of winning the ball) can help ingrain the directness.",
+    "success_cues": [
+      "Players closest to the ball react immediately and aggressively upon losing possession.",
+      "At least one player commits fully to a challenge to win the ball back, rather than jockeying passively.",
+      "The ball is regained through that committed challenge.",
+      "Immediately after the regain, the team progresses the ball quickly and directly upfield rather than resetting slowly."
+    ],
+    "reference_author": "UEFA Technical Analysis Unit — individual author not stated",
+    "reference_author_qualification": "UEFA technical analysis source"
+  },
+  "limitations": [
+    "The sequence includes UEFA graphical overlays and repeated analysis.",
+    "No single named individual (e.g. Rui Faria or Roberto Martínez, who are quoted elsewhere in the article on the separate Cucurella 1v1 series) is quoted specifically on this clip — attribution is to the general article narrative only."
+  ]
+}

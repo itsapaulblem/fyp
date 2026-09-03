@@ -1,0 +1,53 @@
+{
+  "case_id": "A-0003",
+  "status": "approved",
+  "source": {
+    "title": "Argentina attacking corners: freeing the edge — clip 3 vs Poland",
+    "provider": "FIFA Training Centre",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/set-plays/corners/attacking-corners.php",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0003.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 16.725
+  },
+  "situation": {
+    "phase": "attacking corner",
+    "action_family": "corner",
+    "team_role": "Argentina attacking unit",
+    "pitch_area": "corner area and outside edge of penalty area",
+    "outcome": "Enzo Fernández receives farther from the box and shoots off target",
+    "human_observation": "The article does not describe specific player positions or decoy movements for this clip. It states only that this is a further example of the same corner routine seen in clips 1 and 2, this time resulting in an off-target attempt against Poland. The general strategies behind the routine, per the article, are: committing 5-6 players to attack in tiered formation, engaging player-for-player markers with multiple attackers, overloading the front post or winning a flick-on there, using a third man for short corners, and targeting the front post or centre of goal. The 'special strategy' behind this specific Argentina routine is playing short to draw defenders out, linking up around the box to free space for Fernández on the edge, and using the technical ability of Messi and Di María to work the ball to the front post or set up a shot.",
+    "priority_problem": "Not specified with clip-3-specific detail in the source text. At a general level, the article frames the recurring problem as: how to draw defenders out of the edge-of-box zone using tiered attacking positions and short combination play, so a player with shooting ability (here, Fernández) can strike from range unopposed.",
+    "visible_evidence": [
+      "Article confirms this is 'this corner routine' (the same short-corner-to-Fernández pattern) applied in a match against Poland.",
+      "Outcome stated as an off-target shot from Fernández.",
+      "No further detail on starting positions, decoy runs, or defensive response is given in the source text for this specific clip."
+    ],
+    "tags": [
+      "corner",
+      "short-corner",
+      "edge-of-box",
+      "shot",
+      "off-target"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0003.txt",
+    "objective": "General objective drawn from the article's stated strategies for this routine: commit numbers to the box in a tiered formation to occupy markers, use short combination play to draw the edge-of-box defender away, and free a technically able passer/shooter (Fernández) to strike from the edge of the area.",
+    "practice_design": "Representative general practice for the coaching intervention illustrated by this example: rehearse corner routines where 5-6 attackers commit to the box in staggered depth, with designated players tasked with engaging markers 1-for-1 and a 'third man' used to work the short corner. Emphasise combination play (give-and-go / third-man passing) around the edge of the box specifically to create separation for a nominated shooter, and coach the front-post overload or flick-on as an alternate release if the edge option isn't on.",
+    "success_cues": [
+      "Attacking group commits enough numbers (5-6) in tiered depth to occupy defensive markers throughout the move.",
+      "Short-corner combination play successfully draws at least one defender out of the edge-of-box zone.",
+      "Designated shooter receives on the edge of the area with time to strike (even if, as in this instance, the attempt goes off target).",
+      "Front-post overload or flick-on option is available as an alternate route when the edge-of-box release isn't open."
+    ],
+    "reference_author": "FIFA Training Centre — individual author",
+    "reference_author_qualification": "FIFA Training Centre source"
+  },
+  "limitations": [
+    "Broadcast framing may not show every player's initial position.",
+    "The FIFA article gives minimal clip-specific detail for this instance (one sentence, no description of positions or decoy movements). The coaching content above is drawn from the article's general strategy discussion, not from anything specific to this clip, and should not be treated as a description of what actually happened in this footage.",
+    "Clip-specific human_observation/priority_problem fields remain thin; a video review would be needed to add clip-3-specific detail."
+  ]
+}

@@ -28,7 +28,7 @@ def test_action_normalization_handles_official_punctuation() -> None:
 
 
 def test_control_pairing_is_deterministic_and_respects_action() -> None:
-    cases = [make_case("A-0001", "Corner"), make_case("A-0002", "Foul")]
+    cases = [make_case("A-0001", "corner"), make_case("A-0002", "free_kick")]
     query = SoccerNetClip(
         "SNGS-001", "train", "Corner", 25, 750, "1.3", "x.zip", "label", "%06d.jpg"
     )
@@ -36,4 +36,3 @@ def test_control_pairing_is_deterministic_and_respects_action() -> None:
     unrelated = deterministic_control_case(cases, query, "B1_random_case", 42)
     assert oracle.case_id == "A-0001"
     assert unrelated.case_id == "A-0002"
-

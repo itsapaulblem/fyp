@@ -1,0 +1,48 @@
+CASE: A-0017 — Atlético low-block defending, clip 1
+
+TEAM / ROLE BEING COACHED
+Atlético de Madrid defensive unit (back five), protecting central
+areas of their own defensive third against Arsenal.
+
+COACHING INTERVENTION
+Concise intervention tied to visible evidence: Organise a compact low
+block that prioritises closing central passing lanes (through the box
+and in behind), deliberately conceding only wide, less dangerous
+circulation passes around the outside of the defensive structure.
+
+Evidence (per UEFA Technical Observer Edin Terzić, discussing this
+clip): Atlético focused their low-block defending on protecting
+central areas — the width of the penalty box — forcing Arsenal to
+attack in the wide corridors instead. Terzić's direct assessment: "You
+see Atlético in the central area with all their players. There's no
+pass through, there's no pass in behind. They only allow the pass
+around them." Atlético defended with a back five (as distinct from
+Arsenal's back four discussed in later clips of the same article), and
+the quality of this deep defending was underlined by Arsenal's shots
+against the low block carrying a combined low xG (0.22 across five
+attempts), none of which forced a save.
+
+REPRESENTATIVE TRAINING PRACTICE
+Small-sided possession/defending practice using a back five (or
+matching the numbers being defended against): defending team is
+instructed specifically to prioritise central compactness — no player
+leaves a central passing lane open — while accepting that the
+attacking side will have freedom to pass around the outside. Attacking
+side is coached to attempt central through balls and balls in behind
+as the "win" condition, while the defending side's success is measured
+by denying these central options entirely, regardless of how much
+possession/width play the attackers are allowed. Debrief on shot
+quality/location conceded (emphasising low-value wide/deep attempts
+over central, high-value chances).
+
+OBSERVABLE SUCCESS CUES
+- No central through balls or passes in behind reach an attacker in a
+  dangerous position.
+- The defending unit remains compact around the width of the penalty
+  box rather than being pulled apart.
+- Attacking side is forced to circulate the ball around the outside of
+  the block rather than through the middle.
+- Any shots conceded are low-quality (wide angle, distance, or low xG)
+  rather than clear central chances.
+- The defending shape holds its central discipline even as the ball
+  moves from side to side.

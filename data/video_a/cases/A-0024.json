@@ -1,0 +1,59 @@
+{
+  "case_id": "A-0024",
+  "status": "approved",
+  "source": {
+    "title": "FU20WC25: Goalkeeper considerations when defending corners — clip 3 (Morocco, Yanis Benchaouch)",
+    "provider": "FIFA Training Centre",
+    "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fu20wc/2025/goalkeeper-considerations-when-defending-corners.php",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0024.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 31.701
+  },
+  "situation": {
+    "phase": "defending a corner (first phase, hybrid marking system)",
+    "action_family": "corner",
+    "team_role": "Morocco goalkeeper (Yanis Benchaouch)",
+    "pitch_area": "six-yard box / goal area",
+    "outcome": "Benchaouch times his jump to tip the ball away despite chaotic attacking movement",
+    "human_observation": "Per Pascal Zuberbühler, this clip shows chaotic movements by Korea Republic's players designed to disorganise Morocco's defence and lose their markers. Morocco's goalkeeper Benchaouch is under no direct pressure and has a good view, while the front of his goal area is protected by zonal players (Morocco using a hybrid marking system, combining player marking and zonal marking). Benchaouch is aware of the chaos around him but is not distracted by it, staying focused on the ball. He waits before timing his jump to generate great height, tipping the ball away. The article notes that, tournament-wide, first contacts by goalkeepers in hybrid marking systems decreased by 4% compared to the FIFA U-20 World Cup Argentina 2023.",
+    "priority_problem": "How a goalkeeper can maintain focus on the ball and resist being distracted by deliberate opposition movement designed to disorganise markers, relying on zonal cover at the front of the goal area, and time a jump correctly to generate maximum height for the intervention.",
+    "visible_evidence": [
+      "Korea Republic's attacking players make deliberately chaotic movements intended to disorganise Morocco's markers and shake off their assigned defenders.",
+      "Morocco defends using a hybrid system, combining player marking with zonal players protecting the front of the goal area.",
+      "Benchaouch is not under direct physical pressure and has a clear view of the ball.",
+      "Benchaouch is visibly aware of the surrounding chaotic movement but does not let it distract his focus on the ball.",
+      "Benchaouch waits before committing to his jump.",
+      "Benchaouch's timing generates significant height on his jump.",
+      "Benchaouch tips the ball away as his intervention."
+    ],
+    "tags": [
+      "goalkeeping",
+      "corners",
+      "hybrid-marking",
+      "focus",
+      "timing",
+      "tip-away"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0024.txt",
+    "objective": "Develop a goalkeeper's ability to remain focused solely on the ball amid deliberate opposition movement designed to create confusion, trusting zonal cover in front of goal, and to time a jump correctly to maximise reach/height on the intervention.",
+    "practice_design": "Per the article's general framing of hybrid marking systems (used as general coaching advice illustrated by this example): rehearse corner defending in a hybrid setup (player marking combined with zonal players at the front of the goal area), deliberately introducing chaotic, unpredictable attacking movement patterns designed to disrupt marking assignments. Coach the goalkeeper specifically to filter out this movement and keep visual focus locked on the ball and its trajectory, rather than reacting to nearby player movement. Add repetition on jump timing — waiting rather than committing early — to build the habit of generating maximum height only at the correct moment.",
+    "success_cues": [
+      "Goalkeeper maintains visual focus on the ball throughout, despite distracting or chaotic attacking movement nearby.",
+      "Goalkeeper does not react prematurely to opposition players' movement patterns.",
+      "Zonal players in front of the goal area provide the intended protection, reducing direct pressure on the goalkeeper.",
+      "Goalkeeper's jump is well-timed, generating maximum height for the intervention.",
+      "Goalkeeper successfully intervenes (tips/punches/catches) the delivered ball."
+    ],
+    "reference_author": "Pascal Zuberbühler",
+    "reference_author_qualification": "FIFA's senior football and goalkeeping expert"
+  },
+  "limitations": [
+    "The local clip boundary was confirmed against the video file; clip_end_seconds is 31.701.",
+    "Broadcast framing may not show every defending player's position at the moment of delivery.",
+    "The 4%-decrease statistic is a tournament-wide figure for hybrid marking systems generally, not specific to this individual clip."
+  ]
+}

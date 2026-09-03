@@ -19,10 +19,10 @@ Do not describe retrieval-assisted performance as independent video understandin
 
 - Every approved case must pair advice with the exact referenced video segment.
 - Record URL/provider, clip boundaries, rights status, access date, human
-  observation, tactical tags, advice, reviewer identity/qualification, and date.
+  observation, tactical tags, advice, source attribution, and human-review status.
 - Federation material may inform terminology, but unrelated advice is not a
   valid label.
-- Unknown rights or incomplete human review means the case remains `draft`.
+- Unknown rights or incomplete human review means the case cannot be approved.
 - Start with a 20–30 case feasibility pilot; scale beyond 100 only if justified.
 
 ## Dataset B: SoccerNet queries
@@ -66,6 +66,5 @@ Do not describe retrieval-assisted performance as independent video understandin
   prompts, outputs, scores, or conclusions into a new result.
 - Store secrets only in `.env`; commit only `.env.example`.
 - Generated media, embeddings, private references, and outputs are Git-ignored.
-- Do not invent cases, coaching advice, reviewer credentials, links, labels,
+- Do not invent cases, coaching advice, links, labels,
   pair relevance, scores, or metric values.
-

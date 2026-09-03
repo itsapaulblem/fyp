@@ -1,0 +1,58 @@
+{
+  "case_id": "A-0004",
+  "status": "approved",
+  "source": {
+    "title": "Argentina attacking corners: freeing the edge — clip 4 vs Mexico",
+    "provider": "FIFA Training Centre",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/set-plays/corners/attacking-corners.php",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0004.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 19.243
+  },
+  "situation": {
+    "phase": "attacking corner",
+    "action_family": "corner",
+    "team_role": "Argentina attacking unit",
+    "pitch_area": "corner area, edge of penalty area, and inside the box",
+    "outcome": "Fernández receives on the edge of the area, carries the ball into the box, and scores in the far corner of the net",
+    "human_observation": "Mexico send two players out to defend the short corner, unlike the single defender Argentina faced from the Netherlands in clips 1 and 2. Fernández recognises he can exploit the space behind those two defenders. When he receives the ball at the edge of the area, rather than shooting immediately from range, he carries the ball forward into the penalty box before finishing into the far corner of the net.",
+    "priority_problem": "How to exploit a defense that commits two players to the short corner (rather than one), recognising the space left behind them, and adapting the finish (carry into the box rather than a first-time strike from the edge) to convert that space into a goal.",
+    "visible_evidence": [
+      "Mexico commit two defenders to the short corner, rather than the single defender seen from the Netherlands in clips 1 and 2.",
+      "Fernández identifies and targets the space behind those two committed defenders.",
+      "Fernández receives the ball at the edge of the area.",
+      "Instead of shooting from the edge, Fernández carries the ball into the penalty box.",
+      "Fernández finishes into the far corner of the net."
+    ],
+    "tags": [
+      "corner",
+      "short-corner",
+      "decoy",
+      "edge-of-box",
+      "carry",
+      "goal",
+      "far-corner-finish"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0004.txt",
+    "objective": "Recognise and exploit the space left behind opponents who over-commit numbers to defend the short corner, and adapt the release (carry into the box vs. shoot from range) based on how much space and time is actually available.",
+    "practice_design": "Small-sided corner-kick rehearsal where the defending side is coached to send two players out to press the short corner (rather than one), so the attacking group must recognise and react to the extra space this creates behind them. Fernández-role player receives on the edge of the area and must read in the moment whether to shoot first-time or carry into the box, rehearsing both options. Finish practice with an emphasis on placement (far corner) once inside the box, using both feet.",
+    "success_cues": [
+      "Defending side commits two (or more) players to the short corner, leaving clear space behind them.",
+      "Receiving player recognises this space immediately upon receiving the ball on the edge of the area.",
+      "Receiving player correctly chooses to carry into the box (rather than shoot early) when the extra space and time allow it.",
+      "Finish is placed accurately into the far corner of the net rather than blazed straight at the keeper.",
+      "Overall sequence shows the attacking group reading the defense's specific response and adapting their execution accordingly, rather than running an identical, rigid routine regardless of the defensive setup."
+    ],
+    "reference_author": "FIFA Training Centre — individual author",
+    "reference_author_qualification": "FIFA Training Centre source"
+  },
+  "limitations": [
+    "Broadcast framing may not show every player's initial position.",
+    "The article does not describe Argentina's own starting positions/decoy setup for this clip in as much detail as clips 1-2 — the detail given is mainly about Mexico's defensive response and Fernández's decision-making, not the buildup shape.",
+    "The local clip boundary was confirmed against the video file; clip_end_seconds is 19.243."
+  ]
+}

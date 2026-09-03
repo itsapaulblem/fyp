@@ -1,0 +1,53 @@
+{
+  "case_id": "A-0019",
+  "status": "approved",
+  "source": {
+    "title": "Regaining possession high up the pitch — clip 2 (Scotland pressing to regain)",
+    "provider": "FIFA Training Centre",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/transition-to-defending/regaining-possession-high-up-the-pitch.php",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0019.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 44.24
+  },
+  "situation": {
+    "phase": "transition after losing possession",
+    "action_family": "counterpress",
+    "team_role": "Scotland pressing unit",
+    "pitch_area": "high up the pitch, area not further specified in source text",
+    "outcome": "Scotland's coordinated press regains the ball within seven seconds of losing it",
+    "human_observation": "This local segment isolates one of the Scotland pressing examples presented in the FIFA source. Five Scotland players press against five England players to win the ball back, demonstrating an organised collective reaction after losing possession. The example shows Scotland coordinating the press and regaining the ball within seven seconds rather than relying on an isolated individual action.",
+    "priority_problem": "How to organise a coordinated, numerically matched press (five against five in this example) immediately after losing the ball, so that the team can win possession back quickly rather than being exposed to a counter-attack.",
+    "visible_evidence": [
+      "Five Scotland players press against five England players in an attempt to win the ball back.",
+      "Multiple Scotland players engage together rather than pressing individually.",
+      "The local segment isolates one complete example from the longer source presentation.",
+      "Scotland regain the ball within seven seconds of losing possession."
+    ],
+    "tags": [
+      "counterpress",
+      "organised-press",
+      "regain",
+      "transition",
+      "five-v-five"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0019.txt",
+    "objective": "Organise a coordinated, numerically matched team press immediately after losing possession, so the ball can be regained quickly (within seconds) rather than conceding space for a counter-attack.",
+    "practice_design": "Representative general practice for the coaching intervention illustrated by this example: design phase-of-play practices where possession is deliberately lost in a matched numerical situation (e.g. 5v5), requiring the team without the ball to press immediately and collectively rather than relying on the nearest player alone. Use a regain-time target (e.g. seven seconds, referenced elsewhere in the article as the tournament average) to build urgency, and coach communication/coordination between pressing players to close space as a unit.",
+    "success_cues": [
+      "Multiple players engage the press simultaneously rather than just the nearest defender.",
+      "Press is organised and coordinated, closing down passing options as a unit.",
+      "Ball is regained quickly (within several seconds) rather than the opposition being given time to escape the press.",
+      "Team does not concede large gaps or get bypassed while pressing collectively."
+    ],
+    "reference_author": "FIFA Training Centre — individual author",
+    "reference_author_qualification": "FIFA Training Centre source"
+  },
+  "limitations": [
+    "Local incident segment extracted from the full source video at 92.160–136.400 seconds.",
+    "Unlike clip 1 (England, A-0018, quoting April Heinrichs), no single named individual is quoted specifically discussing this Scotland clip — the article's other named quote (Sun Wen) concerns general tournament defensive-line trends, not this clip directly, so it has not been attributed here."
+  ]
+}

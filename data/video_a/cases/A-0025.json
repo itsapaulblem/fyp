@@ -1,0 +1,58 @@
+{
+  "case_id": "A-0025",
+  "status": "approved",
+  "source": {
+    "title": "FU20WC25: Goalkeeper considerations when defending corners — clip 4 (Japan, Alexandre Pisano)",
+    "provider": "FIFA Training Centre",
+    "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fu20wc/2025/goalkeeper-considerations-when-defending-corners.php",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0025.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 24.96
+  },
+  "situation": {
+    "phase": "defending a corner (first phase, zonal marking system)",
+    "action_family": "corner",
+    "team_role": "Japan goalkeeper (Alexandre Pisano)",
+    "pitch_area": "six-yard box / goal area",
+    "outcome": "Pisano judges the situation and punches the ball away",
+    "human_observation": "Per Pascal Zuberbühler, this clip shows Japan defending with seven players in their zonal setup. The goalkeeper, Alexandre Pisano, has a clear view of the inswinging delivery and has space to work in. His patience and timing are crucial, as his delayed jump ensures he generates the maximum height needed to punch the ball away. The article notes that, tournament-wide, first contacts made by goalkeepers in zonal setups rose by 2% compared to the FIFA U-20 World Cup Argentina 2023, and that goalkeepers must still take responsibility for defending this zone alongside their zonal players, particularly when attacking players encroach on the space between zonal defenders.",
+    "priority_problem": "How a goalkeeper operating behind a large zonal defensive setup can use the space and clear view afforded by that system to delay his jump for as long as possible, maximising the height and reach of his intervention on an inswinging delivery.",
+    "visible_evidence": [
+      "Japan defend the corner using seven players in a zonal setup.",
+      "Pisano has a clear view of the incoming inswinging delivery.",
+      "Pisano has space to work in, afforded by the zonal defensive structure.",
+      "Pisano delays his jump rather than committing early.",
+      "This delayed timing allows him to generate maximum height on his jump.",
+      "Pisano's intervention is a punch to clear the ball away."
+    ],
+    "tags": [
+      "goalkeeping",
+      "corners",
+      "zonal-marking",
+      "timing",
+      "delayed-jump",
+      "punch-clear"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0025.txt",
+    "objective": "Develop a goalkeeper's ability to exploit the space and clear sightlines provided by a zonal defensive setup to delay their jump as long as possible, maximising height and reach when intervening on an inswinging delivery.",
+    "practice_design": "Per the article's general framing of zonal marking systems (used as general coaching advice illustrated by this example): rehearse corner defending using a large zonal setup (e.g. seven zonal defenders), giving the goalkeeper a clear, unobstructed view and working space. Coach the goalkeeper specifically on delaying the jump — resisting the instinct to commit early — using repeated inswinging deliveries of varying pace and trajectory so the goalkeeper learns to read the ball long enough to time a maximal-height jump. Reinforce the shared responsibility principle: goalkeepers must still actively defend the zone alongside zonal players, especially reacting to attackers encroaching into gaps between zonal markers.",
+    "success_cues": [
+      "Goalkeeper maintains a clear, unobstructed view of the incoming delivery throughout.",
+      "Goalkeeper does not commit to the jump prematurely.",
+      "Jump timing is delayed just long enough to maximise height/reach at the point of contact.",
+      "Goalkeeper successfully punches/clears the ball away from danger.",
+      "Goalkeeper remains alert to any attacker encroaching into gaps between zonal defenders, not solely relying on the zonal structure."
+    ],
+    "reference_author": "Pascal Zuberbühler",
+    "reference_author_qualification": "FIFA's senior football and goalkeeping expert"
+  },
+  "limitations": [
+    "The local clip boundary was confirmed against the video file; clip_end_seconds is 24.96.",
+    "Broadcast framing may not show every defending player's position at the moment of delivery.",
+    "The 2%-increase statistic is a tournament-wide figure for zonal marking systems generally, not specific to this individual clip."
+  ]
+}

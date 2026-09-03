@@ -1,0 +1,55 @@
+{
+  "case_id": "A-0002",
+  "status": "approved",
+  "source": {
+    "title": "Argentina attacking corners: freeing the edge — clip 2 vs Netherlands",
+    "provider": "FIFA Training Centre",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/set-plays/corners/attacking-corners.php",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0002.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 19.008
+  },
+  "situation": {
+    "phase": "attacking corner",
+    "action_family": "corner",
+    "team_role": "Argentina attacking unit",
+    "pitch_area": "corner area and edge of penalty area",
+    "outcome": "Decoy movement frees Enzo Fernández for an unopposed right-foot shot that hits the post",
+    "human_observation": "Unlike clip 1, Argentina's players start from different positions here: the two centre-backs are already in the penalty area rather than jogging in late, and a player is stationed on the ball-side corner of the penalty area, becoming the most immediate threat to the sole Dutch defender guarding the edge of the box. Fernández again hangs back to appear like a non-threat. Messi starts from inside the box and makes a run to receive the ball, dragging his marker with him. As soon as Messi receives it, the Argentina player stationed on the corner of the penalty area makes a decoy run into the box, dragging the edge-of-area defender with him. This leaves Fernández completely free to shoot again, this time from the edge of the area, though the shot is denied by the post.",
+    "priority_problem": "How to use two simultaneous decoy actions (Messi's run to the ball, and the corner-stationed player's late run into the box) to strip the edge of the box of its lone defender, freeing a second wave attacker (Fernández) to shoot unopposed.",
+    "visible_evidence": [
+      "Both Argentina centre-backs are already positioned inside the penalty area at the start, rather than arriving late as in clip 1.",
+      "An Argentina player is stationed on the ball-side corner of the penalty area, posing the immediate threat that occupies the sole Dutch defender on the edge of the box.",
+      "Fernández holds a deeper position early on, giving the impression he is not an immediate threat.",
+      "Messi starts from inside the box and runs to receive the ball, dragging his marker away with him.",
+      "The instant Messi receives the ball, the Argentina player on the corner of the box makes a decoy run into the penalty area, pulling the edge-of-area defender inside with him.",
+      "With both the marker and the edge-of-area defender dragged away, Fernández is left completely unopposed to shoot from the edge of the area, but the shot strikes the post."
+    ],
+    "tags": [
+      "corner",
+      "short-corner",
+      "decoy",
+      "edge-of-box",
+      "shot"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0002.txt",
+    "objective": "Use two coordinated decoy actions in sequence — a receiving run to draw one marker, followed by a run into the box to draw the edge-of-area defender — to leave a shooter completely free on the edge of the box.",
+    "practice_design": "Small-sided corner-kick rehearsal with fixed starting positions: both defending-side centre-back mannequins/players already inside the box, one attacker stationed on the ball-side corner of the box, one attacker (Messi role) starting inside the box, and a shooter (Fernández role) starting deep. Sequence the reps so the corner-stationed attacker occupies the edge defender first, then the inside attacker checks to the ball to drag his own marker, then immediately breaks in behind to draw the edge defender fully inside, releasing the shooter. Rehearse timing so the shooter's run into space happens only after both decoys have committed.",
+    "success_cues": [
+      "Edge-of-box defender is initially occupied by the corner-stationed attacker before the ball is played.",
+      "Receiver's run to the ball fully drags his marker away from the edge zone.",
+      "Decoy run into the box happens immediately after the ball is received, pulling the edge-of-area defender inside with it.",
+      "Shooter is left with no defender within closing distance when the ball arrives on the edge of the area.",
+      "Shot is struck cleanly and on target (unlike this clip, where it strikes the post)."
+    ],
+    "reference_author": "FIFA Training Centre — individual author",
+    "reference_author_qualification": "FIFA Training Centre source"
+  },
+  "limitations": [
+    "Broadcast framing may not show every player's initial position."
+  ]
+}

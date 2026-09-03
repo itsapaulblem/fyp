@@ -1,0 +1,57 @@
+{
+  "case_id": "A-0017",
+  "status": "approved",
+  "source": {
+    "title": "Low-block excellence — Atlético clip 1",
+    "provider": "UEFA",
+    "url": "https://www.uefa.com/uefachampionsleague/news/02a5-208b92a22823-9521a1d11d35-1000--champions-league-performance-insights-drifting-wingers-an/",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0017.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 26.0
+  },
+  "situation": {
+    "phase": "low-block defending",
+    "action_family": "low_block",
+    "team_role": "Atlético de Madrid defensive unit",
+    "pitch_area": "central defensive third and width of the penalty area",
+    "outcome": "Atlético prevent passes through or behind and direct Arsenal around the block",
+    "human_observation": "UEFA Technical Observer Edin Terzić identified this clip as an example of Atlético focusing their low-block defending on protecting central areas — the width of the penalty box — and forcing Arsenal to attack in the wide corridors instead. Terzić's stated commentary, referring directly to this clip: 'You see Atlético in the central area with all their players. There's no pass through, there's no pass in behind. They only allow the pass around them.' The wider article context notes Atlético defended with a back five (as distinct from Arsenal's back four discussed in later clips), and that the quality of Atlético's deep defending was underlined by the fact that Arsenal's shots taken against the low block carried a combined low xG (Arsenal's five attempts totalling 0.22 xG), with none forcing a save.",
+    "priority_problem": "How to organise a compact defensive block so that all central passing lanes (through balls and passes in behind) are closed off, funneling the opposition's only viable ball progression to passes around the outside of the block rather than through or behind it.",
+    "visible_evidence": [
+      "Atlético commit numerous players into the central area of their own defensive third.",
+      "The central area, specifically the width of the penalty box, is protected as the priority zone.",
+      "No pass through the Atlético block is available to Arsenal.",
+      "No pass in behind the Atlético block is available to Arsenal.",
+      "The only passing option Atlético concede is play around the outside of their central block.",
+      "Atlético's defensive setup uses a back five, as distinguished from Arsenal's back four discussed elsewhere in the article.",
+      "This deep, central-protection approach corresponds with a low combined xG (0.22) from Arsenal's shot attempts in this fixture, none of which forced a save."
+    ],
+    "tags": [
+      "low-block",
+      "back-five",
+      "central-protection",
+      "compactness",
+      "force-wide"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0017.txt",
+    "objective": "Organise a compact low block that prioritises closing central passing lanes (through the box and in behind), deliberately conceding only wide, less dangerous circulation passes around the outside of the defensive structure.",
+    "practice_design": "Small-sided possession/defending practice using a back five (or matching the numbers being defended against): defending team is instructed specifically to prioritise central compactness — no player leaves a central passing lane open — while accepting that the attacking side will have freedom to pass around the outside. Attacking side is coached to attempt central through balls and balls in behind as the 'win' condition, while the defending side's success is measured by denying these central options entirely, regardless of how much possession/width play the attackers are allowed. Debrief on shot quality/location conceded (emphasising low-value wide/deep attempts over central, high-value chances).",
+    "success_cues": [
+      "No central through balls or passes in behind reach an attacker in a dangerous position.",
+      "The defending unit remains compact around the width of the penalty box rather than being pulled apart.",
+      "Attacking side is forced to circulate the ball around the outside of the block rather than through the middle.",
+      "Any shots conceded are low-quality (wide angle, distance, or low xG) rather than clear central chances.",
+      "The defending shape holds its central discipline even as the ball moves from side to side."
+    ],
+    "reference_author": "Edin Terzić",
+    "reference_author_qualification": "UEFA Technical Observer"
+  },
+  "limitations": [
+    "Local incident segment extracted from the full source video at 38.000–64.000 seconds.",
+    "The xG/shot-quality context given is match-wide (both legs' fixture context), not necessarily specific to only this clip's passage of play."
+  ]
+}

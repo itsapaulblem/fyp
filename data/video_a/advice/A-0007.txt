@@ -1,0 +1,71 @@
+CASE: A-0007 — PSG wide free kick vs Inter Miami: blocking the last defender
+
+COACHING INTERVENTION
+Objective: Exploit a zonal defensive line's structural weaknesses at
+the far post — numerical inferiority, closed body orientation, an
+undersized last defender, and predictable early line movement — by
+synchronising decoy/offside-holding runners with a timed, legal
+screening block on the last defender to free a runner from depth for
+an unmarked header at the far post.
+
+Rationale (from source text): This example comes from the FIFA Club
+World Cup 2025 game between PSG and Inter Miami. Inter Miami's
+defensive setup exposed the last defender in their zonal line: five
+players were committed to the ball/wall area, leaving only five in the
+zonal line itself, creating a 4v2 numerical disadvantage at the far
+post. The line held close to the edge of the box (~13m out), leaving
+space in behind. Defenders adopted closed body orientations, limiting
+visual contact with attackers behind them, and the last defender was
+undersized relative to the block he'd face. The line stepped up early,
+timed to the taker's run-up, which reduced attackers' positional edge
+but also let offside-starting attackers regain onside position as the
+kick was delivered.
+
+PSG designed their routine around these specific vulnerabilities: two
+attackers made runs from depth while two more held offside positions
+to occupy the last defenders and disguise the real threat. All
+movement was triggered off Vitinha's first step. Marquinhos' run
+pulled Falcon (the last defender) infield, further weakening far-post
+cover, while Neves timed his run to stay onside. Pacho, reacting to the
+same trigger, regained an onside position as the line stepped up
+early, then applied the block. PSG deliberately used Pacho — their
+more physically dominant centre-back — against Inter Miami's smaller
+last defender, screening with his back to the defender (avoiding arm
+use or frontal contact) to block the recovery run without conceding a
+foul, while staying available for any second ball. The inswinging
+delivery met Neves' well-timed run from deep at the far post, arriving
+unmarked for a free header, while Falcon — anticipating the ball would
+go out of play and unaware of the run behind him — raised his arms
+rather than defending the space.
+
+REPRESENTATIVE PRACTICE
+Set-piece rehearsal against a zonal defensive shape mimicking the
+identified vulnerabilities: attacking side commits two runners from
+depth and two players holding offside positions to occupy/confuse the
+last defenders. All movement is triggered off a single, agreed cue
+(e.g. the taker's first step of the run-up). Rehearse the blocking
+player (matched physically against the opposition's weakest last
+defender) using a back-to-defender screen — no frontal contact, no arm
+use — to legally block the recovery run while remaining available for
+a second ball. Simultaneously rehearse the drag run that pulls the
+last defender infield, and the depth runner's timed, onside run to the
+far post. Finish with crosses/deliveries specifically inswinging to
+meet the far-post run.
+
+OBSERVABLE SUCCESS CUES
+- Attacking side identifies and exploits a genuine numerical advantage
+  at the far post before the kick is taken.
+- Decoy/offside-holding attackers successfully occupy or confuse the
+  last defenders without being the actual target.
+- All attacking movement triggers off the same cue, arriving
+  synchronised rather than piecemeal.
+- The drag-run attacker pulls the last defender out of position,
+  reducing far-post cover.
+- The blocking player is matched against a physically weaker last
+  defender and executes a legal screen (back-to-defender, no arms, no
+  frontal contact) that stops the recovery run without conceding a
+  foul.
+- The runner from depth times his run to remain onside and arrives at
+  the far post unmarked.
+- Delivery is inswinging and precisely meets the runner's arrival for
+  a clean header on goal.

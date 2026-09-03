@@ -11,6 +11,18 @@ RightsStatus = Literal[
     "verified_redistributable", "private_research_only", "link_only", "unknown"
 ]
 CaseStatus = Literal["draft", "approved", "rejected"]
+ActionFamily = Literal[
+    "corner",
+    "free_kick",
+    "between_lines",
+    "overload",
+    "one_v_one_defending",
+    "low_block",
+    "high_press",
+    "counterpress",
+    "high_regain",
+    "other",
+]
 Condition = Literal[
     "B0_frames_only",
     "B1_random_case",
@@ -55,7 +67,7 @@ class FootballSituation(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     phase: str = "unclear"
-    action_family: str = "other"
+    action_family: ActionFamily = "other"
     team_role: str = "unclear"
     pitch_area: str = "unclear"
     outcome: str = "unclear"
@@ -74,9 +86,6 @@ class CoachingReference(BaseModel):
     success_cues: list[str] = Field(default_factory=list)
     reference_author: str = ""
     reference_author_qualification: str = ""
-    reviewer_pseudonym: str = ""
-    reviewer_qualification: str = ""
-    reviewed_at: str = ""
 
     @model_validator(mode="after")
     def validate_path(self) -> CoachingReference:
@@ -110,9 +119,6 @@ class CaseARecord(BaseModel):
             "coaching.reference_author_qualification": (
                 self.coaching.reference_author_qualification
             ),
-            "coaching.reviewer_pseudonym": self.coaching.reviewer_pseudonym,
-            "coaching.reviewer_qualification": self.coaching.reviewer_qualification,
-            "coaching.reviewed_at": self.coaching.reviewed_at,
         }
         errors.extend(
             f"{name} is required"

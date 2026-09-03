@@ -1,0 +1,56 @@
+{
+  "case_id": "A-0005",
+  "status": "approved",
+  "source": {
+    "title": "Cameroon attacking corners: front-post overload vs zonal defence, clip 1",
+    "provider": "FIFA Training Centre",
+    "url": "https://www.fifatrainingcentre.com/en/game/game-analysis/set-plays/corners/attacking-corners-cameroon.php",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0005.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 13.931
+  },
+  "situation": {
+    "phase": "attacking corner",
+    "action_family": "corner",
+    "team_role": "Cameroon attacking unit",
+    "pitch_area": "six-yard box, front post, back post, edge of box",
+    "outcome": "Not specified in the source text for this clip. The article presents clip 1 as a demonstrative example of the routine's shape and setup, without stating whether it resulted in a goal, save, or clearance.",
+    "human_observation": "Cameroon's general approach to attacking corners, per the article, focused on delivering the ball straight into the penalty area, with clip 1 as the first example. The routine placed heavy emphasis on overloading the area around the front post, designed to counter an opposition using a zonal defensive setup. Four players concentrated around the six-yard box, all making runs towards the front post to establish numerical superiority in that zone. Behind them, a second wave of attackers included one player running to the back post and two more tasked with covering the edge of the box. For the corner to be effective, Cameroon needed either to score directly from the first contact, or to flick the ball across goal to the back-post runner — requiring both the quality of the delivery and the timing of the runs to be precise.",
+    "priority_problem": "How to establish numerical superiority in the front-post zone against a zonal defensive setup by sending four runners there, so that the delivery (if it beats the first defender and reaches that zone) leaves the deeper zonal defender unable to deal with the cross and the rest of the defence unable to recover across in time.",
+    "visible_evidence": [
+      "Cameroon send four players to concentrate around the six-yard box, all making runs towards the front post.",
+      "A second wave of attackers sits behind the front-post group: one player makes a run towards the back post.",
+      "Two further players in the second wave are tasked with covering the edge of the box.",
+      "The routine is designed specifically to counter a zonally-based defensive setup.",
+      "Success depends on the delivery beating the first defender to reach the overloaded front-post zone, and on the front-post runners either scoring from first contact or flicking the ball on to the back-post runner.",
+      "The article states the first step of the routine is sending four runners into the area where the opposition has the fewest defenders, to establish numerical superiority there before the delivery arrives."
+    ],
+    "tags": [
+      "corner",
+      "near-post-overload",
+      "front-post",
+      "zonal-defence",
+      "tiered-runs"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0005.txt",
+    "objective": "Establish numerical superiority in the front-post zone against a zonal defensive setup by committing four runners there in a tiered structure, then convert via first contact or a flick-on across goal to a back-post runner.",
+    "practice_design": "Small-sided corner rehearsal against a zonal defensive shape: attacking side sends four players to occupy and overload the front-post zone, with a second wave of three players positioned deeper — one targeting the back post, two covering the edge of the box. Coach for precise timing of the front-post runners' movement relative to the delivery, and rehearse both finishing options (direct contact at the front post, and flick-on to the back-post runner) so players can react to whichever presents itself based on the delivery.",
+    "success_cues": [
+      "Four attackers successfully occupy and outnumber defenders in the front-post zone before the ball is delivered.",
+      "Delivery beats the first defender and reaches the overloaded zone.",
+      "Zonal defender behind the contested zone is unable to intervene on the ball.",
+      "No other defender is able to recover across in time to affect the situation at the front post.",
+      "Front-post group either scores from first contact or successfully flicks the ball on to the back-post runner."
+    ],
+    "reference_author": "FIFA Training Centre — individual author",
+    "reference_author_qualification": "FIFA Training Centre source"
+  },
+  "limitations": [
+    "The article does not state the actual outcome (goal/save/clearance) for clip 1 specifically — only clips 2 (vs Switzerland, off-target/cleared) and 3 (vs Serbia, goal) have stated outcomes.",
+    "The brief clip may not show the complete pre-corner organisation."
+  ]
+}

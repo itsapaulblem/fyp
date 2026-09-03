@@ -1,0 +1,53 @@
+{
+  "case_id": "A-0010",
+  "status": "approved",
+  "source": {
+    "title": "Champions League performance insights: Güler contribution — clip 1",
+    "provider": "UEFA",
+    "url": "https://www.uefa.com/uefachampionsleague/news/029f-1f1f7f9745be-b4346e769d91-1000--champions-league-performance-insights-finding-space-between/",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0010.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 27.233333
+  },
+  "situation": {
+    "phase": "attacking organisation",
+    "action_family": "between_lines",
+    "team_role": "Real Madrid attacking midfielder (Arda Güler)",
+    "pitch_area": "central and inside channel",
+    "outcome": "Güler sets up Vinícius Júnior for a 1v1 in the move preceding the goal",
+    "human_observation": "This clip is discussed by UEFA Technical Observer Jan Peder Jalland as the buildup to Bellingham's goal against Juventus. Jalland highlights the technical detail of how Güler keeps the ball close to his feet and keeps the opposition guessing. Jalland's stated commentary: Güler takes small touches and can twist and turn to produce quality in tight spaces; he doesn't give away clear signals, so it seems the pass could come at any time, which makes opponents hesitant to press him and give away space. The wider article notes Güler ranked second among Real Madrid players for both key passes (six) and passes into the final third (nine) in the match, and was the second-most frequent Real Madrid player (after Bellingham) to receive the ball between the lines (12 times).",
+    "priority_problem": "How to retain the ball and manipulate opposition pressing decisions in tight central spaces by using small touches and disguised body language, so that defenders are reluctant to press and space/time is preserved for a decisive final pass.",
+    "visible_evidence": [
+      "Güler keeps the ball close to his feet while operating in limited space.",
+      "He uses small touches, allowing him to twist and turn under pressure.",
+      "He avoids giving away clear signals about his intentions, so opponents cannot anticipate when or where the pass will go.",
+      "This uncertainty makes opposing players hesitant to press him aggressively, preserving space around him.",
+      "The sequence culminates in Güler setting up a 1v1 opportunity for Vinícius Júnior, in the buildup to Bellingham's goal."
+    ],
+    "tags": [
+      "between-lines",
+      "small-touches",
+      "key-pass",
+      "1v1-creation"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0010.txt",
+    "objective": "Develop the ability to retain possession under pressure in tight central spaces using small touches and disguised body language, delaying opposition pressing decisions long enough to create a decisive pass or 1v1 opportunity for a teammate.",
+    "practice_design": "Per Jalland's general coaching reflections in the article (used as general coaching advice illustrated by this example): begin with mannequins and passes played between the lines, with a player moving to find a striker or winger in behind, then progress to combination play and finishing. Add central defenders as mannequins for midfielders, then gradually introduce live opposition, increasing difficulty by adjusting pitch size and player numbers — smaller pitches with fewer players increase the demand for close control, awareness, and quick decision-making under less time and space, while larger setups with more players are closer to matchplay but yield fewer repetitions.",
+    "success_cues": [
+      "Player keeps the ball close and under control while under pressure in tight space.",
+      "Player disguises intent (body shape, eyes, timing) so opponents cannot predict the pass.",
+      "Opposing defenders are visibly hesitant to press aggressively, giving the player extra time on the ball.",
+      "Player successfully releases a pass that creates a clear 1v1 or attacking opportunity for a teammate."
+    ],
+    "reference_author": "Jan Peder Jalland",
+    "reference_author_qualification": "UEFA Technical Observer; coach of Norway's Under-21 men's national team"
+  },
+  "limitations": [
+    "Broadcast framing may not show all off-ball players.",
+    "The key-passes/final-third-passes/between-lines-receptions figures are match-wide statistics, not specific to this individual clip."
+  ]
+}

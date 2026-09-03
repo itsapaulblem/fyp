@@ -1,0 +1,57 @@
+{
+  "case_id": "A-0012",
+  "status": "approved",
+  "source": {
+    "title": "Champions League Performance Insight: Arsenal's right-sided overload — clip 1",
+    "provider": "UEFA",
+    "url": "https://www.uefa.com/uefachampionsleague/news/0293-1c7386e765b9-68b052b1fe83-1000--champions-league-performance-insights-how-arsenal-s-overlo/",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0012.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 40.1
+  },
+  "situation": {
+    "phase": "positional attack",
+    "action_family": "overload",
+    "team_role": "Arsenal attacking unit",
+    "pitch_area": "right channel and penalty area",
+    "outcome": "Rice draws out a defender, Saka runs into the opened space and crosses for Havertz to score",
+    "human_observation": "Per UEFA's technical analysis unit, Arsenal's game plan against Sporting CP was to force Sporting into a flat back five and exploit the space either side of Sporting's midfield two (Morita and Hjulmand) within their 5-2-3 defensive shape, with the right flank in particular targeted for overloads and combinations — the source of Arsenal's two early goals. In this specific clip, Arsenal's attack builds down the right with a structured push toward the defensive line involving five players. Declan Rice moves into the right channel, drawing out Sporting's left-sided centre-back, Gonçalo Inácio. Rice's movement opens space for Saka, who capitalises with a well-timed run and delivers a cross that Kai Havertz converts.",
+    "priority_problem": "How to use a central midfielder's (Rice's) deliberate movement into a wide channel to drag a covering centre-back out of position, creating the space for a winger (Saka) to attack and deliver a cross for a converted chance.",
+    "visible_evidence": [
+      "Arsenal commit five players in a structured push toward Sporting's defensive line down the right side.",
+      "Declan Rice moves from central midfield into the right channel.",
+      "This movement draws Sporting's left-sided centre-back, Gonçalo Inácio, out of his defensive line to follow/engage Rice.",
+      "The space vacated by Inácio's movement is exploited by Saka.",
+      "Saka makes a well-timed run into that space.",
+      "Saka delivers a cross from the resulting position.",
+      "Kai Havertz converts the cross to score."
+    ],
+    "tags": [
+      "overload",
+      "right-channel",
+      "space-creation",
+      "cross",
+      "finish"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0012.txt",
+    "objective": "Use a central midfielder's movement into a wide channel to deliberately draw a covering centre-back out of the defensive line, creating space for a winger to attack in behind and deliver a cross for a teammate to finish.",
+    "practice_design": "Positional/rondo-to-goal practice against a back-five or back-four shape: attacking side commits players (structured five-player push, as in this clip) toward one side of the pitch. A central midfielder is coached to time a run into the wide channel specifically to occupy/drag a covering centre-back, rather than to receive the ball directly. As the centre-back engages, the wide attacker (winger) times a run into the space just vacated, receives, and delivers a cross for an onrushing striker to finish. Progress from unopposed shape work to opposed practice with a defined defensive block (e.g. 5-2-3) to replicate the real spacing being exploited.",
+    "success_cues": [
+      "Central midfielder's run into the channel is deliberate and draws the covering centre-back out of position, rather than being incidental.",
+      "The vacated space is recognised and attacked promptly by the winger.",
+      "Winger's run is well-timed to arrive in space rather than into a marked position.",
+      "Cross is delivered with enough quality for the target striker to convert.",
+      "The wider structural push (numbers committed to that side) is maintained throughout the sequence, not abandoned once the ball starts moving."
+    ],
+    "reference_author": "UEFA Technical Analysis Unit / UEFA Technical Observer Group (unnamed individual for this specific clip)",
+    "reference_author_qualification": "UEFA's official match analysis unit, as credited in the source article"
+  },
+  "limitations": [
+    "The sequence includes UEFA graphical overlays and replay material.",
+    "Unlike the Bellingham/Güler article, no single named individual is quoted discussing this specific clip — attribution is to UEFA's technical analysis unit/observer group generically, as stated in the source text."
+  ]
+}

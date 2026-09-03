@@ -1,0 +1,54 @@
+{
+  "case_id": "A-0021",
+  "status": "approved",
+  "source": {
+    "title": "Champions League tactical insights: Cucurella excels — clip 3",
+    "provider": "UEFA",
+    "url": "https://www.uefa.com/uefachampionsleague/news/029f-1f4ff3a2dfa2-8f711ec7d108-1000--champions-league-performance-insights-marc-cucurella-s-1v1-d/",
+    "accessed_on": "2026-09-03",
+    "rights_status": "private_research_only",
+    "local_media_path": "data/video_a/media/A-0021.mp4",
+    "clip_start_seconds": 0.0,
+    "clip_end_seconds": 43.879546
+  },
+  "situation": {
+    "phase": "high pressing and attacking transition",
+    "action_family": "high_regain",
+    "team_role": "Chelsea team",
+    "pitch_area": "middle-to-attacking third",
+    "outcome": "Andrey Santos intercepts and Chelsea score four touches later through Estêvão",
+    "human_observation": "Per the source article, Chelsea and Barcelona's intensity and speed came together for Chelsea's second goal, featured in this clip: Barcelona could not escape Chelsea's pressure, Andrey Santos intercepted the ball, and four touches later Estêvão was taking on Pau Cubarsí. The article frames this as the culmination of two earlier clips in the same video — clip one showing Chelsea's counterpressing (Malo Gusto's challenge to regain possession) and clip two showing Chelsea's focus on getting the ball rapidly behind Barcelona's high line — with this clip showing intensity and speed combining directly into a goal.",
+    "priority_problem": "How sustained collective pressure prevents the opposition from playing out under pressure, so that a turnover (interception) can be converted into a fast, low-touch direct attack reaching a 1v1 situation in a dangerous area.",
+    "visible_evidence": [
+      "Barcelona are unable to escape Chelsea's pressure in this sequence.",
+      "Andrey Santos intercepts the ball as a result of that sustained pressure.",
+      "Chelsea progress the ball with only four touches after the interception.",
+      "The sequence culminates in Estêvão taking on Pau Cubarsí in a 1v1 situation.",
+      "This clip is presented as the payoff of the pressing pattern shown in the two preceding clips of the same video (counterpressing to regain, and getting the ball behind the high line)."
+    ],
+    "tags": [
+      "high-regain",
+      "pressing",
+      "direct-attack",
+      "transition",
+      "goal"
+    ]
+  },
+  "coaching": {
+    "advice_path": "data/video_a/advice/A-0021.txt",
+    "objective": "Sustain collective pressing intensity long enough to force a turnover in a dangerous area, then convert that turnover immediately into a fast, minimal-touch attack that creates a 1v1 opportunity.",
+    "practice_design": "Pressing-to-transition practice: set up a possession exercise where the defending team is instructed to sustain coordinated pressure without allowing the opposition an easy out-ball, rather than pressing in short bursts. On winning the ball (via interception, as with Santos here), immediately apply a touch-limit constraint (e.g. maximum 3-4 touches before reaching a 1v1 or shooting position) to force fast, direct decision-making. Rotate which player is the designated interceptor/first attacker to build broad comfort with converting regains into quick attacking situations.",
+    "success_cues": [
+      "Pressing is sustained and coordinated long enough that the opposition cannot find a comfortable pass out.",
+      "The turnover is won through an interception rather than a rushed clearance or long ball.",
+      "The team in possession after the turnover uses very few touches to progress into a dangerous area.",
+      "The sequence results in a clear 1v1 opportunity for an attacker in a dangerous area.",
+      "Players show awareness to support the ball-winner immediately, enabling quick combination play rather than an isolated run."
+    ],
+    "reference_author": "UEFA Technical Analysis Unit — individual author not stated",
+    "reference_author_qualification": "UEFA technical analysis source"
+  },
+  "limitations": [
+    "The sequence includes UEFA graphical overlays, close-ups and replay material."
+  ]
+}
