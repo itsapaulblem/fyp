@@ -1,0 +1,15 @@
+{
+  "decision_version": "0.3.0",
+  "status": "pending",
+  "approved_for_single_test_run": false,
+  "validation_result_paths": [],
+  "selected_model_tag": "",
+  "selected_model_digest": "",
+  "retrieval_index_path": "data/embeddings/dataset_a_clip_v0.3.0.npz",
+  "retrieval_k": 1,
+  "dataset_a_eligibility_note": "",
+  "rubric_freeze_note": "",
+  "outstanding_issues": [],
+  "decided_by": "",
+  "decided_at_utc": ""
+}

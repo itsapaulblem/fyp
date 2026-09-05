@@ -1,0 +1,44 @@
+DATASET B — ANALYSIS TASK
+
+The attached images are chronological frames sampled from a new 30-second
+football sequence. Analyze this sequence using visible evidence from these
+images. Complete recognition before giving coaching advice.
+
+Write a normal plain-text answer using the headings and labels below. Do not
+write JSON and do not use a code block.
+
+RECOGNITION
+Possession:
+Phase:
+Chronological sequence:
+Main event:
+Outcome:
+Visible evidence:
+
+ANALOGY
+Case used: yes or no
+Transferable principles:
+Important differences:
+
+COACHING
+Team or role:
+Priority problem:
+Why it matters:
+Coach message:
+Representative practice:
+Success cues:
+
+UNCERTAINTY
+Confidence: low, medium, or high
+Visibility limitations:
+
+Use short sentences or bullet points after the labels. If no Dataset A material
+was provided, write "no" for Case used and "not applicable — no Dataset A case
+was provided" for both analogy fields. If evidence is insufficient, say so
+instead of inventing an event or tactical problem.
+
+Do not infer team names, player identities, hidden action labels, or off-screen
+positions. If Dataset A material was supplied, explain what transfers and what
+differs before advising. Give at most one priority problem, one concise coach
+message, one representative practice, observable success cues, and honest
+visibility limitations.

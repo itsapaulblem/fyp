@@ -41,7 +41,33 @@ def test_control_pairing_is_deterministic_and_respects_action() -> None:
         label_member="label",
         frame_member_pattern="%06d.jpg",
     )
-    oracle = deterministic_control_case(cases, query, "B2_action_oracle", 42)
+    oracle = deterministic_control_case(cases, query, "B2_action_oracle", 42, {"Corner": "corner"})
     unrelated = deterministic_control_case(cases, query, "B1_random_case", 42)
     assert oracle.case_id == "A-0001"
-    assert unrelated.case_id == "A-0002"
+    same_id_different_hidden_label = SoccerNetClip(**{**query.__dict__, "action_class": "Goal"})
+    assert (
+        deterministic_control_case(cases, same_id_different_hidden_label, "B1_random_case", 42)
+        == unrelated
+    )
+
+
+def test_action_oracle_rejects_unsupported_hidden_action() -> None:
+    cases = [make_case("A-0001", "corner")]
+    query = SoccerNetClip(
+        clip_id="B-TRAIN-0001",
+        source_clip_id="private",
+        split="train",
+        action_class="Goal",
+        frame_rate=25,
+        frame_count=750,
+        annotation_version="1.3",
+        archive_path="x.zip",
+        label_member="label",
+        frame_member_pattern="%06d.jpg",
+    )
+    try:
+        deterministic_control_case(cases, query, "B2_action_oracle", 42, {"Goal": None})
+    except ValueError as error:
+        assert "not evaluable" in str(error)
+    else:
+        raise AssertionError("Unsupported B2 actions must not receive a substitute")

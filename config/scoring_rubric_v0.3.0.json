@@ -1,0 +1,34 @@
+{
+  "rubric_id": "football-mllm-human-scoring-v0.3.0",
+  "scoring_order": ["recognition", "retrieval_relevance", "coaching", "failure_modes", "uncertainty"],
+  "blinding": "Score recognition before revealing condition or Dataset A material. Do not use SoccerNet labels as coaching ground truth.",
+  "dimensions": {
+    "recognition": {
+      "possession": {"range": [0, 2], "anchors": {"0": "wrong or invented", "1": "uncertain/partly supported", "2": "correct and visibly supported"}},
+      "temporal_sequence": {"range": [0, 4], "anchors": {"0": "mostly invented or reversed", "2": "main progression partly correct", "4": "key visible events correctly ordered"}},
+      "phase": {"range": [0, 2], "anchors": {"0": "wrong", "1": "plausible but vague", "2": "correct and supported"}},
+      "main_event": {"range": [0, 2], "anchors": {"0": "wrong/invented", "1": "partially correct", "2": "correct"}},
+      "outcome": {"range": [0, 2], "anchors": {"0": "wrong/invented", "1": "partly visible or cautious", "2": "correct"}},
+      "visible_evidence": {"range": [0, 2], "anchors": {"0": "unsupported", "1": "mixed", "2": "specific and visible"}}
+    },
+    "retrieval_relevance": {
+      "analogy_relevance": {"range": [0, 3], "anchors": {"0": "unrelated", "1": "surface similarity only", "2": "one useful tactical principle", "3": "strongly analogous with important differences acknowledged"}}
+    },
+    "coaching": {
+      "problem_identification": {"range": [0, 2], "anchors": {"0": "unsupported", "1": "plausible", "2": "priority problem follows from B evidence"}},
+      "advice_quality": {"range": [0, 3], "anchors": {"0": "unsafe/irrelevant", "1": "generic", "2": "specific and plausible", "3": "specific, actionable, and evidence-linked"}},
+      "practice_representativeness": {"range": [0, 2], "anchors": {"0": "unrelated", "1": "partly representative", "2": "representative constraints and cues"}},
+      "evidence_support": {"range": [0, 2], "anchors": {"0": "not supported by B", "1": "mixed", "2": "fully tied to visible B evidence"}}
+    },
+    "failure_modes": {
+      "hallucination_severity": {"range": [0, 3], "direction": "lower_is_better", "anchors": {"0": "none", "1": "minor", "2": "material", "3": "dominates answer"}},
+      "blind_copying": {"range": [0, 2], "direction": "lower_is_better", "anchors": {"0": "none", "1": "partial copying", "2": "A details treated as facts about B"}},
+      "unsupported_transfer": {"range": [0, 2], "direction": "lower_is_better", "anchors": {"0": "none", "1": "questionable transfer", "2": "materially incorrect transfer"}}
+    },
+    "uncertainty": {
+      "calibration": {"range": [0, 2], "anchors": {"0": "confident despite missing/contradictory evidence", "1": "partly calibrated", "2": "confidence and limitations match visibility"}}
+    }
+  },
+  "aggregation_policy": "Report every dimension separately. Any composite must be predeclared before test and must not hide failure-mode scores.",
+  "missing_policy": "Use null with a reason; never silently impute a score."
+}

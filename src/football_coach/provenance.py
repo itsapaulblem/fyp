@@ -16,7 +16,7 @@ def sha256_file(path: Path, chunk_size: int = 1024 * 1024) -> str:
 
 
 def timestamp_utc() -> str:
-    return datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+    return datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ")
 
 
 def write_run(
@@ -34,4 +34,3 @@ def write_run(
     (run_dir / "raw_api_response.json").write_text(
         json.dumps(raw_response, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
-

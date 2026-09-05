@@ -11,4 +11,3 @@ def test_run_writer_keeps_readable_and_raw_outputs(tmp_path: Path) -> None:
     assert (run_dir / "prompt.txt").read_text(encoding="utf-8") == "exact prompt"
     assert (run_dir / "response.txt").read_text(encoding="utf-8") == "exact answer"
     assert json.loads((run_dir / "raw_api_response.json").read_text())["done"] is True
-

@@ -1,0 +1,19 @@
+{
+  "decision_version": "0.3.0",
+  "status": "pending",
+  "selected_frame_count": null,
+  "maximum_edge": 672,
+  "sampling_algorithm": "uniform_endpoints_v1",
+  "pilot_cohort_id": "dataset-b-frame-sampling-pilot-v0.3.0",
+  "model_tag": "",
+  "model_digest": "",
+  "capacity_F60": {"status": "pending", "evidence_run": ""},
+  "train_pilot_evidence_paths": [],
+  "validation_confirmation_paths": [],
+  "recognition_findings": "",
+  "hallucination_and_repetition_findings": "",
+  "cost_and_latency_findings": "",
+  "rationale": "",
+  "decided_by": "",
+  "decided_at_utc": ""
+}

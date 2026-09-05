@@ -57,4 +57,3 @@ def initialize_case(
     case_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     advice_path.write_text(advice_template.read_text(encoding="utf-8"), encoding="utf-8")
     return case_path, advice_path
-

@@ -1,0 +1,13 @@
+{
+  "pair_judgement_version": "0.3.0",
+  "status": "draft",
+  "condition": "B3_human_oracle",
+  "dataset_b_clip_id": "B-TRAIN-0001",
+  "dataset_a_case_id": "A-0001",
+  "reviewer": {"name_or_code": "", "reviewed_at_utc": ""},
+  "analogy_rationale": "",
+  "transferable_principles": [],
+  "important_differences": [],
+  "selection_used_model_answer": false,
+  "selection_used_soccernet_label": false
+}

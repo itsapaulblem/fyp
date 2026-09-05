@@ -1,0 +1,37 @@
+{
+  "reference_version": "0.3.0",
+  "clip_id": "B-TRAIN-0001",
+  "review_status": "draft",
+  "reviewer": {
+    "name_or_code": "",
+    "football_qualification_or_experience": "",
+    "reviewed_at_utc": ""
+  },
+  "review_protocol": {
+    "used_only_neutral_id_and_frames": true,
+    "blinded_to_soccernet_label_during_visual_review": true,
+    "blinded_to_model_answers": true,
+    "blinded_to_dataset_a_pairs": true
+  },
+  "visual_reference": {
+    "chronological_visible_description": [],
+    "possession_by_visible_appearance": "",
+    "tactical_phase": "",
+    "main_visible_event": "",
+    "outcome": "",
+    "visibility_limitations": []
+  },
+  "sampling_visibility": {
+    "F10": {"event_visible": null, "notes": ""},
+    "F20": {"event_visible": null, "notes": ""},
+    "F30": {"event_visible": null, "notes": ""},
+    "F60": {"event_visible": null, "notes": ""}
+  },
+  "hidden_reference": {
+    "soccernet_action_label": "",
+    "attached_only_after_visual_review": false,
+    "used_as_coaching_ground_truth": false,
+    "blind_snapshot_path": "",
+    "blind_snapshot_sha256": ""
+  }
+}

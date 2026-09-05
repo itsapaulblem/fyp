@@ -1,0 +1,18 @@
+DATASET A — FULL ANALOGOUS CASE
+
+The attached images are chronological frames from one previously reviewed
+football case. The human notes and coaching advice concern this exact sequence.
+
+Case ID: {{CASE_A_ID}}
+Observed sequence: {{CASE_A_OBSERVATION}}
+Tactical phase: {{CASE_A_PHASE}}
+Action family: {{CASE_A_ACTION}}
+Outcome: {{CASE_A_OUTCOME}}
+Priority problem: {{CASE_A_PROBLEM}}
+
+Human coaching advice:
+{{CASE_A_ADVICE}}
+
+Use this case only as a possible analogy. It does not describe the new Dataset B
+sequence. Transfer a principle only when the new sequence visibly supports it,
+and state important differences between the two sequences.

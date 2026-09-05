@@ -1,0 +1,127 @@
+{
+  "protocol_id": "retrieval-assisted-football-v0.3.0",
+  "status": "draft_train_only",
+  "seed": 20260903,
+  "dataset_a": {
+    "pilot_target": 25,
+    "scale_beyond_100_requires_oracle_evidence": true,
+    "approved_cases_only_for_experiments": true,
+    "case_glob": "data/video_a/cases/*.json"
+  },
+  "dataset_b": {
+    "name": "SoccerNet Game State Reconstruction v1.3",
+    "archives": {
+      "train": "data/raw/gamestate/gamestate-2024/train.zip",
+      "valid": "data/raw/gamestate/gamestate-2024/valid.zip",
+      "test": "data/raw/gamestate/gamestate-2024/test.zip"
+    },
+    "expected_split_counts": {"train": 57, "valid": 58, "test": 49},
+    "expected_annotation_version": "1.3",
+    "expected_frames": 750,
+    "expected_fps": 25,
+    "public_manifest": "data/video_b/manifests/soccernet_gsr_v1.3_public.csv",
+    "private_manifest": "data/video_b/private/soccernet_gsr_v1.3_reference.csv"
+  },
+  "conditions": [
+    "B0_frames_only",
+    "B1_random_case",
+    "B2_action_oracle",
+    "B3_human_oracle",
+    "B4_embedding_knn",
+    "B5_advice_only"
+  ],
+  "input_feasibility": {
+    "pilot_cohort_path": "config/pilot_cohort_v0.3.0.json",
+    "frame_counts": [10, 20, 30, 60],
+    "maximum_edge": 672,
+    "sampling_algorithm": "uniform_endpoints_v1",
+    "image_encoding": "JPEG quality 92 after OpenCV INTER_AREA resize",
+    "selected_frame_count": null,
+    "selection_status": "pending_train_pilot_and_validation_confirmation",
+    "capacity_gate": {
+      "frame_count": 60,
+      "ollama_num_ctx": 4096,
+      "status": "pending_real_model_run",
+      "required_evidence": [
+        "request_completed without transport or memory failure",
+        "exact model tag and digest recorded",
+        "elapsed time and raw response preserved",
+        "plain-text answer format status preserved"
+      ]
+    }
+  },
+  "prompts": {
+    "full_case_context": "input_prompts/dataset_a_full_case_context.txt",
+    "advice_only_context": "input_prompts/dataset_a_advice_only_context.txt",
+    "dataset_b_task": "input_prompts/dataset_b_analysis_task.txt"
+  },
+  "model_output": {
+    "format": "plain_text",
+    "answer_file": "response.txt",
+    "required_headings": ["RECOGNITION", "ANALOGY", "COACHING", "UNCERTAINTY"]
+  },
+  "human_reference": {
+    "template": "templates/dataset_b_reference.template.json",
+    "directory": "data/video_b/review"
+  },
+  "scoring": {
+    "rubric_path": "config/scoring_rubric_v0.3.0.json",
+    "rubric_version": "0.3.0",
+    "score_template": "templates/score.template.json",
+    "require_condition_blinding": true
+  },
+  "action_oracle": {
+    "mapping_version": "soccer_event_to_case_family_v1",
+    "unsupported_policy": "mark_not_evaluable_do_not_substitute",
+    "label_to_case_family": {
+      "Corner": "corner",
+      "Direct free-kick": "free_kick",
+      "Clearance": null,
+      "Foul": null,
+      "Goal": null,
+      "Kick-off": null,
+      "Offside": null,
+      "Penalty": null,
+      "Shots off target": null,
+      "Shots on target": null,
+      "Substitution": null,
+      "Yellow card": null
+    }
+  },
+  "retrieval": {
+    "metric": "cosine_similarity",
+    "model_input_cases": 1,
+    "k": 1,
+    "k_rationale": "The intervention supplies one analogous case, so direct nearest-neighbour retrieval uses k=1 without a reranker.",
+    "encoder": {
+      "family": "CLIP",
+      "model_id": "openai/clip-vit-base-patch32",
+      "revision": "092a3b7e31726acc3a0207eea00f6040ac8b03a7",
+      "preprocessing": "AutoProcessor from the same pinned revision",
+      "frame_aggregation": "mean of per-frame L2-normalized image embeddings, followed by L2 normalization",
+      "training": "frozen pretrained weights; no B labels, tags, coordinates, or text"
+    },
+    "dataset_a_frame_count": 20,
+    "index_path": "data/embeddings/dataset_a_clip_v0.3.0.npz",
+    "automatic_b_features": "sampled B pixels only"
+  },
+  "freezes": {
+    "sampling_decision_path": "data/video_b/private/sampling_decision_v0.3.0.json",
+    "sampling_freeze_path": "config/freezes/sampling_v0.3.0.json",
+    "protocol_decision_path": "data/video_b/private/protocol_decision_v0.3.0.json",
+    "protocol_freeze_path": "config/freezes/protocol_v0.3.0.json"
+  },
+  "models": ["qwen3.5:27b", "qwen3.5:35b"],
+  "generation": {
+    "temperature": 0,
+    "seed": 20260903,
+    "num_ctx": 4096,
+    "think": false,
+    "stream": false
+  },
+  "split_policy": {
+    "train": "development and frame-sampling pilot",
+    "valid": "B0 sampling confirmation in sampling_validation; method selection after sampling freeze",
+    "test": "single final run after verified protocol freeze"
+  }
+}

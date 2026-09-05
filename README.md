@@ -23,11 +23,11 @@ condition.
 | ID | Dataset B input | Dataset A input | Question |
 |---|---|---|---|
 | B0 | frames | none | Visual-only baseline |
-| B1 | frames | random unrelated case | Does any example help? |
-| B2 | frames | same-action case selected with hidden label | Oracle action upper bound |
-| B3 | frames | human-selected analogous case | Oracle analogy upper bound |
+| B1 | frames | seeded random case, selected without B labels | Does any example help? |
+| B2 | frames | mapped same-action case selected with hidden label | Diagnostic: does action-label matching help when label leakage is deliberately allowed? |
+| B3 | frames | human-selected analogous case | Upper bound: how well could case assistance work if a knowledgeable human chose the analogy? |
 | B4 | frames | embedding k-NN case | Automatic retrieval system |
-| B5 | frames | retrieved advice without A frames | Does text, rather than A video, drive improvement? |
+| B5 | frames | advice from the same B4-retrieved case, with no other A fields | Does advice text, rather than A video/context, drive improvement? |
 
 Recognition of Dataset B is scored before coaching quality. Retrieval relevance,
 blind copying, hallucination, and uncertainty are measured separately.
@@ -42,6 +42,13 @@ Copy-Item .env.example .env
 uv run football-coach index-b
 uv run football-coach validate-a
 uv run pytest
+```
+
+Install the optional frozen CLIP retrieval pipeline only on the machine that
+will build/query embeddings:
+
+```powershell
+uv sync --extra dev --extra retrieval --system-certs
 ```
 
 Set the remote Ollama endpoint in `.env`. Prefer running this code on the GPU
@@ -94,28 +101,87 @@ retrieval prompts.
 ## Inputs and outputs
 
 All presentation-facing prompt templates are plain text under `input_prompts/`.
+Their names describe their roles:
+
+- `dataset_a_full_case_context.txt`: A frames plus human case notes and advice;
+- `dataset_a_advice_only_context.txt`: only the advice used by B5;
+- `dataset_b_analysis_task.txt`: the common question and plain-text answer layout.
+
+The first two are alternatives: a run uses the full-case context, the advice-only
+context, or neither. Every condition then uses the same Dataset B analysis task.
+The obsolete v0.2 JSON-output prompts were replaced by these current templates.
 Each run directory under `output/` contains:
 
 - `prompt.txt`: exact readable messages and image order;
-- `response.txt`: exact model answer;
+- `response.txt`: exact plain-text model answer, never converted to JSON;
 - `metadata.txt`: condition, model, hashes, timing, and retrieval provenance;
 - `raw_api_response.json`: untouched machine-readable Ollama response.
+
+The last file is only the Ollama transport envelope retained for reproducibility;
+the model's actual answer is the normal text in `response.txt`.
 
 Generated media, embeddings, private data, raw SoccerNet data, and outputs are
 Git-ignored. Never use `git add -f` on them.
 
 ## Split discipline
 
-- Dataset B train: prompts, representations, retrieval, and rubric development.
-- Dataset B validation: choose the final method and calibrate thresholds.
-- Dataset B test: one final run after protocol freeze.
+- `draft_train_only`: only B0 F10/F20/F30/F60 runs on the fixed eight-clip
+  neutral pilot cohort.
+- `sampling_validation`: only B0 at the chosen candidate frame count on the
+  fixed four-clip neutral validation cohort. A real F60 capacity result and
+  train-pilot evidence are required to enter this state.
+- `frozen_validation`: B0–B5 validation after an approved sampling decision and
+  immutable sampling freeze.
+- `frozen_test`: one final test run after the protocol freeze hashes prompts,
+  plain-text output contract, generation settings, rubric, Dataset A cases/advice/media, retrieval
+  index, encoder/revision, model tag/digest, and validation evidence.
 
-The project config begins in `draft_train_only` state, and run commands reject
-test clips. A protocol/version change is required before test execution.
+Changing the status string alone cannot unlock validation/test commands.
+
+## Experiment setup workflow
+
+1. Inspect the preregistered label-blind matrix with `football-coach pilot-plan`.
+2. Run `football-coach sample-pilot-frames` to create every neutral F10/F20/F30/F60
+   review input without contacting the MLLM. Complete the forms created by
+   `init-reference-b`, then use `finalize-reference-b`; this preserves and hashes
+   a label-free snapshot before attaching the hidden SoccerNet label.
+3. Only after the blind references are finalized, run B0 on all pilot cells with
+   `football-coach run-sampling-pilot --model qwen3.5:27b` (or the selected
+   exact 35B tag). One invocation fixes the model for all 32 cells and preserves
+   successful runs, answer-format omissions, capacity failures, crashes, model digest,
+   frame indices/hashes, and timing.
+4. Copy `templates/sampling_decision.template.json` with
+   `init-sampling-decision`; document the train decision and real F60 result.
+5. Change status to `sampling_validation`, run only the fixed validation cohort,
+   complete the decision, then create the sampling freeze with `freeze-sampling`.
+6. Change status to `frozen_validation`. Build the pixel-only Dataset A index
+   with `build-a-index`; B4 and B5 automatically use its rank-1 cosine neighbour.
+7. Run B0–B5 with identical frozen B frames and generation settings. Score
+   recognition first, then retrieval and coaching, using
+   `config/scoring_rubric_v0.3.0.json` and blinded score forms.
+8. Record the final validation choice in `init-protocol-decision`, run
+   `freeze-protocol`, then and only then change status to `frozen_test`.
+
+Each frozen test clip/condition/model cell receives one private attempt marker
+immediately before inference. A preserved crash counts as that cell's attempt;
+the command refuses accidental reruns.
+
+B1 selection hashes only the fixed seed, condition, and neutral B ID; relevance
+is scored after generation. B2 alone reads the hidden action label. Its explicit
+mapping currently supports `Corner` and `Direct free-kick`; other actions are
+reported as not evaluable and never receive a substitute case. This limitation
+must be reported rather than treating the oracle as coverage of all SoccerNet
+events.
+
+B4 uses the pinned `openai/clip-vit-base-patch32` image encoder. The same
+preprocessor embeds uniformly sampled A and B pixels; per-frame normalized
+embeddings are mean-pooled and normalized, then matched by cosine nearest
+neighbour. This is retrieval-assisted analysis, not independent video
+understanding.
 
 ## Current boundary
 
-The repository is a working foundation, not a completed Dataset A and not an
-experimental result. It does not yet choose a video encoder. Failed capacity,
+The repository now defines the experiment and its gates, but no sampling choice,
+human Dataset B reference, model result, retrieval relevance judgement, or score
+is claimed until the corresponding real evidence is produced. Failed capacity,
 retrieval, and model runs must be preserved and analyzed rather than hidden.
-

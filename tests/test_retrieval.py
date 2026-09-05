@@ -17,7 +17,11 @@ def test_cosine_knn_returns_nearest_case() -> None:
 
 def test_embedding_index_round_trip(tmp_path: Path) -> None:
     path = tmp_path / "index.npz"
-    EmbeddingIndex(["A-0001"], np.array([[3, 4]], dtype=np.float32)).save(path)
+    EmbeddingIndex(
+        ["A-0001"],
+        np.array([[3, 4]], dtype=np.float32),
+        {"model_id": "pinned", "uses_dataset_b_labels_or_text": False},
+    ).save(path)
     loaded = EmbeddingIndex.load(path)
     assert loaded.search(np.array([3, 4]), 1)[0].similarity == 1.0
-
+    assert loaded.metadata["model_id"] == "pinned"

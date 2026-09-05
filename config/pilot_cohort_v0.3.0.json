@@ -1,0 +1,29 @@
+{
+  "cohort_id": "dataset-b-frame-sampling-pilot-v0.3.0",
+  "split": "train",
+  "selection_method": "Select the eight smallest SHA-256 digests of UTF-8 seed:neutral_clip_id over all 57 public train IDs.",
+  "selection_used_hidden_labels": false,
+  "selection_used_pixels": false,
+  "seed": 20260903,
+  "clip_ids": [
+    "B-TRAIN-0025",
+    "B-TRAIN-0054",
+    "B-TRAIN-0046",
+    "B-TRAIN-0051",
+    "B-TRAIN-0006",
+    "B-TRAIN-0011",
+    "B-TRAIN-0040",
+    "B-TRAIN-0024"
+  ],
+  "validation_confirmation_clip_ids": [
+    "B-VALID-0049",
+    "B-VALID-0033",
+    "B-VALID-0038",
+    "B-VALID-0003"
+  ],
+  "frame_counts": [10, 20, 30, 60],
+  "maximum_edge": 672,
+  "condition": "B0_frames_only",
+  "purpose": "Compare temporal recognition under controlled frame counts before any retrieval-assisted condition.",
+  "results_status": "pending"
+}

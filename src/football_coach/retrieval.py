@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -14,7 +15,12 @@ class RetrievalHit:
 
 
 class EmbeddingIndex:
-    def __init__(self, case_ids: list[str], vectors: np.ndarray):
+    def __init__(
+        self,
+        case_ids: list[str],
+        vectors: np.ndarray,
+        metadata: dict[str, object] | None = None,
+    ):
         matrix = np.asarray(vectors, dtype=np.float32)
         if matrix.ndim != 2:
             raise ValueError("vectors must be a two-dimensional matrix")
@@ -27,6 +33,7 @@ class EmbeddingIndex:
             raise ValueError("zero-length embeddings are not searchable")
         self.case_ids = tuple(case_ids)
         self.vectors = matrix / norms[:, None]
+        self.metadata = dict(metadata or {})
 
     def search(
         self,
@@ -56,12 +63,21 @@ class EmbeddingIndex:
 
     def save(self, path: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
-        np.savez_compressed(path, case_ids=np.array(self.case_ids), vectors=self.vectors)
+        np.savez_compressed(
+            path,
+            case_ids=np.array(self.case_ids),
+            vectors=self.vectors,
+            metadata_json=np.array(json.dumps(self.metadata, sort_keys=True)),
+        )
 
     @classmethod
     def load(cls, path: Path) -> EmbeddingIndex:
         with np.load(path, allow_pickle=False) as payload:
             ids = [str(item) for item in payload["case_ids"].tolist()]
             vectors = payload["vectors"]
-        return cls(ids, vectors)
-
+            metadata = (
+                json.loads(str(payload["metadata_json"].item()))
+                if "metadata_json" in payload.files
+                else {}
+            )
+        return cls(ids, vectors, metadata)

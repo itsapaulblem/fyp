@@ -1,0 +1,11 @@
+DATASET A — ADVICE ONLY
+
+The following text is the human coaching advice from the same Dataset A case
+that automatic pixel-embedding retrieval selected for the full-case condition.
+No Dataset A frames, observation, tactical tags, outcome, or problem are supplied.
+
+{{CASE_A_ADVICE}}
+
+Do not assume that the situation which produced this advice also occurred in the
+new Dataset B sequence. Apply the advice only where Dataset B''s visible evidence
+supports it.

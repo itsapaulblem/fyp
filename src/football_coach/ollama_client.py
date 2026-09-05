@@ -46,7 +46,6 @@ class OllamaClient:
         self,
         model: str,
         messages: list[PromptMessage],
-        schema: dict[str, Any],
         options: dict[str, Any],
         think: bool,
     ) -> dict[str, Any]:
@@ -65,7 +64,6 @@ class OllamaClient:
         payload = {
             "model": model,
             "messages": encoded_messages,
-            "format": schema,
             "options": options,
             "think": think,
             "stream": False,

@@ -1,15 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path, PurePosixPath
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, model_validator
 
-RightsStatus = Literal[
-    "verified_redistributable", "private_research_only", "link_only", "unknown"
-]
+RightsStatus = Literal["verified_redistributable", "private_research_only", "link_only", "unknown"]
 CaseStatus = Literal["draft", "approved", "rejected"]
 ActionFamily = Literal[
     "corner",
@@ -121,9 +119,7 @@ class CaseARecord(BaseModel):
             ),
         }
         errors.extend(
-            f"{name} is required"
-            for name, value in required_text.items()
-            if not value.strip()
+            f"{name} is required" for name, value in required_text.items() if not value.strip()
         )
         if self.source.rights_status == "unknown":
             errors.append("source.rights_status must be resolved")
@@ -155,54 +151,86 @@ class SoccerNetClip:
     frame_member_pattern: str
 
 
-class ModelObservation(BaseModel):
+class ReviewerInfo(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    possession_team: str = Field(min_length=1)
-    phase: str = Field(min_length=1)
-    temporal_sequence: list[str] = Field(min_length=1)
-    main_event: str = Field(min_length=1)
+    name_or_code: str
+    football_qualification_or_experience: str
+    reviewed_at_utc: datetime
+
+
+class ReferenceReviewProtocol(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    used_only_neutral_id_and_frames: Literal[True]
+    blinded_to_soccernet_label_during_visual_review: Literal[True]
+    blinded_to_model_answers: Literal[True]
+    blinded_to_dataset_a_pairs: Literal[True]
+
+
+class VisualReference(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    chronological_visible_description: list[str] = Field(min_length=1)
+    possession_by_visible_appearance: str = Field(min_length=1)
+    tactical_phase: str = Field(min_length=1)
+    main_visible_event: str = Field(min_length=1)
     outcome: str = Field(min_length=1)
-    visible_evidence: list[str] = Field(min_length=1)
+    visibility_limitations: list[str]
 
 
-class ModelAnalogy(BaseModel):
+class SamplingVisibility(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    case_used: bool
-    transferable_principles: list[str]
-    important_differences: list[str]
+    event_visible: bool
+    notes: str
 
 
-class ModelDiagnosis(BaseModel):
+class HiddenBReference(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    team_or_role: str = Field(min_length=1)
-    priority_problem: str = Field(min_length=1)
-    why_it_matters: str = Field(min_length=1)
+    soccernet_action_label: str = Field(min_length=1)
+    attached_only_after_visual_review: Literal[True]
+    used_as_coaching_ground_truth: Literal[False]
+    blind_snapshot_path: str = Field(min_length=1)
+    blind_snapshot_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
 
 
-class ModelAdvice(BaseModel):
+class DatasetBHumanReference(BaseModel):
+    """Private scoring reference completed without seeing labels or model answers."""
+
     model_config = ConfigDict(extra="forbid")
 
-    coach_message: str = Field(min_length=1)
-    representative_practice: str = Field(min_length=1)
-    success_cues: list[str] = Field(min_length=1)
+    reference_version: Literal["0.3.0"]
+    clip_id: str = Field(pattern=r"^B-(TRAIN|VALID|TEST)-[0-9]{4}$")
+    review_status: Literal["approved"]
+    reviewer: ReviewerInfo
+    review_protocol: ReferenceReviewProtocol
+    visual_reference: VisualReference
+    sampling_visibility: dict[Literal["F10", "F20", "F30", "F60"], SamplingVisibility]
+    hidden_reference: HiddenBReference
+
+    @model_validator(mode="after")
+    def require_all_sampling_conditions(self) -> DatasetBHumanReference:
+        required = {"F10", "F20", "F30", "F60"}
+        if set(self.sampling_visibility) != required:
+            raise ValueError(f"sampling_visibility must contain exactly {sorted(required)}")
+        return self
 
 
+class HumanScoreRecord(BaseModel):
+    """Human-entered scores. Nulls remain explicit until scoring is complete."""
 
-class ModelUncertainty(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    confidence: Literal["low", "medium", "high"]
-    visibility_limits: list[str]
-
-
-class ModelAnswer(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    observation: ModelObservation
-    analogy: ModelAnalogy
-    diagnosis: ModelDiagnosis
-    advice: ModelAdvice
-    uncertainty: ModelUncertainty
+    score_version: Literal["0.3.0"]
+    run_id: str = Field(min_length=1)
+    clip_id: str = Field(pattern=r"^B-(TRAIN|VALID|TEST)-[0-9]{4}$")
+    scorer: dict[str, str]
+    blinding: dict[str, bool]
+    recognition: dict[str, int]
+    retrieval_relevance: dict[str, int | str | None]
+    coaching: dict[str, int]
+    failure_modes: dict[str, int]
+    uncertainty: dict[str, int]
+    notes: str

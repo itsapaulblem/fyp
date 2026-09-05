@@ -29,6 +29,19 @@ def resize_max_edge(frame: np.ndarray, maximum_edge: int) -> np.ndarray:
     )
 
 
+def write_jpeg_without_overwrite(frame: np.ndarray, output: Path) -> None:
+    ok, encoded = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 92])
+    if not ok:
+        raise OSError(f"Could not encode {output}")
+    payload = encoded.tobytes()
+    if output.exists():
+        if output.read_bytes() != payload:
+            raise FileExistsError(f"Refusing to overwrite non-identical sampled frame: {output}")
+        return
+    with output.open("xb") as handle:
+        handle.write(payload)
+
+
 def sample_dataset_b(
     record: SoccerNetClip,
     project_root: Path,
@@ -49,8 +62,7 @@ def sample_dataset_b(
                 raise ValueError(f"Could not decode {member}")
             frame = resize_max_edge(frame, maximum_edge)
             output = destination / f"{order:02d}_frame_{frame_number:06d}.jpg"
-            if not cv2.imwrite(str(output), frame, [cv2.IMWRITE_JPEG_QUALITY, 92]):
-                raise OSError(f"Could not write {output}")
+            write_jpeg_without_overwrite(frame, output)
             outputs.append(output)
     return outputs
 
@@ -88,10 +100,8 @@ def sample_dataset_a(
                 raise ValueError(f"Could not read frame {frame_number} from {video_path}")
             frame = resize_max_edge(frame, maximum_edge)
             output = destination / f"{order:02d}_frame_{frame_number:06d}.jpg"
-            if not cv2.imwrite(str(output), frame, [cv2.IMWRITE_JPEG_QUALITY, 92]):
-                raise OSError(f"Could not write {output}")
+            write_jpeg_without_overwrite(frame, output)
             outputs.append(output)
     finally:
         capture.release()
     return outputs
-
