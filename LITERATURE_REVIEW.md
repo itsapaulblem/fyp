@@ -1,60 +1,68 @@
-# Thesis Literature Review Register
+# Thesis Literature Review and Research Gap
 
-## Research question
+## 1. Research question and scope
 
 **Does providing a human-annotated analogous Dataset A case improve an MLLM's recognition and coaching advice for a new Dataset B sequence?**
 
-This is a working research register for an undergraduate thesis. It replaces the immediate need to learn Zotero. It should not be presented as the finished literature-review chapter.
+This review establishes the evidence and research gap behind that question. The study evaluates retrieval-assisted performance: it does not treat performance with a supplied case as independent video understanding. Dataset B recognition and coaching advice are separate outcomes because a model may describe an event correctly but give poor advice, or misread an event while producing convincing generic advice.
 
-The central comparison is between the same Dataset B frames analysed without a case and with an analogous human-annotated Dataset A case. Retrieval-assisted performance must not be described as independent video understanding.
+## 2. Synthesis of the reviewed literature
 
-## How to use this file
+### 2.1 Video understanding and frame selection
 
-For each paper that you actually read:
+Video-language models do not necessarily use temporal information simply because they receive multiple frames. S08 shows that strong single-frame performance can reveal static-appearance bias in video-language benchmarks. S11 likewise shows that adding more frames is not automatically beneficial and that selecting useful evidence can be more effective than processing every frame uniformly. Together, these papers justify a controlled frame-count pilot for this project, but they do not identify the best frame count for SoccerNet clips or for Qwen3.5. The final sampling choice must therefore come from the project's training and validation evidence.
 
-1. Open the official paper or publisher page.
-2. Check the title, authors, year, venue, pages, and DOI.
-3. Add a reading note using the template near the end of this file.
-4. Separate what the paper directly demonstrates from what you infer for this thesis.
-5. Change its reading status from `TO READ` to `READ`.
-6. Cite the original paper in the thesis, not an AI-generated summary.
+### 2.2 Retrieved examples and analogous cases
 
-Verification labels in this file mean:
+S22 provides the foundation for representing visual inputs with CLIP embeddings and comparing normalized representations using cosine similarity. S20 shows on the reported static visual tasks that relevant in-context examples can outperform random examples. S16 shows that retrieved multimodal context can help, but also that noisy or imperfect retrieval can reduce performance for some models. These findings motivate comparing relevant, random, and no-case conditions. They do not prove that visually similar football clips are tactically analogous or that a retrieved case will improve generated coaching advice.
 
-- `READ`: you supplied a human reading review, which was checked and organised in the consolidated reading-notes section.
-- `PRIMARY RECORD CHECKED`: core bibliographic details were checked against an official proceedings, publisher, or paper page.
-- `CORRECTION CHECKED`: a specific correction was checked against primary records.
-- `TO VERIFY`: retained from the consolidated search table but still needs a source-by-source metadata check before citation.
-- `NON-ARCHIVAL`: preprint, workshop version without confirmed archival proceedings, or technical report.
+### 2.3 Football understanding and generated sports advice
 
-Every paper title in the grouped tables below is a clickable reading link. Links point to an official proceedings or publisher page where possible; arXiv or an official project page is used for non-archival work. Most official pages have a **PDF** button for the full article.
+S28 establishes the SoccerNet-GSR source context and demonstrates the difficulty of extracting structured football information from broadcast video. Its private tracking, identity, coordinate, and event metadata are reference information, not ordinary model input. S31 shows that a domain-trained multimodal system can recognise football refereeing events and generate natural-language explanations. Its small human study reports similar mean ratings for model-generated and paired human-written explanations, but it does not test analogous-case retrieval or tactical coaching. S33 shows in a text-only running context that generated sports advice changes with the information supplied and still requires structured human checking. Collectively, these papers support football-focused language evaluation, but none answers this thesis question.
 
-## Recommended reading order
+### 2.4 Hallucination and human evaluation
 
-Do not try to read all 37 papers from beginning to end immediately.
+S35 shows that image-language models can confidently claim that absent objects are present and that hallucination should be evaluated separately from general task performance. S36 extends hallucination analysis to video and distinguishes object-relation, temporal, semantic-detail, extrinsic factual, and extrinsic non-factual errors. This distinction matters because a football statement may be generally true but unsupported by the current frames. POPE and VideoHallucer use controlled binary questions, whereas this thesis requires normal-text answers. Their taxonomies inform the human rubric, but their metrics cannot be copied directly as validation of this project's open-ended scoring procedure.
 
-1. Read the abstract, introduction, method overview, experiment setup, limitations, and conclusion of the core papers.
-2. Use the remaining papers to support individual design choices or establish background.
-3. Begin writing by claim, not by summarising one paper after another.
+## 3. Research gap
 
-The priority papers and their current reading status are listed below.
+The reviewed literature separately examines sampled-frame video understanding, visual retrieval, in-context examples, football analysis, generated sports advice, and multimodal hallucination. Among the reviewed sources, no study combines these elements to test whether a human-annotated analogous football case improves both recognition of a new sequence and the coaching advice generated for it. It also remains unknown whether automatic pixel-only retrieval approaches human case selection, whether an irrelevant case harms performance, and whether apparent improvement comes from useful transfer, blind copying, or unsupported assumptions.
 
-| Current ID | Paper | Human reading status |
-|---|---|---|
-| S08 | Revealing Single Frame Bias for Video-and-Language Learning | Completed |
-| S11 | Too Many Frames, Not All Useful / LVNet | Completed |
-| S16 | MRAG-Bench | Completed |
-| S20 | What Makes Good Examples for Visual In-Context Learning? | Completed |
-| S22 | CLIP | Completed |
-| S28 | SoccerNet Game State Reconstruction | Completed |
-| S31 | X-VARS | Completed |
-| S33 | ChatGPT-generated running training plans | Completed |
-| S35 | POPE: Evaluating Object Hallucination in LVLMs | Completed |
-| S36 | VideoHallucer | Completed |
+## 4. How the experiment addresses the gap
 
-Therefore, all ten priority papers now have human reading notes.
+The main comparisons are:
 
-## Group 1: Multimodal video understanding
+- **B0 versus B3:** the same Dataset B frames without a case versus with a human-selected analogous Dataset A case. This tests whether strong human case selection can help.
+- **B0 versus B4:** the same Dataset B frames without a case versus with a case selected automatically by pixel-derived embeddings and cosine nearest-neighbour retrieval. This tests the deployable automatic approach.
+- **B3 versus B4:** human selection versus automatic retrieval. This measures the remaining selection gap.
+
+Three supporting controls help explain those comparisons:
+
+- **B1 random case:** tests whether any benefit comes merely from receiving extra case material. Its selection must be independent of hidden Dataset B labels.
+- **B2 action-matched diagnostic:** uses the hidden Dataset B action label to select a Dataset A case. This is intentional diagnostic leakage and is not an end-to-end retrieval system.
+- **B5 advice only:** supplies only the advice from B4's retrieved case while keeping the same Dataset B frames. This tests whether case visuals and descriptive context add value beyond the advice text alone.
+
+Across paired conditions, Dataset B frames, prompts, output requirements, generation settings, and scoring criteria remain identical except for the intended case intervention. Recognition is scored before coaching quality. Retrieval relevance, hallucination, blind copying, unsupported transfer, and calibrated uncertainty are assessed separately.
+
+## 5. Expected contribution
+
+The expected contribution is an initial controlled account of whether analogous human coaching cases improve football-sequence recognition, coaching advice, both, or neither. It will also show whether an automatic pixel-only retriever approaches human selection and whether irrelevant or incomplete case information causes harm. The contribution is the controlled evidence and transparent evaluation procedure, not a claim that retrieval has already improved the model. Until the experiment is complete, the thesis should say that it investigates or addresses the gap, not that it solves it.
+
+## 6. Thematic source register
+
+The current IDs reflect the renumbering after a former S24 entry was removed. In this register, S24 is X-CLIP, S35 is POPE, and S36 is VideoHallucer.
+
+Status labels have distinct meanings:
+
+- READ means a detailed human reading note appears in Section 7.
+- PRIMARY RECORD CHECKED means bibliographic details were checked, not necessarily that the full paper was reviewed.
+- CORRECTION CHECKED means a specific bibliographic correction was verified.
+- TO VERIFY marks a supporting source that still requires source-level verification before it is cited.
+- NON-ARCHIVAL identifies a preprint, workshop record without confirmed archival proceedings, or technical report.
+
+Every paper title is a reading link. Official proceedings or publisher pages are used where available.
+
+### 6.1 Multimodal video understanding
 
 | ID | Short title | Role in this thesis | Status |
 |---|---|---|---|
@@ -66,7 +74,7 @@ Therefore, all ten priority papers now have human reading notes.
 | S06 | [TempCompass](https://aclanthology.org/2024.findings-acl.517/) | Evidence about temporal perception and reasoning weaknesses in video language models. | PRIMARY RECORD CHECKED |
 | S07 | [Gemini 1.5 technical report](https://arxiv.org/abs/2403.05530) | Background on long-context multimodal processing, not peer-reviewed evidence. | NON-ARCHIVAL |
 
-## Group 2: Frame sampling and temporal reasoning
+### 6.2 Frame sampling and temporal reasoning
 
 | ID | Short title | Role in this thesis | Status |
 |---|---|---|---|
@@ -76,7 +84,7 @@ Therefore, all ten priority papers now have human reading notes.
 | S11 | [Too Many Frames, Not All Useful / LVNet](https://aclanthology.org/2026.eacl-long.164/) | Core evidence that more frames are not automatically better; relevant to the F10/F20/F30/F60 pilot. | READ; PRIMARY RECORD CHECKED |
 | S12 | [VideoAgent](https://videoagent.github.io/) | Example of selecting or retrieving useful visual evidence rather than processing every frame equally. | TO VERIFY |
 
-## Group 3: Retrieval, case-based reasoning, and in-context examples
+### 6.3 Retrieval, case-based reasoning, and in-context examples
 
 | ID | Short title | Role in this thesis | Status |
 |---|---|---|---|
@@ -90,7 +98,7 @@ Therefore, all ten priority papers now have human reading notes.
 | S20 | [What Makes Good Examples for Visual In-Context Learning?](https://proceedings.neurips.cc/paper_files/paper/2023/hash/398ae57ed4fda79d0781c65c926d667b-Abstract-Conference.html) | Core evidence that example selection can outperform random examples. | READ; PRIMARY RECORD CHECKED |
 | S21 | [Learning to Retrieve Prompts for In-Context Learning](https://aclanthology.org/2022.naacl-main.191/) | Background supporting learned or similarity-based example selection over random selection. | TO VERIFY |
 
-## Group 4: CLIP and embedding retrieval
+### 6.4 CLIP and embedding retrieval
 
 | ID | Short title | Role in this thesis | Status |
 |---|---|---|---|
@@ -99,7 +107,7 @@ Therefore, all ten priority papers now have human reading notes.
 | S24 | [X-CLIP](https://doi.org/10.1145/3503161.3547910) | More advanced video-text retrieval baseline; useful background rather than a required implementation. | PRIMARY RECORD CHECKED |
 | S25 | [I3D](https://openaccess.thecvf.com/content_cvpr_2017/html/Carreira_Quo_Vadis_Action_CVPR_2017_paper.html) | Older video representation baseline and historical context. | TO VERIFY |
 
-## Group 5: SoccerNet, football understanding, and coaching
+### 6.5 SoccerNet, football understanding, and coaching
 
 | ID | Short title | Role in this thesis | Status |
 |---|---|---|---|
@@ -112,7 +120,7 @@ Therefore, all ten priority papers now have human reading notes.
 | S32 | [SportQA](https://aclanthology.org/2024.naacl-long.283/) | Sports video question-answering background. | PRIMARY RECORD CHECKED |
 | S33 | [ChatGPT-generated running training plans](https://doi.org/10.52082/jssm.2024.56) | Indirect evidence about generated coaching/training advice and human evaluation. It is text-based and not football video analysis. | READ; PRIMARY RECORD CHECKED |
 
-## Group 6: Hallucination and human evaluation
+### 6.6 Hallucination and human evaluation
 
 | ID | Short title | Role in this thesis | Status |
 |---|---|---|---|
@@ -121,7 +129,7 @@ Therefore, all ten priority papers now have human reading notes.
 | S36 | [VideoHallucer](https://arxiv.org/abs/2406.16338) | Directly relevant video-hallucination benchmark. The abstract reports eleven evaluated LVLMs, while the setup and body describe twelve model families; report the source inconsistency rather than relying on one number. | READ; NON-ARCHIVAL; PRIMARY RECORD CHECKED |
 | S37 | [MT-Bench and Chatbot Arena](https://proceedings.neurips.cc/paper_files/paper/2023/hash/91f18a1287b398d378ef22505bf41832-Abstract-Datasets_and_Benchmarks.html) | Relevant only if an LLM judge is used. Human scoring remains preferable for the main thesis evaluation. | TO VERIFY |
 
-## Human reading notes
+## 7. Detailed human reading notes
 
 These are the reviews you wrote after reading the papers. They are collected here in current numerical order. Accuracy checks and thesis-specific cautions have been incorporated, but the notes remain a record of your reading rather than evidence that every source in the full register has been read.
 
@@ -890,67 +898,7 @@ The paper supports keeping hallucination separate from recognition and coaching 
 
 **Where I may cite it:** In related work as the main video-specific hallucination benchmark; in methodology when defining intrinsic, temporal, semantic-detail, and extrinsic unsupported claims; and in limitations when explaining why normal-text football answers require human grounding judgments beyond object-presence metrics such as CHAIR and POPE.
 
-## Literature synthesis
-
-This section turns the individual paper reviews into a claim-based account of the existing evidence, the unresolved question, and the role of this experiment. The concise version is suitable for an initial supervisor explanation. The full draft preserves the longer reasoning for later thesis writing.
-
-### Concise synthesis
-
-#### 1. What existing research establishes
-
-Prior research provides the separate foundations for this project. Video-language studies show that sampled-frame models can rely heavily on static appearance and that more frames are not automatically better. Visual in-context-learning and multimodal retrieval research shows that selecting relevant examples can outperform random examples, although noisy retrieval may also harm performance. CLIP provides a practical way to represent pixels as embeddings for cosine-similarity matching. SoccerNet-GSR and X-VARS establish the football-video context, while the running-plan study shows that generated sports advice requires structured human evaluation. POPE and VideoHallucer demonstrate that fluent multimodal answers can contain unsupported object, event, temporal, and factual claims.
-
-#### 2. What remains uncertain
-
-These studies do not show whether a human-annotated analogous football case improves an MLLM's interpretation of a new football sequence or the coaching advice generated from it. They also do not establish whether an automatically retrieved case works as well as a human-selected case. A visually similar case may be tactically irrelevant, and an imperfect case may cause copying or unsupported transfer. Recognition and coaching quality therefore cannot be treated as one outcome.
-
-#### 3. Research gap
-
-The gap is a controlled evaluation combining sampled football frames, human-annotated prior cases, automatic pixel-only retrieval, normal-text MLLM outputs, and separate recognition and coaching scores. None of the reviewed papers directly compares no case, a human-selected analogous case, and an automatically retrieved analogous case while also checking retrieval relevance, hallucination, copying, unsupported transfer, and uncertainty.
-
-#### 4. How the experiment addresses the gap
-
-The main comparisons are B0 versus B3 and B0 versus B4. B0 versus B3 tests whether a human-selected analogous case can help. B0 versus B4 tests whether a pixel-only cosine k-nearest-neighbour retriever can select a useful human-annotated case automatically. B3 versus B4 measures the remaining gap between human and automatic selection. B1 supplies a random case, B2 is an action-label diagnostic with intentional leakage, and B5 supplies only B4's retrieved advice. Dataset B frames, prompts, model settings, and scoring criteria remain identical across paired conditions except for the intended intervention.
-
-#### 5. Expected contribution
-
-The expected contribution is an initial controlled account of whether analogous human coaching cases improve football-sequence recognition, coaching advice, both, or neither, and whether automatic retrieval approaches human selection. The experiment also contributes a transparent evaluation procedure for normal-text answers that separates recognition, coaching quality, retrieval relevance, hallucination, copying, unsupported transfer, and calibrated uncertainty. Until results are obtained, the thesis should say that it investigates or addresses this gap, not that it solves it.
-
-### Full synthesis draft
-
-1. What existing research already establishes
-
-Prior work establishes several separate pieces relevant to this project, but each in isolation. CLIP (Radford et al., 2021) shows that contrastive image-text pretraining on web-scale data produces embeddings whose cosine similarity can support zero-shot classification and, by extension, similarity-based retrieval between visual items; this underlies the embedding mechanism that any automatic case-retrieval system would rely on. Zhang et al. (2023) build directly on this mechanism for visual in-context learning, showing that automatically retrieving in-context examples via CLIP-cosine similarity (unsupervised) or via a contrastively fine-tuned retriever (supervised) reliably outperforms random example selection on segmentation, detection, and colorization tasks, and that the retrieved examples tend to be both semantically and spatially/stylistically close to the query. This is the clearest existing evidence that relevance-based retrieval of an example beats random selection, but it is tested only on static-image, non-language-generating tasks, with no coaching-style or advice-generation component and no football content.
-
-X-VARS (Held et al., 2024) establishes that a fine-tuned CLIP visual encoder combined with an LLM can perform foul recognition and generate referee-style explanations for football clips. In a small study, those explanations received a mean human rating close to the mean rating for paired human-written explanations. The paper reports qualitative hallucination examples and uses a fixed event-centred frame window rather than comparing sampling methods. Lei et al. (2023) complicate the assumption that more or denser frames are always needed, showing that single-frame-trained models can match multi-frame models on several video-language benchmarks once pretraining is large enough. This reveals a static-appearance bias in popular datasets and cautions that frame quantity is not a reliable proxy for genuine temporal understanding. LVNet (Park et al., 2026) shows that non-uniform, question-relevance-conditioned keyframe selection can outperform uniform sampling for long-form video QA at lower computational cost, reinforcing that frame selection matters. MRAG-Bench (Hu et al., 2025) shows in a general, non-football multimodal retrieval setting that retrieved visual knowledge can help, while noisy or imperfect retrieval can harm many evaluated open-source models. This demonstrates that reference quality, not merely reference presence, matters. Somers et al. (2024) establish a richly annotated football game-state dataset and computer-vision pipeline for tracking and identifying athletes from broadcast video. It provides Dataset B context but does not evaluate MLLM language generation or coaching.
-
-The Düking et al. (2024) ChatGPT training-plan paper establishes, in a related but non-visual sports-coaching context, that the quality of AI-generated sports advice depends heavily on how much relevant input information the model is given, and that expert panels using Likert-scale ratings are a workable way to judge AI-generated coaching content. POPE (Li et al., 2023) establishes a stable, prompt-robust binary-question protocol for detecting object hallucination in image-language models, and shows that negative-sampling strategies (random, popular, adversarial) can reveal systematic biases in a model's answers. VideoHallucer (Wang et al., 2024) extends this to video, establishing a taxonomy of intrinsic and extrinsic hallucination types (including a temporal subtype) and an adversarial paired-question evaluation method, and shows that model scaling helps with some hallucination types but not others, and that models are generally better at detecting plain facts than at detecting whether a claim is actually supported by the video.
-
-Taken together, these papers establish that football-focused video-language systems can produce recognition outputs and plausible domain-specific explanations; that hallucination is a real and measurable problem in both image and video LLMs; that CLIP-style embeddings are a standard mechanism for measuring visual similarity and retrieving relevant examples; that relevance-based retrieval (via CLIP/cosine similarity) reliably beats random selection for static in-context visual examples; that non-uniform, relevance-conditioned frame/keyframe selection beats naive uniform or dense sampling for video tasks; that retrieved visual context can help or actively hurt a model's output depending on its quality and the model's ability to filter noise; and that the amount and relevance of input information given to a language model measurably changes the quality of its generated advice in a coaching context. What none of them establish is examined next.
-
-2. What remains uncertain
-
-It remains uncertain whether giving an MLLM analysing football an additional analogous prior example alongside a new football sequence changes its recognition accuracy or the quality of its coaching advice, and if so, whether the source of that example (a human-selected analogous case versus an automatically retrieved one, for instance via CLIP cosine similarity) matters. X-VARS shows that auxiliary classifier predictions injected as text can shift the model's output, but this is a different mechanism (fed-in labels, not a full analogous case) and was not tested against a no-case baseline in a controlled way that isolates the effect of the example itself. Zhang et al. show that CLIP-based retrieval beats random selection for in-context examples, but only for static image-to-image tasks (segmentation, detection, colorization) with no language generation and no football content; it is unknown whether the same relevance-retrieval advantage transfers to a setting where the "output" is generated coaching text rather than a predicted mask or label. MRAG-Bench shows that retrieved visual knowledge can help or hurt depending on quality and depending on whether the model (open-source vs proprietary) can filter bad examples, which raises the possibility that an automatically retrieved football case, if imperfectly matched, could actively degrade rather than improve a football MLLM's output; but this has never been tested in a coaching-advice context specifically. LVNet's finding that relevance-conditioned selection beats uniform sampling is about which frames within a single video to feed a model, not about supplying an entirely separate analogous case from a different video/instance, so it is uncertain whether the same logic (relevance beats naive selection) extends to cross-instance case retrieval.
-
-The Düking et al. paper shows that more detailed input information improves output quality in a general running-coach context, but this involved progressively more personal detail about the same athlete, not a separate analogous case drawn from a different instance, and it was text-only with no visual component. Neither this paper nor X-VARS isolates recognition performance from advice-quality performance as two separate axes, and neither systematically checks whether the model is hallucinating, copying the provided case verbatim, or transferring conclusions from the case in an unsupported way when such a case is present. It is also uncertain whether an automatically retrieved case (using CLIP-style cosine similarity, as used for filtering in VideoHallucer's dataset construction, for zero-shot classification in the original CLIP paper, or for in-context example retrieval in Zhang et al.) would function as well as a human-selected one when used as an in-context reference for a downstream generation task, since none of the reviewed papers use CLIP retrieval for this specific purpose; supplying a retrieved example to condition a model's coaching output about a new football sequence. Whether retrieval relevance itself needs to be checked, and whether the model's use of a case is transparent or opaque, are open questions none of the papers directly test.
-
-3. The research gap
-
-Existing research separately studies sampled-frame video understanding (Lei et al., LVNet), visual example selection for evaluation purposes and retrieval-based prompting (Zhang et al., MRAG-Bench), embedding-based retrieval (CLIP, Zhang et al.), football-specific video analysis and infrastructure (X-VARS, Somers et al.), generated sports coaching advice (Düking et al.), and hallucination detection in both image and video LLMs (POPE, VideoHallucer). However, no paper reviewed here brings these together to ask whether supplying a human-annotated analogous football case, or an automatically retrieved analogous case, actually improves an MLLM's recognition of what is happening in a new football sequence and the quality of the coaching advice it then generates about that sequence. X-VARS comes closest by combining a football-specific visual encoder with an LLM, but it does not test the effect of supplying a full analogous case (as opposed to a classifier label) as context, nor does it separate recognition quality from advice quality, nor does it compare human-selected against automatically retrieved reference material. Zhang et al. and MRAG-Bench come closest on the retrieval side; one showing relevance-based retrieval beats random selection for static in-context examples, the other showing retrieved visual knowledge can help or hurt LVLM output depending on quality; but neither touches football, coaching advice, or case-based reasoning, and neither generates free text as its output. LVNet shows relevance-conditioned selection beats uniform sampling for frames within a video, but not for cross-instance case retrieval. POPE and VideoHallucer show how to test for hallucination but do so in general-domain image and video settings unrelated to football coaching or case-based reasoning. The Düking et al. paper shows information-granularity effects but in a text-only, non-visual, non-case-based setting. The gap, therefore, is the absence of any controlled comparison of no-case, human-selected-case, and automatically-retrieved-case conditions for a football-video MLLM, evaluated separately on recognition and coaching-advice quality, with accompanying checks for hallucination, copying, unsupported transfer, retrieval relevance, and model uncertainty.
-
-4. How my experiment addresses the gap
-
-The experiment investigates this gap using a controlled comparison across three main comparison conditions applied to the same set of Dataset B football frames under identical model settings. B0 (no case) versus B3 (human-selected analogous case) tests whether providing a human-selected analogous case changes recognition and advice quality compared with the model working from the new sequence alone. B0 versus B4 (automatically retrieved case) tests the same question but for a case obtained through an automatic retrieval mechanism rather than human judgment, addressing whether case-provision helps even without a human curator in the loop; and, drawing on MRAG-Bench's finding that noisy retrieved visual context can hurt rather than help, this comparison also serves as a check for whether an imperfect automatic match could degrade performance relative to no case at all. B3 versus B4 directly measures the gap between human selection and automatic retrieval, which is left unaddressed by any of the papers reviewed here, including Zhang et al.'s otherwise-relevant work on CLIP-based retrieval for static in-context examples.
-
-The remaining conditions provide supporting controls. B1 tests whether any change is caused merely by receiving an unrelated case. B2 uses the hidden Dataset B action label only as a diagnostic matching condition and must be reported as intentional label leakage, not as an automatic system. B5 supplies only the advice from B4's retrieved case to test whether case frames and descriptive context add value beyond advice text alone.
-
-Recognition and coaching-advice quality are evaluated as two separate outcomes rather than a single blended score, following the general principle (visible in X-VARS's separate classification-accuracy and human-study explanation-quality results) that a model's ability to correctly identify what occurred and its ability to generate good advice about it are not necessarily the same capability. In addition, the experiment incorporates checks for hallucination (informed by the POPE and VideoHallucer protocols), copying of the provided case verbatim, unsupported transfer of conclusions from the case to the new sequence, retrieval relevance (informed by CLIP similarity scoring, following the general mechanism used in VideoHallucer's dataset construction and in Zhang et al.'s prompt retrieval framework), and the model's expressed uncertainty. Holding the Dataset B frames and model settings identical across all paired conditions is intended to isolate the effect of the case-provision condition itself from confounds such as different input videos or different model configurations. At this stage, the experiment tests and investigates whether case-provision and its source affect performance; it does not yet establish or confirm a result.
-
-5. My expected contribution
-
-If the experiment shows a measurable difference between the no-case, human-selected-case, and automatically-retrieved-case conditions, the expected contribution is an initial, controlled account of whether and how supplying an analogous football case affects an MLLM's recognition and coaching-advice generation for a new sequence, something not directly tested in any of the papers reviewed here; including the two papers (Zhang et al., MRAG-Bench) that come closest to studying retrieval-based example provision, since neither addresses football, coaching text generation, or case-based reasoning specifically. A secondary expected contribution is a combined evaluation protocol, using a human rubric informed by POPE's and VideoHallucer's hallucination taxonomies together with checks for copying, unsupported transfer, and retrieval relevance, applied to normal-text case-conditioned football coaching outputs rather than copied directly from binary captioning or question-answering benchmarks. This would extend X-VARS's demonstration that a football-specific MLLM can generate referee explanations that received ratings close to human-written explanations in a small study by asking a narrower, more specific question: whether an additional analogous case, and the way that case is obtained, changes the reliability and quality of what the model produces. These are intended as investigative findings from a first controlled test, not as a general or conclusive resolution of the broader question of case-based reasoning in football MLLMs.
-
-## Verified correction ledger
+## 8. Bibliographic verification notes
 
 These corrections were checked against primary publication records.
 
@@ -966,93 +914,17 @@ These corrections were checked against primary publication records.
 
 The resulting high-level classification is **34 peer-reviewed publications and 3 non-archival records (S05, S07, and S36)**. This count should be treated as a bibliography-management note, not as a substantive thesis finding.
 
-## What the literature needs to justify
+## 9. Methodological conclusions and boundaries
 
-### 1. Why use sampled frames?
+The literature supports the following decisions for this thesis:
 
-Ollama receives images rather than the native video stream. Video-language research also shows that temporal information can matter and that adding frames is not automatically beneficial. Therefore, the thesis uses a documented frame-sampling pilot instead of assuming a frame count. The human pilot observation that B-TRAIN-0040 required F60 to reveal the goal is local experimental evidence and should be reported separately from published literature.
+- Use sampled frames because the Ollama interface receives images, but select and freeze the frame count through the project's own pilot rather than claiming that published work establishes an optimal number.
+- Treat the analogous case as an experimental intervention. Prior retrieval research motivates the hypothesis that relevance matters, but does not guarantee improvement in football recognition or coaching.
+- Use pixel-derived embeddings and cosine nearest-neighbour matching for B4, with the encoder, preprocessing, aggregation method, and value of `k` selected before the final test run.
+- Evaluate recognition before coaching quality because fluent advice can conceal an incorrect interpretation of the play.
+- Score retrieval relevance, hallucination, blind copying, unsupported transfer, and calibrated uncertainty separately.
+- Preserve normal-text model answers exactly as generated. Binary hallucination benchmarks inform the rubric but do not replace evaluation of the actual B0 to B5 outputs.
 
-### 2. Why might an analogous human case help?
+The literature does not justify exposing hidden Dataset B labels, tracking, coordinates, identities, or human references in the ordinary visual conditions. Hidden action labels are permitted only in B2 as an explicitly labelled diagnostic. B3 represents human case selection, while B4 represents the automatic pixel-only system. Any improvement with B3 or B4 must be described as retrieval-assisted performance rather than independent video understanding.
 
-Case-based reasoning says that a new problem can be approached by retrieving and adapting a similar past case. Multimodal retrieval and visual in-context-learning research suggests that the relevance of supplied examples matters. This motivates the hypothesis; it does not guarantee that football recognition or coaching will improve.
-
-### 3. Why use cosine embedding retrieval?
-
-CLIP and video-retrieval research provide a practical basis for representing visual content with embeddings. Cosine nearest-neighbour retrieval gives a direct and reproducible similarity rule. Dataset B hidden event labels cannot be used by the automatic B4 retriever; it may use only pixels or embeddings derived from pixels.
-
-### 4. Why score recognition and coaching separately?
-
-A model could misunderstand the play but produce generic-sounding advice, or recognise the play correctly while giving poor advice. Separate scoring is therefore required to tell whether a retrieved case improves visual recognition, coaching quality, both, or neither. Hallucination, blind copying, retrieval relevance, unsupported transfer, and calibrated uncertainty also need separate judgments.
-
-## Research gap
-
-The reviewed literature covers video understanding, temporal sampling, multimodal retrieval, case selection, football analysis, generated training advice, and hallucination evaluation. However, these are mostly separate research lines.
-
-The apparent gap is a controlled test of whether a **human-annotated analogous football case** improves both:
-
-1. recognition of a new football sequence; and
-2. coaching advice grounded in that sequence.
-
-The experiment addresses this gap through paired conditions using identical Dataset B frames and generation settings, changing only the intended case information.
-
-This gap statement must be revisited after reading the closest papers in full. An absence in the current search results is not proof that no such study exists.
-
-## Per-paper reading-note template
-
-Copy this section under a paper when you read it.
-
-```text
-Paper ID and citation:
-Date read:
-
-Research problem:
-Dataset:
-Model:
-Input representation:
-Retrieval or sampling method:
-Experimental baselines:
-Evaluation metrics:
-
-Main finding in my own words:
-Evidence from the paper (page/table/figure):
-Limitations stated by the authors:
-Additional limitation I noticed:
-
-Relevance to my thesis:
-Direct evidence, indirect support, or background:
-Which thesis design choice does it support:
-What it does NOT establish:
-Where I may cite it in the thesis:
-```
-
-## Search log
-
-Record future searches so the literature review is reproducible.
-
-| Search date | Database | Exact query | Inclusion criteria | Exclusion criteria | Papers retained |
-|---|---|---|---|---|---|
-|  |  |  |  |  |  |
-
-Suggested databases include Google Scholar, Scopus or Web of Science if available through the university, ACL Anthology, IEEE Xplore, ACM Digital Library, CVF Open Access, and arXiv for recent non-peer-reviewed work.
-
-## Thesis-writing outline supported by this register
-
-1. Multimodal video understanding and temporal limitations.
-2. Frame sampling as a practical and methodological choice.
-3. Retrieval-augmented multimodal generation and visual examples.
-4. Case-based reasoning and analogous coaching examples.
-5. Pixel-derived embeddings and cosine nearest-neighbour retrieval.
-6. SoccerNet and existing football-language systems.
-7. Recognition versus coaching evaluation.
-8. Hallucination, copying, unsupported transfer, and uncertainty.
-9. Research gap and experimental hypotheses.
-
-## Current cautions
-
-- Do not cite the consolidated AI-generated table as a source.
-- Do not claim that every bibliographic record has been fully verified; only the entries marked above have received a primary-record check so far.
-- Do not claim that retrieval improves independent video understanding.
-- Do not use SoccerNet hidden labels as model input or automatic B4 retrieval input.
-- Do not treat football event labels as human coaching ground truth.
-- Do not present text-to-video retrieval results as direct proof of video-to-case retrieval performance.
-- Do not report the sampling-pilot observations as published literature findings.
+These sources establish a defensible motivation and evaluation framework. They do not predetermine the result. Whether the analogous case improves recognition or coaching must be answered by the controlled experiment.
