@@ -6,27 +6,39 @@
 
 This review establishes the evidence and research gap behind that question. The study evaluates retrieval-assisted performance: it does not treat performance with a supplied case as independent video understanding. Dataset B recognition and coaching advice are separate outcomes because a model may describe an event correctly but give poor advice, or misread an event while producing convincing generic advice.
 
+**One-sentence summary:** This thesis tests whether supplying a relevant human-annotated football example improves both what the model recognises and the advice it gives.
+
 ## 2. Synthesis of the reviewed literature
 
 ### 2.1 Video understanding and frame selection
 
 Video-language models do not necessarily use temporal information simply because they receive multiple frames. S08 shows that strong single-frame performance can reveal static-appearance bias in video-language benchmarks. S11 likewise shows that adding more frames is not automatically beneficial and that selecting useful evidence can be more effective than processing every frame uniformly. Together, these papers justify a controlled frame-count pilot for this project, but they do not identify the best frame count for SoccerNet clips or for Qwen3.5. The final sampling choice must therefore come from the project's training and validation evidence.
 
+**One-sentence summary:** Existing research shows that both frame quantity and frame usefulness matter, so this project must determine its frame count experimentally.
+
 ### 2.2 Retrieved examples and analogous cases
 
 S22 provides the foundation for representing visual inputs with CLIP embeddings and comparing normalized representations using cosine similarity. S20 shows on the reported static visual tasks that relevant in-context examples can outperform random examples. S16 shows that retrieved multimodal context can help, but also that noisy or imperfect retrieval can reduce performance for some models. These findings motivate comparing relevant, random, and no-case conditions. They do not prove that visually similar football clips are tactically analogous or that a retrieved case will improve generated coaching advice.
+
+**One-sentence summary:** Relevant retrieved examples may help more than random examples, but visual similarity does not guarantee tactical relevance.
 
 ### 2.3 Football understanding and generated sports advice
 
 S28 establishes the SoccerNet-GSR source context and demonstrates the difficulty of extracting structured football information from broadcast video. Its private tracking, identity, coordinate, and event metadata are reference information, not ordinary model input. S31 shows that a domain-trained multimodal system can recognise football refereeing events and generate natural-language explanations. Its small human study reports similar mean ratings for model-generated and paired human-written explanations, but it does not test analogous-case retrieval or tactical coaching. S33 shows in a text-only running context that generated sports advice changes with the information supplied and still requires structured human checking. Collectively, these papers support football-focused language evaluation, but none answers this thesis question.
 
+**One-sentence summary:** Prior sports research supports football-focused multimodal analysis and human evaluation, but it has not tested retrieved coaching analogies for new football sequences.
+
 ### 2.4 Hallucination and human evaluation
 
 S35 shows that image-language models can confidently claim that absent objects are present and that hallucination should be evaluated separately from general task performance. S36 extends hallucination analysis to video and distinguishes object-relation, temporal, semantic-detail, extrinsic factual, and extrinsic non-factual errors. This distinction matters because a football statement may be generally true but unsupported by the current frames. POPE and VideoHallucer use controlled binary questions, whereas this thesis requires normal-text answers. Their taxonomies inform the human rubric, but their metrics cannot be copied directly as validation of this project's open-ended scoring procedure.
 
+**One-sentence summary:** The evaluation must separately identify unsupported objects, event order, details, and football claims in the model's normal-text answers.
+
 ## 3. Research gap
 
 The reviewed literature separately examines sampled-frame video understanding, visual retrieval, in-context examples, football analysis, generated sports advice, and multimodal hallucination. Among the reviewed sources, no study combines these elements to test whether a human-annotated analogous football case improves both recognition of a new sequence and the coaching advice generated for it. It also remains unknown whether automatic pixel-only retrieval approaches human case selection, whether an irrelevant case harms performance, and whether apparent improvement comes from useful transfer, blind copying, or unsupported assumptions.
+
+**One-sentence summary:** No reviewed study has tested whether human-selected or automatically retrieved annotated football cases improve recognition and coaching without causing copying or hallucination.
 
 ## 4. How the experiment addresses the gap
 
@@ -44,9 +56,13 @@ Three supporting controls help explain those comparisons:
 
 Across paired conditions, Dataset B frames, prompts, output requirements, generation settings, and scoring criteria remain identical except for the intended case intervention. Recognition is scored before coaching quality. Retrieval relevance, hallucination, blind copying, unsupported transfer, and calibrated uncertainty are assessed separately.
 
+**One-sentence summary:** B0 to B5 isolate the effect and mechanism of case assistance while keeping all other experimental inputs and settings fixed.
+
 ## 5. Expected contribution
 
 The expected contribution is an initial controlled account of whether analogous human coaching cases improve football-sequence recognition, coaching advice, both, or neither. It will also show whether an automatic pixel-only retriever approaches human selection and whether irrelevant or incomplete case information causes harm. The contribution is the controlled evidence and transparent evaluation procedure, not a claim that retrieval has already improved the model. Until the experiment is complete, the thesis should say that it investigates or addresses the gap, not that it solves it.
+
+**One-sentence summary:** The contribution will be controlled evidence about whether analogous cases help, which selection approach works, and what failure modes occur.
 
 ## 6. Thematic source register
 
@@ -137,6 +153,8 @@ Completed reviews: **S08, S11, S16, S20, S22, S28, S31, S33, S35, and S36.** All
 
 ### Reading note - S08
 
+**One-sentence summary:** S08 shows that strong video-language results can rely heavily on static appearance, supporting this project's need to test whether additional frames reveal meaningful temporal information.
+
 **Citation:** Lei, J., Berg, T., and Bansal, M. (2023). “Revealing Single Frame Bias for Video-and-Language Learning.” *Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)*, pp. 487–507.
 
 **DOI:** [10.18653/v1/2023.acl-long.29](https://doi.org/10.18653/v1/2023.acl-long.29)
@@ -195,6 +213,8 @@ Completed reviews: **S08, S11, S16, S20, S22, S28, S31, S33, S35, and S36.** All
 **Where I may cite it:** In the literature review and methodology rationale concerning static-appearance bias, the need for a controlled frame-count pilot, the distinction between static recognition and temporal event understanding, and the limitation that sampled-frame evaluation may not demonstrate complete video understanding. It should not be cited as direct evidence for football coaching, B4 retrieval, or hallucination metrics.
 
 ### Reading note - S11
+
+**One-sentence summary:** S11 shows that selecting informative frames can be more effective and efficient than uniformly processing many redundant frames.
 
 **Citation:** Park, J., Ranasinghe, K., Kahatapitiya, K., Ryu, W., Kim, D., and Ryoo, M. S. (2026). “Too Many Frames, Not All Useful: Efficient Strategies for Long-Form Video QA.” *Proceedings of the 19th Conference of the European Chapter of the Association for Computational Linguistics (Volume 1: Long Papers)*, pp. 3569–3588.
 
@@ -279,6 +299,8 @@ This is question-conditioned frame selection within one video, not retrieval of 
 
 ### Reading note - S16
 
+**One-sentence summary:** S16 shows that retrieved visual context can help when relevant but can harm performance when retrieval is noisy, motivating no-case, random-case, and relevant-case controls.
+
 **Citation:** Hu, W., Gu, J.-C., Dou, Z.-Y., Fayyaz, M., Lu, P., Chang, K.-W., and Peng, N. (2025). "MRAG-Bench: Vision-Centric Evaluation for Retrieval-Augmented Multimodal Models." *The Thirteenth International Conference on Learning Representations (ICLR 2025)*.
 
 **Persistent arXiv DOI:** [10.48550/arXiv.2410.08182](https://doi.org/10.48550/arXiv.2410.08182)
@@ -354,6 +376,8 @@ The paper labels several arithmetic changes in accuracy as percentages. Because,
 **Where I may cite it:** In related work and motivation for multimodal retrieval, when explaining that relevance and noise can determine whether retrieved context helps or harms a model. It can also motivate separate retrieval and answer evaluation and the use of no-case, random, human-selected, and automatically retrieved controls. It should not be cited as direct evidence for football coaching, temporal frame sampling, the exact B4 retrieval implementation, or hallucination measurement.
 
 ### Reading note - S20
+
+**One-sentence summary:** S20 shows that visual example choice matters and that similarity-based selection can outperform random selection.
 
 **Citation:** Zhang, Y., Zhou, K., and Liu, Z. (2023). "What Makes Good Examples for Visual In-Context Learning?" *Advances in Neural Information Processing Systems 36 (NeurIPS 2023)*.
 
@@ -434,6 +458,8 @@ The paper's ordering ablation does **not** justify ignoring order in this thesis
 
 ### Reading note - S22
 
+**One-sentence summary:** S22 establishes CLIP's shared visual-semantic embedding space and cosine similarity as a transparent foundation for the B4 visual retriever.
+
 **Citation:** Radford, A., Kim, J. W., Hallacy, C., Ramesh, A., Goh, G., Agarwal, S., Sastry, G., Askell, A., Mishkin, P., Clark, J., Krueger, G., and Sutskever, I. (2021). "Learning Transferable Visual Models From Natural Language Supervision." *Proceedings of the 38th International Conference on Machine Learning*, PMLR 139, pp. 8748-8763.
 
 **DOI:** No DOI is listed in the official PMLR record. Use the stable PMLR paper URL below rather than assigning an unofficial identifier.
@@ -510,6 +536,8 @@ The authors trained five ResNet variants: RN50, RN101, RN50x4, RN50x16, and RN50
 Important limitation: S23 and S24 mainly concern text-to-video retrieval. The thesis's B4 condition is video-to-case retrieval. They justify visual embedding and temporal aggregation ideas, but they do not directly prove that B4 will retrieve a useful coaching analogy.
 
 ### Reading note - S28
+
+**One-sentence summary:** S28 documents the SoccerNet-GSR source and the difficulty of reconstructing detailed football events from broadcast footage, while providing no coaching ground truth.
 
 **Citation:** Somers, V., Joos, V., Cioppa, A., Giancola, S., Ghasemzadeh, S. A., Magera, F., Standaert, B., Mansourian, A. M., Zhou, X., Kasaei, S., Ghanem, B., Alahi, A., Van Droogenbroeck, M., and De Vleeschouwer, C. (2024). "SoccerNet Game State Reconstruction: End-to-End Athlete Tracking and Identification on a Minimap." *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops*, pp. 3293-3305.
 
@@ -592,6 +620,8 @@ This paper does **not** support supplying structured game-state annotations to Q
 
 ### Reading note - S31
 
+**One-sentence summary:** S31 demonstrates football-specific multimodal explanation generation but also reveals hallucination risks and does not test retrieved coaching cases.
+
 **Citation:** Held, J., Itani, H., Cioppa, A., Giancola, S., Ghanem, B., and Van Droogenbroeck, M. (2024). "X-VARS: Introducing Explainability in Football Refereeing with Multi-Modal Large Language Models." *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops*, pp. 3267-3279.
 
 **DOI:** [10.1109/CVPRW63382.2024.00332](https://doi.org/10.1109/CVPRW63382.2024.00332)
@@ -673,6 +703,8 @@ The paper's hybrid classifier-to-text design should **not** be added to the pres
 
 ### Reading note - S33
 
+**One-sentence summary:** S33 shows that additional input can improve generated sports plans, although expert evaluation remains necessary and the study is not about football video.
+
 **Citation:** Düking, P., Sperlich, B., Voigt, L., Van Hooren, B., Zanini, M., and Zinner, C. (2024). "ChatGPT Generated Training Plans for Runners are not Rated Optimal by Coaching Experts, but Increase in Quality with Additional Input Information." *Journal of Sports Science and Medicine*, 23, 56-72.
 
 **DOI:** [10.52082/jssm.2024.56](https://doi.org/10.52082/jssm.2024.56)
@@ -740,6 +772,8 @@ Because this thesis currently has one human reviewer, Fleiss' kappa or any other
 **Where I may cite it:** In related work on AI-generated sports advice and in methodology when motivating criterion-based human assessment and expert verification. It may also support a limitations discussion about subjective coaching judgments. It should not be cited as evidence that B4 retrieval works or that more frames necessarily improve performance.
 
 ### Reading note - S35
+
+**One-sentence summary:** S35 shows that vision-language models can confidently mention absent objects, supporting a separate unsupported-claim measure alongside recognition and coaching scores.
 
 **Citation:** Li, Y., Du, Y., Zhou, K., Wang, J., Zhao, W. X., and Wen, J.-R. (2023). "Evaluating Object Hallucination in Large Vision-Language Models." *Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing*, pp. 292-305.
 
@@ -820,6 +854,8 @@ The current thesis should retain human scoring of unsupported claims in the norm
 **Where I may cite it:** In related work and methodology when defining object hallucination, explaining CHAIR-I/CHAIR-S and POPE, and motivating a separate unsupported-claim score. It may also be cited in limitations to explain why an object-only static-image benchmark cannot fully cover action and temporal hallucinations in football video.
 
 ### Reading note - S36
+
+**One-sentence summary:** S36 shows that video hallucination includes contradictions, temporal mistakes, unsupported details, and plausible claims that the video itself does not establish.
 
 **Citation:** Wang, Y., Wang, Y., Zhao, D., Xie, C., and Zheng, Z. (2024). "VideoHallucer: Evaluating Intrinsic and Extrinsic Hallucinations in Large Video-Language Models." *arXiv:2406.16338v1* [cs.CV].
 
@@ -928,3 +964,5 @@ The literature supports the following decisions for this thesis:
 The literature does not justify exposing hidden Dataset B labels, tracking, coordinates, identities, or human references in the ordinary visual conditions. Hidden action labels are permitted only in B2 as an explicitly labelled diagnostic. B3 represents human case selection, while B4 represents the automatic pixel-only system. Any improvement with B3 or B4 must be described as retrieval-assisted performance rather than independent video understanding.
 
 These sources establish a defensible motivation and evaluation framework. They do not predetermine the result. Whether the analogous case improves recognition or coaching must be answered by the controlled experiment.
+
+**One-sentence summary:** The literature justifies the experimental design, but only the frozen B0 to B5 results can answer the research question.

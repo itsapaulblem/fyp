@@ -4,23 +4,23 @@
 
 Research question:
 
-> Does providing a human-annotated analogous Dataset A case improve an MLLM's recognition and coaching advice for a new Dataset B sequence?
+> Does providing a human-annotated similar Dataset A case improve an MLLM's recognition and coaching advice for a new Dataset B sequence?
 
 Measure two outcomes separately:
 
 1. **Recognition:** Did the model correctly describe the visible possession, event order, phase, main event, and outcome?
 2. **Coaching:** Was its advice relevant, specific, actionable, and supported by the B frames?
 
-Also check hallucination, blind copying from A, unsupported transfer, retrieval relevance, and uncertainty. A fluent answer is not automatically correct.
+Also check for hallucination, blind copying from A, etc. A fluent answer is not automatically correct.
 
 Before comparing conditions, this is what B0–B5 mean:
 
 | Condition | Input given to the model | What the test measures |
 |---|---|---|
 | **B0: frames only** | Dataset B frames with no Dataset A case | The unassisted baseline for recognition and coaching |
-| **B1: random case** | The same B frames plus a seeded, label-independent random A case | Whether any extra case helps, distracts, or causes copying |
-| **B2: hidden-label matched case** | The same B frames plus an A case selected using the hidden B action label | Whether knowing the event category would help select a useful case; this is a diagnostic test, not a usable automatic system |
-| **B3: human-selected best-match case** | The same B frames plus the complete A case selected by the researcher as the strongest analogy | The best-case improvement when a person chooses the most similar case |
+| **B1: random case from A** | The same B frames plus a seeded, label-independent random A case | Whether any extra case helps, distracts, or causes copying |
+| **B2: hidden-label matched case from A** | The same B frames plus an A case selected using the hidden B action label | Whether knowing the event category would help select a useful case; this is a diagnostic test, not a usable automatic system |
+| **B3: human-selected best-match case from A** | The same B frames plus the complete A case selected by the researcher as the strongest analogy | The best-case improvement when a person chooses the most similar case |
 | **B4: embedding k-NN** | The same B frames plus the complete A case automatically selected from B pixels using CLIP embeddings and cosine nearest-neighbour retrieval | The improvement produced by the automatic retrieval-assisted system |
 | **B5: advice only** | The same B frames plus only the advice from the exact A case retrieved in B4 | Whether B4's effect comes from advice text alone or from the complete analogous case |
 
@@ -38,8 +38,8 @@ These comparisons answer related but different parts of the thesis and should be
 
 Already completed:
 
-- SoccerNet Dataset B indexing;
-- 25 approved Dataset A cases (`validate-a` reports 25/25);
+- SoccerNet Dataset B preparation (Train/Valid/Development from SoccerNet v1.3 Development Set);
+- 25 approved Dataset A cases sourced from the [FIFA Training Centre Game Library](https://www.fifatrainingcentre.com/en/resources/game-library/), which contains match clips from FIFA international tournaments (`validate-a` reports 25/25);
 - eight fixed train-pilot clips;
 - human review of F10/F20/F30/F60 for those clips;
 - all eight private train references finalized;
@@ -453,10 +453,9 @@ Do not claim the model independently understood the video better.
 
 ## Your next action only
 
-1. Read S08 while waiting.
-2. Occasionally check `nvidia-smi`.
-3. When the GPU is free, start the tunnel.
-4. Run the one-image diagnostic.
-5. Stop and report whether it returned `OK`.
+1. Occasionally check `nvidia-smi`.
+2. When the GPU is free, start the tunnel.
+3. Run the one-image diagnostic.
+4. Stop and report whether it returned `OK`.
 
 Do not run the 32-cell pilot until that diagnostic succeeds.
