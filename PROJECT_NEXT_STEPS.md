@@ -39,14 +39,29 @@ These comparisons answer related but different parts of the thesis and should be
 Already completed:
 
 - SoccerNet Dataset B preparation (Train/Valid/Development from SoccerNet v1.3 Development Set);
-- 25 approved Dataset A cases sourced from the [FIFA Training Centre Game Library](https://www.fifatrainingcentre.com/en/resources/game-library/), which contains match clips from FIFA international tournaments (`validate-a` reports 25/25);
+- 25 approved Dataset A cases in total (`validate-a` reports 25/25);
+- 14 Dataset A cases sourced from the [FIFA Training Centre Game Library](https://www.fifatrainingcentre.com/en/resources/game-library/), which contains match clips from FIFA international tournaments;
+- 11 Dataset A cases sourced from [UEFA Champions League Performance Insights](https://www.uefa.com/uefachampionsleague/news/), with each case retaining its exact UEFA article URL;
 - eight fixed train-pilot clips;
 - human review of F10/F20/F30/F60 for those clips;
 - all eight private train references finalized;
 - prompt, output, rubric, retrieval, and freeze infrastructure;
-- SSH/tunnel connectivity and text-only Qwen test.
+- SSH tunnel connectivity and Ollama model checks;
+- a successful one-image Qwen3.5 27B vision diagnostic in CPU-only mode;
+- the active context window increased from 4,096 to 32,768 tokens;
+- the Ollama client timeout increased from 900 to 7,200 seconds for slow CPU inference;
+- a successful F60 technical capacity run for B-TRAIN-0025; and
+- 21 locally available, complete, valid B0 sampling-pilot cells: all four counts for B-TRAIN-0025, B-TRAIN-0054, B-TRAIN-0046, B-TRAIN-0051, and B-TRAIN-0006, plus F10 for B-TRAIN-0011.
 
-Current state is `draft_train_only`. The next experiment is only the 32-cell B0 sampling pilot. Previous image failures occurred while other users occupied most GPU memory; preserve them as infrastructure failures.
+Current state is `draft_train_only`. Of the 32 B0 sampling-pilot cells, 21 are complete and valid in the local repository and 11 remain locally. A remote run may have completed additional cells, but those must be recovered and verified before the missing cells are rerun. The pilot uses sequential CPU inference because shared GPU memory was insufficient for the 27B vision runner. The active settings are Qwen3.5 27B, `num_gpu=0`, `num_ctx=32768`, maximum edge 672, and a 7,200-second client timeout.
+
+Earlier failures have been preserved rather than treated as experimental results:
+
+- image requests failed with HTTP 500 when GPU memory was heavily occupied;
+- an F20 attempt under the original 4,096-token context was used as a context-capacity diagnostic; and
+- the first 32,768-context F20 attempt reached the old 900-second client timeout, after which the timeout was increased and F20 completed successfully.
+
+These are diagnosed infrastructure or capacity failures. They must not be included as model-quality scores. The completed CPU runs are still pilot evidence, not final validation or test results.
 
 Do **not** run B1–B5 or access test yet.
 
@@ -151,11 +166,12 @@ The two core comparisons are B3–B0 and B4–B0. Do not decide success from one
 
 ---
 
-## 3. While the GPU is busy
+## 3. Work that can continue while the GPU is busy
 
 ### Step 3.1 — Read literature slowly
 
-Open [LITERATURE_REVIEW.md](LITERATURE_REVIEW.md). Read S08 first, then S11, then S16.
+The priority papers and their human reviews are already recorded in [LITERATURE_REVIEW.md](LITERATURE_REVIEW.md).
+
 
 For one paper:
 
@@ -190,11 +206,11 @@ ps -o user,pid,etime,cmd -p PID1,PID2
 
 Do not kill another user's work. Empty `ollama ps` does not mean the GPU is free; `nvidia-smi` shows all GPU processes.
 
-**Stop here until the large external processes finish.**
+The pilot can continue on CPU while this external GPU process runs. Do not try to share the remaining GPU memory with the 27B vision runner, because the one-image GPU requests already stopped with HTTP 500 under that condition.
 
 ---
 
-## 4. When the GPU becomes free
+## 4. Current CPU-only execution setup
 
 ### Step 4.1 — Start tunnel in PowerShell window 1
 
@@ -213,51 +229,66 @@ $env:OLLAMA_BASE_URL = "http://127.0.0.1:11435"
 uv run football-coach ollama-check --model qwen3.5:27b
 ```
 
-### Step 4.3 — Test exactly one image
+### Step 4.3 - Confirm the active CPU settings
 
 ```powershell
-$testImagePath = "C:\Projects\fypfinal\artifacts\model_inputs\dataset_b\B-TRAIN-0025\uniform_10_edge_672\01_frame_000001.jpg"
-$testImage = [Convert]::ToBase64String([IO.File]::ReadAllBytes($testImagePath))
-$testBody = @{
-    model = "qwen3.5:27b"
-    messages = @(@{
-        role = "user"
-        content = "Reply with exactly OK if you can process the attached image."
-        images = @($testImage)
-    })
-    think = $false
-    stream = $false
-    options = @{ temperature = 0; num_ctx = 4096 }
-} | ConvertTo-Json -Depth 6
-
-try {
-    $result = Invoke-RestMethod -Uri "http://127.0.0.1:11435/api/chat" -Method Post -ContentType "application/json" -Body $testBody
-    $result.message.content
-}
-catch {
-    $_.Exception.Message
-    $_.ErrorDetails.Message
-}
+$env:OLLAMA_BASE_URL = "http://127.0.0.1:11435"
+$env:OLLAMA_TIMEOUT_SECONDS = "7200"
+Select-String -Path "config\project_v0.3.0.json" -Pattern 'num_ctx','num_gpu'
 ```
 
-Expected: `OK`.
+Expected active values:
 
-If HTTP 500 persists while the GPU is genuinely free, stop. Diagnose Ollama vision inference before any experiment run.
+```text
+num_ctx: 32768
+num_gpu: 0
+```
+
+The one-image CPU diagnostic has already returned `OK`, so it does not need to be repeated before every cell. On the server, `ollama ps` should show `100% CPU` and context `32768` while a request is running.
+
+Do not run `ollama stop qwen3.5:27b` while a pilot cell is running. It can terminate the active request.
+
+### Step 4.4 - Later GPU use
+
+When the GPU becomes genuinely available, GPU inference should be much faster. However, do not mix CPU and GPU outputs within the accepted pilot without recording and checking the backend change. The safest approach is to finish this sampling pilot with the current fixed CPU settings, then decide whether later validation conditions will use one consistently available backend.
 
 ---
 
 ## 5. Run the sampling pilot
 
-Only after the one-image test succeeds:
+The pilot matrix contains 8 training clips multiplied by 4 frame counts, for 32 cells. The local repository currently contains 21 complete, valid cells and has 11 remaining.
+
+First preview what the resumable runner will do:
 
 ```powershell
 cd C:\Projects\fypfinal
 $env:OLLAMA_BASE_URL = "http://127.0.0.1:11435"
-uv run football-coach pilot-plan
-uv run football-coach run-sampling-pilot --model qwen3.5:27b
+$env:OLLAMA_TIMEOUT_SECONDS = "7200"
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\run_sampling_pilot_cpu.ps1 -DryRun
 ```
 
-Keep the tunnel open. Do not change prompts, frame counts, resolution, or generation settings during the matrix.
+Check that it skips these completed cells:
+
+```text
+B-TRAIN-0025 F10, F20, F30, F60
+B-TRAIN-0054 F10, F20, F30, F60
+B-TRAIN-0046 F10, F20, F30, F60
+B-TRAIN-0051 F10, F20, F30, F60
+B-TRAIN-0006 F10, F20, F30, F60
+B-TRAIN-0011 F10
+```
+
+The remaining local cells are B-TRAIN-0011 F20/F30/F60 and all four counts for B-TRAIN-0040 and B-TRAIN-0024. If the remote runner was previously started, inspect and recover its outputs before starting the sequential runner again.
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\run_sampling_pilot_cpu.ps1
+```
+
+Keep the tunnel open and prevent the Windows computer from sleeping. The script runs one cell at a time, skips already completed valid cells that match the current or explicitly documented compatible pilot config hash, and stops at the first failed cell. It does not run cells in parallel.
+
+If a cell fails, preserve it and inspect the cause before restarting the script. Once the cause is resolved, rerunning the same script will skip valid completed cells and continue from the remaining work.
+
+Do not change the prompt, frame counts, resolution, model tag, context, or generation settings during the matrix.
 
 Expected final summary:
 
@@ -271,6 +302,43 @@ If failures are nonzero, stop and inspect them. Do not hide or delete failures.
 ---
 
 ## 6. Analyse F10/F20/F30/F60
+
+### Evidence collected so far
+
+The completed B-TRAIN-0025 runs demonstrate that all four frame counts fit and finish with the current CPU settings:
+
+| Count | Prompt tokens | Approximate total time | Status |
+|---|---:|---:|---|
+| F10 | 2,852 | 10.95 minutes | Complete, valid format |
+| F20 | 5,392 | 17.14 minutes | Complete, valid format |
+| F30 | 7,932 | 25.17 minutes | Complete, valid format |
+| F60 | 15,552 | 60.35 minutes | Complete, valid format |
+
+This passes the required F60 technical capacity check for one pilot clip. It does not by itself prove that F60 is the best sampling count.
+
+The early answers also show why quality must be reviewed against the private human references. For B-TRAIN-0025, the model described a free kick and later a headed miss, while the human review identified a red-team corner, an attempted shot or deflection from a grey defender, and a clearance. More frames therefore did not automatically correct the event interpretation.
+
+### Why the pilot stops at F60 rather than F100
+
+Each Dataset B clip contains 750 frames over 30 seconds. Uniform sampling provides approximately:
+
+| Count | Sampling density | Approximate time between sampled frames |
+|---|---:|---:|
+| F10 | 0.33 frames/second | 3.3 seconds |
+| F20 | 0.67 frames/second | 1.6 seconds |
+| F30 | 1 frame/second | 1 second |
+| F60 | 2 frames/second | 0.5 seconds |
+| F100 | 3.3 frames/second | 0.3 seconds |
+
+F60 was chosen as the pilot's practical upper bound, not as a claim that 60 is universally optimal. The reasons are:
+
+1. Human review showed that F60 revealed an important missed goal in B-TRAIN-0040, while most other pilot clips gained no additional event information beyond F20 or F30.
+2. The real F60 run already used 15,552 prompt tokens and took about one hour on CPU.
+3. At the observed token growth, F100 would use roughly 25,700 prompt tokens before the model answer and before adding Dataset A case material in B3 or B4. That leaves much less room within the 32,768-token context.
+4. F100 would add many visually similar frames, substantially increase CPU runtime, and might add confusion without adding meaningful temporal evidence.
+5. Adding F100 now would require preparing and human-reviewing another frame level and changing the planned pilot matrix.
+
+F100 should be considered only if the completed pilot shows that F60 still misses meaningful events across several clips. The current evidence does not justify that expansion.
 
 Compare each answer with its blind human reference. Record:
 
@@ -398,13 +466,13 @@ Replace all uppercase placeholders with real frozen values.
 
 ## 11. Score outputs
 
-Rubric: `config/scoring_rubric_v0.3.0.json`.
+Rubric: `config/scoring_rubric.txt` (the single authoritative rubric, version 1.0).
 
 Score in order: recognition, retrieval relevance, coaching, failure modes, uncertainty.
 
 ```powershell
-uv run football-coach init-score BLIND_RUN_ID CLIP_ID data/video_b/review/scores/BLIND_RUN_ID.json
-uv run football-coach validate-score data/video_b/review/scores/BLIND_RUN_ID.json
+uv run football-coach init-score BLIND_RUN_ID CLIP_ID data/video_b/review/scores/BLIND_RUN_ID.txt
+uv run football-coach validate-score data/video_b/review/scores/BLIND_RUN_ID.txt
 ```
 
 Fill the form between commands. Recognition must be scored before condition/model/A context is revealed.
@@ -453,9 +521,12 @@ Do not claim the model independently understood the video better.
 
 ## Your next action only
 
-1. Occasionally check `nvidia-smi`.
-2. When the GPU is free, start the tunnel.
-3. Run the one-image diagnostic.
-4. Stop and report whether it returned `OK`.
+1. Restore SSH access to the remote workstation.
+2. Inspect the `fyp-pilot` tmux session without starting another pilot process.
+3. Recover and verify any additional remote outputs before rerunning missing cells.
+4. Run the resumable script with `-DryRun`; the current local baseline is 21 complete and 11 pending.
+5. Run only genuinely pending cells and do not run `ollama stop` during a request.
+6. Once all 32 cells are present, randomize them behind blind run IDs before formal scoring.
+7. Review all 32 pilot outputs against the human references before choosing F10, F20, F30, or F60.
 
-Do not run the 32-cell pilot until that diagnostic succeeds.
+Do not run B1 to B5 yet.
