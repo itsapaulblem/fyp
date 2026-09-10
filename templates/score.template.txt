@@ -1,0 +1,53 @@
+# BLINDED HUMAN SCORE FORM
+# Use config/scoring_rubric.txt. Complete recognition before revealing the case or condition.
+
+Rubric version: 1.0
+Blind run ID: {{BLIND_RUN_ID}}
+Dataset B clip ID: {{DATASET_B_CLIP_ID}}
+Recognition scored before case or condition reveal:
+
+# RECOGNITION
+Possession score:
+Possession reason:
+Temporal sequence score:
+Temporal sequence reason:
+Tactical phase score:
+Tactical phase reason:
+Main event score:
+Main event reason:
+Outcome score:
+Outcome reason:
+Visible evidence score:
+Visible evidence reason:
+
+# RETRIEVAL RELEVANCE
+Analogy relevance score:
+Analogy relevance reason:
+
+# COACHING
+Problem identification score:
+Problem identification reason:
+Advice quality score:
+Advice quality reason:
+Practice representativeness score:
+Practice representativeness reason:
+Coaching evidence support score:
+Coaching evidence support reason:
+
+# FAILURE MODES
+# Categories: none, object or relation, temporal, semantic detail, extrinsic factual,
+# extrinsic non-factual. Separate multiple categories with commas.
+Hallucination categories:
+Hallucination severity score:
+Hallucination reason:
+Blind copying score:
+Blind copying reason:
+Unsupported transfer score:
+Unsupported transfer reason:
+
+# UNCERTAINTY AND FINAL CHECK
+Uncertainty calibration score:
+Uncertainty calibration reason:
+Critical event missed:
+Critical event missed reason:
+Reviewer notes:

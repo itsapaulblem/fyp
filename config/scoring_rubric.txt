@@ -1,0 +1,217 @@
+FOOTBALL MLLM HUMAN SCORING RUBRIC
+Rubric version: 1.0
+
+1. PURPOSE
+
+Use this single rubric to evaluate whether supplying a human-annotated analogous
+Dataset A case changes an MLLM's recognition and coaching advice for the same
+Dataset B sequence. Retrieval-assisted performance must not be described as
+independent video understanding.
+
+Score recognition and coaching separately. A response can recognise the sequence
+correctly but give weak advice, or misrecognise it while giving plausible generic
+advice. Report every dimension separately. Do not calculate one overall mark.
+
+Use the private human review of the sampled Dataset B frames as the principal
+reference for visible events. SoccerNet's hidden event label may assist recognition
+checking after the visual reference is completed, but it is not coaching ground
+truth and must never be exposed to the model in an automatic condition.
+
+2. LITERATURE BASIS
+
+The dimensions are informed by these reviewed sources. They motivate the rubric
+but do not validate this exact open-ended football scoring procedure.
+
+- S08, Revealing Single Frame Bias for Video-and-Language Learning:
+  https://aclanthology.org/2023.acl-long.29/
+  Supports checking visible and temporal evidence instead of assuming that a
+  multi-frame answer demonstrates temporal understanding.
+- S11, Too Many Frames, Not All Useful / LVNet:
+  https://aclanthology.org/2026.eacl-long.164/
+  Supports checking whether the selected frames provide useful event evidence.
+- S16, MRAG-Bench:
+  https://openreview.net/forum?id=Usklli4gMc
+  Supports evaluating retrieved multimodal context separately because noisy
+  retrieval can help or harm different models.
+- S20, What Makes Good Examples for Visual In-Context Learning?:
+  https://proceedings.neurips.cc/paper_files/paper/2023/hash/398ae57ed4fda79d0781c65c926d667b-Abstract-Conference.html
+  Supports comparing relevant examples with random examples.
+- S22, CLIP:
+  https://proceedings.mlr.press/v139/radford21a.html
+  Supports the pixel-embedding representation used for automatic retrieval.
+- S28, SoccerNet Game State Reconstruction:
+  https://openaccess.thecvf.com/content/CVPR2024W/CVsports/html/Somers_SoccerNet_Game_State_Reconstruction_End-to-End_Athlete_Tracking_and_Identification_on_CVPRW_2024_paper.html
+  Establishes the Dataset B source context and the limits of its labels as
+  coaching references.
+- S31, X-VARS:
+  https://openaccess.thecvf.com/content/CVPR2024W/CVsports/html/Held_X-VARS_Introducing_Explainability_in_Football_Refereeing_with_Multi-Modal_Large_Language_CVPRW_2024_paper.html
+  Supports separate human assessment of football event recognition and generated
+  natural-language explanation.
+- S33, ChatGPT-generated running training plans:
+  https://doi.org/10.52082/jssm.2024.56
+  Supports structured human checking of generated sports advice while remaining
+  indirect, text-only evidence.
+- S35, POPE:
+  https://aclanthology.org/2023.emnlp-main.20/
+  Supports evaluating claims about absent visual content as hallucinations.
+- S36, VideoHallucer:
+  https://arxiv.org/abs/2406.16338
+  Informs the object/relation, temporal, semantic-detail, and extrinsic
+  hallucination categories used below.
+
+3. REQUIRED SCORING ORDER
+
+Follow this order for every response:
+
+1) Hide the condition name, model identity, Dataset A case, retrieval result, and
+   all other condition-revealing information.
+2) Read the model's RECOGNITION section and score every recognition dimension.
+3) Record whether a critical visible event was missed.
+4) Reveal only the information needed to evaluate the supplied case or advice.
+5) Score analogy relevance where applicable.
+6) Score coaching quality.
+7) Score hallucination, blind copying, and unsupported transfer.
+8) Score uncertainty calibration.
+9) Add reviewer notes without changing the model's original answer.
+
+The score form must say "yes" to "Recognition scored before case or condition
+reveal". Otherwise the completed form is invalid.
+
+4. RECOGNITION CRITERIA
+
+Possession (0 to 2)
+0 = Wrong team, invented possession, or a materially wrong account of possession.
+1 = Partly correct, vague, or appropriately uncertain where visibility is limited.
+2 = Correct and supported by the sampled frames.
+
+Temporal sequence (0 to 4)
+0 = Mostly invented, materially reversed, or unrelated sequence.
+1 = One isolated event is correct but the progression is substantially wrong.
+2 = Main progression is partly correct, with important omissions or ordering errors.
+3 = Key events are correctly ordered with only a minor omission or error.
+4 = Key visible events and transitions are correctly and clearly ordered.
+
+Tactical phase (0 to 2)
+0 = Wrong or invented phase.
+1 = Plausible but vague, incomplete, or only partly supported.
+2 = Correct and visibly supported phase or transition.
+
+Main event (0 to 2)
+0 = Wrong, invented, or misses the critical event.
+1 = Partially correct or too vague to identify the event fully.
+2 = Correct identification of the main visible event.
+
+Outcome (0 to 2)
+0 = Wrong or invented outcome.
+1 = Partly correct, incomplete, or appropriately cautious because the outcome is
+    not fully visible.
+2 = Correct outcome supported by the sampled frames.
+
+Visible evidence (0 to 2)
+0 = Evidence is absent, contradicted, or mostly unsupported by the frames.
+1 = Mix of visible evidence and vague or unsupported claims.
+2 = Specific evidence accurately tied to what is visible.
+
+Critical event missed (yes or no)
+Use yes when the answer omits a decisive event required to understand the sequence,
+such as a goal, save, foul, turnover, offside, restart, or final possession change
+that is visible in the scored frames. Explain the decision in either case.
+
+5. ANALOGY RELEVANCE
+
+Analogy relevance (0 to 3, or N/A where allowed)
+0 = Unrelated case or advice.
+1 = Surface similarity only, without a useful tactical relationship.
+2 = At least one useful tactical principle transfers to Dataset B.
+3 = Strongly analogous, with useful principles and important differences recognised.
+
+This dimension evaluates the relevance of the supplied Dataset A material, not the
+quality of the model's prose. Use N/A only for B0 because no Dataset A material was
+provided. B5 still supplies Dataset A advice, so it must receive a relevance score.
+
+6. COACHING CRITERIA
+
+Problem identification (0 to 2)
+0 = Unsupported, irrelevant, unsafe, or based on a misread event.
+1 = Plausible but generic, secondary, or only partly supported.
+2 = Identifies a priority problem that follows from Dataset B evidence.
+
+Advice quality (0 to 3)
+0 = Unsafe, irrelevant, contradictory, or unusable advice.
+1 = Generic advice with little connection to the sequence.
+2 = Specific and plausible advice connected to the identified problem.
+3 = Specific, actionable, appropriately prioritised, and evidence-linked advice.
+
+Practice representativeness (0 to 2)
+0 = Practice is unrelated or trains the wrong problem.
+1 = Partly representative but missing useful constraints or success cues.
+2 = Practice reproduces the relevant problem and gives usable constraints and cues.
+
+Coaching evidence support (0 to 2)
+0 = Coaching claims do not follow from Dataset B evidence.
+1 = Some claims are supported but others are generic or assumed.
+2 = Problem, advice, and practice are consistently tied to visible Dataset B evidence.
+
+7. HALLUCINATION CATEGORIES AND SEVERITY
+
+Select one or more categories, separated by commas, or select none:
+
+- object or relation: invents, removes, or misstates a player, ball, goal, contact,
+  spatial relation, or possession relation;
+- temporal: invents, reverses, or misorders an event or causal sequence;
+- semantic detail: adds an unsupported fine detail, identity, intent, technique,
+  body part, or exact action;
+- extrinsic factual: asserts a checkable outside fact not supported by permitted
+  inputs and the fact is false or unjustified;
+- extrinsic non-factual: adds unsupported opinion, intention, tactical assumption,
+  or speculation as if observed;
+- none: no unsupported material claim.
+
+Hallucination severity (0 to 3, lower is better)
+0 = None.
+1 = Minor unsupported detail that does not change the main interpretation or advice.
+2 = Material unsupported claim that changes recognition, diagnosis, or advice.
+3 = Unsupported claims dominate the answer or reverse the event interpretation.
+
+Severity 0 must use category "none". A positive severity must use at least one
+specific category. Explain the exact claim and why it is unsupported.
+
+8. BLIND COPYING AND UNSUPPORTED TRANSFER
+
+Blind copying (0 to 2, lower is better)
+0 = No Dataset A-specific detail is presented as a fact about Dataset B.
+1 = Wording or a detail appears partly copied without enough adaptation.
+2 = Material Dataset A details are treated as observed facts about Dataset B.
+
+Unsupported transfer (0 to 2, lower is better)
+0 = Transferred principle is relevant and adjusted to Dataset B, or no transfer occurs.
+1 = Transfer is questionable, generic, or insufficiently adapted.
+2 = Transfer materially conflicts with Dataset B evidence or produces wrong advice.
+
+For B0 only, both dimensions are N/A because no Dataset A material was supplied.
+Use numeric scores for B1 to B5. A generally sensible football principle can still
+be unsupported transfer if the current frames do not justify applying it.
+
+9. UNCERTAINTY CALIBRATION
+
+Uncertainty calibration (0 to 2)
+0 = Confident despite missing or contradictory evidence, or so uncertain that clear
+    visible evidence is not recognised.
+1 = Partly calibrated but overconfident, underconfident, or incomplete in places.
+2 = Confidence and stated limitations match what the sampled frames permit.
+
+10. N/A, MISSING VALUES, AND REPORTING RULES
+
+- N/A is permitted only for B0 analogy relevance, B0 blind copying, and B0
+  unsupported transfer. Give a reason such as "B0 supplied no Dataset A material."
+- Do not use N/A for recognition, coaching, hallucination severity, uncertainty,
+  critical-event assessment, B1 to B5 transfer checks, or B5 analogy relevance.
+- A blank score, blank required reason, out-of-range integer, invalid category, or
+  invalid yes/no value makes the form invalid. Do not guess or silently impute it.
+- If evidence is difficult to see, score what is supportable and reflect the
+  limitation in the reason and uncertainty score. Visibility difficulty is not a
+  reason to leave a required score blank.
+- Keep every dimension and failure mode separate in analysis. Do not sum recognition,
+  coaching, relevance, hallucination, copying, transfer, and uncertainty into one
+  overall mark.
+- Never edit or repair the preserved model response while scoring it.

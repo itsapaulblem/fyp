@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -41,6 +42,24 @@ def initialize_from_template(
     write_json_exclusive(destination, payload)
 
 
+def write_text_exclusive(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("x", encoding="utf-8", newline="\n") as handle:
+        handle.write(content)
+
+
+def initialize_text_from_template(
+    template: Path, destination: Path, replacements: dict[str, str]
+) -> None:
+    content = template.read_text(encoding="utf-8")
+    for placeholder, value in replacements.items():
+        content = content.replace(f"{{{{{placeholder}}}}}", value)
+    unresolved = sorted(set(re.findall(r"\{\{([A-Z0-9_]+)\}\}", content)))
+    if unresolved:
+        raise ValueError(f"Unresolved text-template placeholders: {unresolved}")
+    write_text_exclusive(destination, content)
+
+
 def validate_human_reference(
     path: Path, expected_clip_id: str | None = None
 ) -> DatasetBHumanReference:
@@ -55,24 +74,247 @@ def _check_range(name: str, value: Any, lower: int, upper: int) -> None:
         raise ValueError(f"{name} must be an integer in [{lower}, {upper}]")
 
 
+SCORE_FIELDS = {
+    "Rubric version",
+    "Blind run ID",
+    "Dataset B clip ID",
+    "Recognition scored before case or condition reveal",
+    "Possession score",
+    "Possession reason",
+    "Temporal sequence score",
+    "Temporal sequence reason",
+    "Tactical phase score",
+    "Tactical phase reason",
+    "Main event score",
+    "Main event reason",
+    "Outcome score",
+    "Outcome reason",
+    "Visible evidence score",
+    "Visible evidence reason",
+    "Analogy relevance score",
+    "Analogy relevance reason",
+    "Problem identification score",
+    "Problem identification reason",
+    "Advice quality score",
+    "Advice quality reason",
+    "Practice representativeness score",
+    "Practice representativeness reason",
+    "Coaching evidence support score",
+    "Coaching evidence support reason",
+    "Hallucination categories",
+    "Hallucination severity score",
+    "Hallucination reason",
+    "Blind copying score",
+    "Blind copying reason",
+    "Unsupported transfer score",
+    "Unsupported transfer reason",
+    "Uncertainty calibration score",
+    "Uncertainty calibration reason",
+    "Critical event missed",
+    "Critical event missed reason",
+    "Reviewer notes",
+}
+
+SCORE_RANGES = {
+    "Possession score": (0, 2),
+    "Temporal sequence score": (0, 4),
+    "Tactical phase score": (0, 2),
+    "Main event score": (0, 2),
+    "Outcome score": (0, 2),
+    "Visible evidence score": (0, 2),
+    "Analogy relevance score": (0, 3),
+    "Problem identification score": (0, 2),
+    "Advice quality score": (0, 3),
+    "Practice representativeness score": (0, 2),
+    "Coaching evidence support score": (0, 2),
+    "Hallucination severity score": (0, 3),
+    "Blind copying score": (0, 2),
+    "Unsupported transfer score": (0, 2),
+    "Uncertainty calibration score": (0, 2),
+}
+
+N_A_ALLOWED = {
+    "Analogy relevance score",
+    "Blind copying score",
+    "Unsupported transfer score",
+}
+
+HALLUCINATION_CATEGORIES = {
+    "none",
+    "object or relation",
+    "temporal",
+    "semantic detail",
+    "extrinsic factual",
+    "extrinsic non-factual",
+}
+
+
+def _parse_score_form(path: Path) -> dict[str, str]:
+    fields: dict[str, str] = {}
+    for line_number, raw_line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if ":" not in line:
+            raise ValueError(f"Line {line_number} must use 'Field: value' format")
+        name, value = (part.strip() for part in line.split(":", 1))
+        if name not in SCORE_FIELDS:
+            raise ValueError(f"Unknown score field on line {line_number}: {name}")
+        if name in fields:
+            raise ValueError(f"Duplicate score field: {name}")
+        fields[name] = value
+    missing = sorted(SCORE_FIELDS - fields.keys())
+    if missing:
+        raise ValueError(f"Missing score fields: {', '.join(missing)}")
+    return fields
+
+
+def _required_text(fields: dict[str, str], name: str) -> str:
+    value = fields[name].strip()
+    if not value:
+        raise ValueError(f"{name} is missing")
+    return value
+
+
+def _score_value(fields: dict[str, str], name: str) -> int | None:
+    raw = _required_text(fields, name)
+    if raw.upper() == "N/A":
+        if name not in N_A_ALLOWED:
+            raise ValueError(f"{name} cannot be N/A")
+        return None
+    if not re.fullmatch(r"-?\d+", raw):
+        raise ValueError(f"{name} must be an integer or permitted N/A")
+    value = int(raw)
+    lower, upper = SCORE_RANGES[name]
+    _check_range(name, value, lower, upper)
+    return value
+
+
+def _reason_for_score(fields: dict[str, str], score_name: str, reason_name: str) -> str:
+    reason = _required_text(fields, reason_name)
+    if _score_value(fields, score_name) is None and "b0" not in reason.lower():
+        raise ValueError(f"{reason_name} must explain that B0 supplied no Dataset A material")
+    return reason
+
+
 def validate_score(path: Path, rubric_path: Path) -> HumanScoreRecord:
-    score = HumanScoreRecord.model_validate(load_json(path))
-    rubric = load_json(rubric_path)
-    for section, dimensions in rubric["dimensions"].items():
-        values = getattr(score, section)
-        for dimension, specification in dimensions.items():
-            value = values.get(dimension)
-            if value is None:
-                if section == "retrieval_relevance" and values.get("not_applicable_reason"):
-                    continue
-                raise ValueError(f"{section}.{dimension} is not scored")
-            lower, upper = specification["range"]
-            _check_range(f"{section}.{dimension}", value, lower, upper)
-    if not score.blinding.get("condition_hidden_during_recognition_scoring", False):
-        raise ValueError("Recognition must be scored before the condition is revealed")
-    if not score.scorer.get("name_or_code") or not score.scorer.get("scored_at_utc"):
-        raise ValueError("Score requires scorer identity/code and timestamp")
-    return score
+    rubric_text = rubric_path.read_text(encoding="utf-8")
+    if not re.search(r"(?m)^Rubric version:\s*1\.0\s*$", rubric_text):
+        raise ValueError("The authoritative rubric must declare Rubric version: 1.0")
+    fields = _parse_score_form(path)
+    if _required_text(fields, "Rubric version") != "1.0":
+        raise ValueError("Score form rubric version must be 1.0")
+    blinded = _required_text(
+        fields, "Recognition scored before case or condition reveal"
+    ).lower()
+    if blinded not in {"yes", "no"}:
+        raise ValueError("Recognition scoring-order field must be yes or no")
+    if blinded != "yes":
+        raise ValueError("Recognition must be scored before the case or condition is revealed")
+
+    hallucination_categories = [
+        item.strip().lower()
+        for item in _required_text(fields, "Hallucination categories").split(",")
+    ]
+    unknown_categories = sorted(set(hallucination_categories) - HALLUCINATION_CATEGORIES)
+    if unknown_categories:
+        raise ValueError(f"Unknown hallucination categories: {unknown_categories}")
+    if "none" in hallucination_categories and len(hallucination_categories) != 1:
+        raise ValueError("Hallucination category 'none' cannot be combined with other categories")
+
+    critical_event = _required_text(fields, "Critical event missed").lower()
+    if critical_event not in {"yes", "no"}:
+        raise ValueError("Critical event missed must be yes or no")
+
+    score_pairs = {
+        "Possession score": "Possession reason",
+        "Temporal sequence score": "Temporal sequence reason",
+        "Tactical phase score": "Tactical phase reason",
+        "Main event score": "Main event reason",
+        "Outcome score": "Outcome reason",
+        "Visible evidence score": "Visible evidence reason",
+        "Analogy relevance score": "Analogy relevance reason",
+        "Problem identification score": "Problem identification reason",
+        "Advice quality score": "Advice quality reason",
+        "Practice representativeness score": "Practice representativeness reason",
+        "Coaching evidence support score": "Coaching evidence support reason",
+        "Hallucination severity score": "Hallucination reason",
+        "Blind copying score": "Blind copying reason",
+        "Unsupported transfer score": "Unsupported transfer reason",
+        "Uncertainty calibration score": "Uncertainty calibration reason",
+    }
+    reasons = {
+        score_name: _reason_for_score(fields, score_name, reason_name)
+        for score_name, reason_name in score_pairs.items()
+    }
+    values = {name: _score_value(fields, name) for name in SCORE_RANGES}
+    na_scores = {name for name in N_A_ALLOWED if values[name] is None}
+    if na_scores and na_scores != N_A_ALLOWED:
+        raise ValueError(
+            "B0 requires N/A for analogy relevance, blind copying, and unsupported transfer; "
+            "B1 to B5 require numeric scores for all three"
+        )
+    if values["Hallucination severity score"] == 0 and hallucination_categories != ["none"]:
+        raise ValueError("Hallucination severity 0 requires category 'none'")
+    if values["Hallucination severity score"] != 0 and "none" in hallucination_categories:
+        raise ValueError("A positive hallucination severity requires a specific category")
+
+    return HumanScoreRecord.model_validate(
+        {
+            "score_version": "1.0",
+            "run_id": _required_text(fields, "Blind run ID"),
+            "clip_id": _required_text(fields, "Dataset B clip ID"),
+            "blinding": {"condition_hidden_during_recognition_scoring": True},
+            "recognition": {
+                "possession": values["Possession score"],
+                "possession_reason": reasons["Possession score"],
+                "temporal_sequence": values["Temporal sequence score"],
+                "temporal_sequence_reason": reasons["Temporal sequence score"],
+                "phase": values["Tactical phase score"],
+                "phase_reason": reasons["Tactical phase score"],
+                "main_event": values["Main event score"],
+                "main_event_reason": reasons["Main event score"],
+                "outcome": values["Outcome score"],
+                "outcome_reason": reasons["Outcome score"],
+                "visible_evidence": values["Visible evidence score"],
+                "visible_evidence_reason": reasons["Visible evidence score"],
+            },
+            "retrieval_relevance": {
+                "analogy_relevance": values["Analogy relevance score"],
+                "analogy_relevance_reason": reasons["Analogy relevance score"],
+            },
+            "coaching": {
+                "problem_identification": values["Problem identification score"],
+                "problem_identification_reason": reasons["Problem identification score"],
+                "advice_quality": values["Advice quality score"],
+                "advice_quality_reason": reasons["Advice quality score"],
+                "practice_representativeness": values["Practice representativeness score"],
+                "practice_representativeness_reason": reasons[
+                    "Practice representativeness score"
+                ],
+                "evidence_support": values["Coaching evidence support score"],
+                "evidence_support_reason": reasons["Coaching evidence support score"],
+            },
+            "failure_modes": {
+                "hallucination_categories": ", ".join(hallucination_categories),
+                "hallucination_severity": values["Hallucination severity score"],
+                "hallucination_reason": reasons["Hallucination severity score"],
+                "blind_copying": values["Blind copying score"],
+                "blind_copying_reason": reasons["Blind copying score"],
+                "unsupported_transfer": values["Unsupported transfer score"],
+                "unsupported_transfer_reason": reasons["Unsupported transfer score"],
+            },
+            "uncertainty": {
+                "calibration": values["Uncertainty calibration score"],
+                "calibration_reason": reasons["Uncertainty calibration score"],
+            },
+            "critical_event_missed": critical_event == "yes",
+            "critical_event_missed_reason": _required_text(
+                fields, "Critical event missed reason"
+            ),
+            "notes": fields["Reviewer notes"],
+        }
+    )
 
 
 def validate_human_pair(path: Path, expected_clip_id: str, expected_case_id: str) -> dict[str, Any]:

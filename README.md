@@ -158,7 +158,7 @@ Changing the status string alone cannot unlock validation/test commands.
    with `build-a-index`; B4 and B5 automatically use its rank-1 cosine neighbour.
 7. Run B0–B5 with identical frozen B frames and generation settings. Score
    recognition first, then retrieval and coaching, using
-   `config/scoring_rubric_v0.3.0.json` and blinded score forms.
+   `config/scoring_rubric.txt` and blinded plain-text score forms.
 8. Record the final validation choice in `init-protocol-decision`, run
    `freeze-protocol`, then and only then change status to `frozen_test`.
 

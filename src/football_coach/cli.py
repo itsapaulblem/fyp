@@ -18,6 +18,7 @@ from .experiment import (
     create_protocol_freeze,
     create_sampling_freeze,
     initialize_from_template,
+    initialize_text_from_template,
     validate_human_pair,
     validate_human_reference,
     validate_pilot_cohort,
@@ -387,6 +388,8 @@ def validate_score_command(
     config_path: Path = typer.Option(DEFAULT_CONFIG),
 ) -> None:
     """Validate a completed blinded human score against the frozen rubric."""
+    if path.suffix.lower() != ".txt":
+        raise typer.BadParameter("Score form must be a .txt file")
     config = load_json(config_path)
     score = validate_score(path, ROOT / config["scoring"]["rubric_path"])
     typer.echo(f"VALID score run_id={score.run_id} clip_id={score.clip_id}")
@@ -408,13 +411,18 @@ def init_score(
     blind_run_id: str,
     clip_id: str,
     destination: Path,
+    config_path: Path = typer.Option(DEFAULT_CONFIG),
 ) -> None:
     """Create a non-overwriting score form without condition or model identity."""
     destination = require_private_path(destination, ROOT / "data/video_b/review/scores")
-    payload = load_experiment_json(ROOT / "templates/score.template.json")
-    payload["run_id"] = blind_run_id
-    payload["clip_id"] = clip_id
-    write_json_exclusive(destination, payload)
+    if destination.suffix.lower() != ".txt":
+        raise typer.BadParameter("Score form destination must end in .txt")
+    config = load_json(config_path)
+    initialize_text_from_template(
+        ROOT / config["scoring"]["score_template"],
+        destination,
+        {"BLIND_RUN_ID": blind_run_id, "DATASET_B_CLIP_ID": clip_id},
+    )
     typer.echo(f"Created blinded score form at {destination}")
 
 

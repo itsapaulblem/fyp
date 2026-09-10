@@ -219,18 +219,19 @@ class DatasetBHumanReference(BaseModel):
 
 
 class HumanScoreRecord(BaseModel):
-    """Human-entered scores. Nulls remain explicit until scoring is complete."""
+    """Validated human-entered scores parsed from the plain-text score form."""
 
     model_config = ConfigDict(extra="forbid")
 
-    score_version: Literal["0.3.0"]
+    score_version: Literal["1.0"]
     run_id: str = Field(min_length=1)
     clip_id: str = Field(pattern=r"^B-(TRAIN|VALID|TEST)-[0-9]{4}$")
-    scorer: dict[str, str]
     blinding: dict[str, bool]
-    recognition: dict[str, int]
+    recognition: dict[str, int | str]
     retrieval_relevance: dict[str, int | str | None]
-    coaching: dict[str, int]
-    failure_modes: dict[str, int]
-    uncertainty: dict[str, int]
+    coaching: dict[str, int | str]
+    failure_modes: dict[str, int | str | None]
+    uncertainty: dict[str, int | str]
+    critical_event_missed: bool
+    critical_event_missed_reason: str
     notes: str

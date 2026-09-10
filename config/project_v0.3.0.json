@@ -69,9 +69,9 @@
     "directory": "data/video_b/review"
   },
   "scoring": {
-    "rubric_path": "config/scoring_rubric_v0.3.0.json",
-    "rubric_version": "0.3.0",
-    "score_template": "templates/score.template.json",
+    "rubric_path": "config/scoring_rubric.txt",
+    "rubric_version": "1.0",
+    "score_template": "templates/score.template.txt",
     "require_condition_blinding": true
   },
   "action_oracle": {
