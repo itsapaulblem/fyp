@@ -15,8 +15,8 @@ The two video collections have different roles:
 
 The automatic system must retrieve from Dataset A using only information
 available from Dataset B pixels or pixel-derived embeddings. Matching with a
-hidden SoccerNet action label is permitted only as a clearly labelled oracle
-condition.
+hidden SoccerNet action label is permitted only in B2, a clearly labelled
+diagnostic condition with deliberate label access.
 
 ## Experimental conditions
 
@@ -24,8 +24,8 @@ condition.
 |---|---|---|---|
 | B0 | frames | none | Visual-only baseline |
 | B1 | frames | seeded random case, selected without B labels | Does any example help? |
-| B2 | frames | mapped same-action case selected with hidden label | Diagnostic: does action-label matching help when label leakage is deliberately allowed? |
-| B3 | frames | human-selected analogous case | Upper bound: how well could case assistance work if a knowledgeable human chose the analogy? |
+| B2 | frames | mapped same-action case selected with hidden label | Diagnostic only: does action-label matching help when label leakage is deliberately allowed? |
+| B3 | frames | human-selected analogous case | How well could case assistance work if a person chose the best analogy? |
 | B4 | frames | embedding k-NN case | Automatic retrieval system |
 | B5 | frames | advice from the same B4-retrieved case, with no other A fields | Does advice text, rather than A video/context, drive improvement? |
 
@@ -80,8 +80,12 @@ Do not mark a case `approved` unless the advice concerns that exact segment,
 the reviewer provenance is complete, and usage rights are recorded. Online
 advice from an unrelated clip is not an acceptable label.
 
-The first milestone is a 20–30 case pilot. Scale beyond 100 only after an
-oracle-pair experiment shows that analogous cases help.
+The feasibility library now contains 25 approved cases: 14 sourced from the
+[FIFA Training Centre Game Library](https://www.fifatrainingcentre.com/en/resources/game-library/)
+and 11 from [UEFA Champions League Performance Insights](https://www.uefa.com/uefachampionsleague/news/).
+Each case retains its exact source URL. `validate-a` currently reports 25/25.
+Scale beyond this feasibility library only if the experiment provides a clear
+reason to do so.
 
 ## Dataset B workflow
 
@@ -95,7 +99,7 @@ data/raw/gamestate/gamestate-2024/test.zip
 
 `index-b` builds a manifest directly from the ZIPs and checks v1.3, 750 frames,
 25 fps, unique clip IDs, and expected split counts. Hidden action labels are
-stored for evaluation/oracle experiments but are never placed in automatic
+stored for evaluation and the B2 hidden-label diagnostic but are never placed in automatic
 retrieval prompts.
 
 ## Inputs and outputs
@@ -145,11 +149,12 @@ Changing the status string alone cannot unlock validation/test commands.
    review input without contacting the MLLM. Complete the forms created by
    `init-reference-b`, then use `finalize-reference-b`; this preserves and hashes
    a label-free snapshot before attaching the hidden SoccerNet label.
-3. Only after the blind references are finalized, run B0 on all pilot cells with
-   `football-coach run-sampling-pilot --model qwen3.5:27b` (or the selected
-   exact 35B tag). One invocation fixes the model for all 32 cells and preserves
-   successful runs, answer-format omissions, capacity failures, crashes, model digest,
-   frame indices/hashes, and timing.
+3. Only after the blind references are finalized, run B0 on all pilot cells. The
+   current Qwen3.5 27B CPU workflow uses
+   `scripts/run_sampling_pilot_cpu.ps1`. Its dry-run mode lists completed and
+   pending cells, and the real mode runs pending cells sequentially. It preserves
+   successful runs, answer-format omissions, capacity failures, crashes, model
+   digest, frame indices/hashes, and timing.
 4. Copy `templates/sampling_decision.template.json` with
    `init-sampling-decision`; document the train decision and real F60 result.
 5. Change status to `sampling_validation`, run only the fixed validation cohort,
@@ -170,8 +175,8 @@ B1 selection hashes only the fixed seed, condition, and neutral B ID; relevance
 is scored after generation. B2 alone reads the hidden action label. Its explicit
 mapping currently supports `Corner` and `Direct free-kick`; other actions are
 reported as not evaluable and never receive a substitute case. This limitation
-must be reported rather than treating the oracle as coverage of all SoccerNet
-events.
+must be reported rather than treating the B2 diagnostic as coverage of all
+SoccerNet events.
 
 B4 uses the pinned `openai/clip-vit-base-patch32` image encoder. The same
 preprocessor embeds uniformly sampled A and B pixels; per-frame normalized
@@ -179,9 +184,28 @@ embeddings are mean-pooled and normalized, then matched by cosine nearest
 neighbour. This is retrieval-assisted analysis, not independent video
 understanding.
 
+## Human scoring workflow
+
+`config/scoring_rubric.txt` is the single authoritative rubric and declares
+`Rubric version: 1.0`. `templates/score.template.txt` is only a blank form, not
+a second rubric. Create and validate one private form per response:
+
+```powershell
+uv run football-coach init-score BLIND_RUN_ID CLIP_ID data/video_b/review/scores/BLIND_RUN_ID.txt
+uv run football-coach validate-score data/video_b/review/scores/BLIND_RUN_ID.txt
+```
+
+Fill the form between these commands. Score recognition before revealing the
+case or condition. Missing values, invalid `N/A` use, and out-of-range scores
+are rejected. Report dimensions separately and do not combine them into one
+overall mark.
+
 ## Current boundary
 
-The repository now defines the experiment and its gates, but no sampling choice,
-human Dataset B reference, model result, retrieval relevance judgement, or score
-is claimed until the corresponding real evidence is produced. Failed capacity,
-retrieval, and model runs must be preserved and analyzed rather than hidden.
+The repository remains in `draft_train_only`. All eight train-pilot human
+references are finalized. The local repository contains 21 complete, valid B0
+pilot cells and 11 locally pending cells; a previously started remote run may
+contain additional results that must be recovered and verified before rerunning
+them. No frame count has been selected, no validation or test condition has been
+run, and no formal score is claimed yet. Failed capacity, retrieval, and model
+runs must be preserved and analyzed rather than hidden.

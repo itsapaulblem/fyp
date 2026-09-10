@@ -290,14 +290,15 @@ If a cell fails, preserve it and inspect the cause before restarting the script.
 
 Do not change the prompt, frame counts, resolution, model tag, context, or generation settings during the matrix.
 
-Expected final summary:
+After the runner finishes, repeat the dry run. The required completion check is:
 
 ```text
-pilot_cells=32
-pilot_failures=0
+Completed cells to skip: 32
+Pending cells to run: 0
 ```
 
-If failures are nonzero, stop and inspect them. Do not hide or delete failures.
+If any cells remain pending, stop and inspect the latest preserved run before
+retrying. Do not hide or delete failures.
 
 ---
 
@@ -476,6 +477,11 @@ uv run football-coach validate-score data/video_b/review/scores/BLIND_RUN_ID.txt
 ```
 
 Fill the form between commands. Recognition must be scored before condition/model/A context is revealed.
+
+For B0, use `N/A` for analogy relevance, blind copying, and unsupported transfer,
+and explain that B0 supplied no Dataset A material. For B1 to B5, those three
+fields require numeric scores. Every other scoring dimension requires a numeric
+score and a written reason.
 
 ### Blocker to correct first
 
