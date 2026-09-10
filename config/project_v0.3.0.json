@@ -36,11 +36,15 @@
     "maximum_edge": 672,
     "sampling_algorithm": "uniform_endpoints_v1",
     "image_encoding": "JPEG quality 92 after OpenCV INTER_AREA resize",
+    "compatible_pilot_config_sha256": [
+      "66edb1be675192bdf4a2ba1a6c5fbaa0781f7959fc394c2c67e61fe75e19af6b"
+    ],
+    "compatible_pilot_config_note": "This preserved hash identifies the same Qwen3.5 27B CPU sampling settings before the scoring files were migrated from JSON to TXT. It may be used only to resume the B0 train sampling pilot.",
     "selected_frame_count": null,
     "selection_status": "pending_train_pilot_and_validation_confirmation",
     "capacity_gate": {
       "frame_count": 60,
-      "ollama_num_ctx": 4096,
+      "ollama_num_ctx": 32768,
       "status": "pending_real_model_run",
       "required_evidence": [
         "request_completed without transport or memory failure",
@@ -115,7 +119,8 @@
   "generation": {
     "temperature": 0,
     "seed": 20260903,
-    "num_ctx": 4096,
+    "num_ctx": 32768,
+    "num_gpu": 0,
     "think": false,
     "stream": false
   },
