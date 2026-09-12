@@ -20,6 +20,7 @@ dev = [
     "ruff>=0.7,<1",
 ]
 retrieval = [
+    "pillow>=10,<13",
     "torch>=2.4,<3",
     "transformers>=4.49,<6",
 ]

@@ -9,6 +9,15 @@ import cv2
 import numpy as np
 
 
+def _extract_clip_image_features(features: Any) -> Any:
+    """Return the projected image-feature tensor across Transformers CLIP APIs."""
+    if hasattr(features, "image_embeds"):
+        return features.image_embeds
+    if hasattr(features, "pooler_output"):
+        return features.pooler_output
+    return features
+
+
 class ClipFrameEncoder:
     """Frozen CLIP image encoder with transparent temporal mean pooling."""
 
@@ -49,8 +58,7 @@ class ClipFrameEncoder:
                 inputs = self.processor(images=images, return_tensors="pt")
                 pixel_values = inputs["pixel_values"].to(self.device)
                 features: Any = self.model.get_image_features(pixel_values=pixel_values)
-                if hasattr(features, "image_embeds"):
-                    features = features.image_embeds
+                features = _extract_clip_image_features(features)
                 features = features / features.norm(dim=-1, keepdim=True)
                 batches.append(features.detach().cpu().numpy().astype(np.float32))
                 if progress:
