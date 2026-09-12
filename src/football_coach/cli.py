@@ -20,6 +20,7 @@ from .experiment import (
     expected_reference_visibility_keys,
     initialize_from_template,
     initialize_text_from_template,
+    prepare_comparison_grading,
     prepare_pilot_grading,
     validate_human_pair,
     validate_human_reference,
@@ -448,6 +449,37 @@ def prepare_pilot_grading_command(
         raise typer.BadParameter(str(error)) from error
     typer.echo(f"Created randomized pilot grading package at {destination}")
     typer.echo(f"items={summary['item_count']} copied_frames={summary['frame_count']}")
+    typer.echo(f"package_sha256={summary['package_sha256']}")
+    typer.echo("Private mapping created separately; do not inspect it until grading is complete.")
+
+
+@app.command("prepare-comparison-grading")
+def prepare_comparison_grading_command(
+    package_id: str,
+    clip_b_id: str,
+    run_paths: list[Path],
+    config_path: Path = typer.Option(DEFAULT_CONFIG),
+) -> None:
+    """Build a randomized private package for paired-condition grading."""
+    config = load_json(config_path)
+    destination = ROOT / "data/video_b/review" / package_id
+    mapping = ROOT / "data/video_b/private" / f"{package_id}_mapping.json"
+    try:
+        summary = prepare_comparison_grading(
+            config,
+            ROOT,
+            package_id,
+            clip_b_id,
+            run_paths,
+            destination,
+            mapping,
+        )
+    except (FileExistsError, FileNotFoundError, ValueError) as error:
+        raise typer.BadParameter(str(error)) from error
+    typer.echo(f"Created blinded comparison package at {destination}")
+    typer.echo(
+        f"items={summary['item_count']} copied_frames={summary['copied_frame_count']}"
+    )
     typer.echo(f"package_sha256={summary['package_sha256']}")
     typer.echo("Private mapping created separately; do not inspect it until grading is complete.")
 

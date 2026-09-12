@@ -56,15 +56,20 @@ Already completed:
   hash-checked frame copies;
 - all 32 human score forms completed and validated;
 - the mapping revealed only after grading was complete; and
-- dimension-by-dimension results aggregated for F10, F20, F30, and F60.
+- dimension-by-dimension results aggregated for F10, F20, F30, and F60;
+- four B0 F30 validation responses completed and scored;
+- F30 frozen as the best tested operational trade-off, despite poor accuracy;
+- the pixel-only CLIP index built and verified for all 25 Dataset A cases;
+- four valid B3 human-selected pairing forms completed; and
+- one randomized B0/B3/B4 smoke comparison on B-VALID-0049 completed, graded,
+  validated, and unblinded.
 
-Current state is `draft_train_only`. All 32 B0 sampling-pilot cells are complete
-and valid in the local repository. The pilot used sequential CPU inference because
-shared GPU memory was insufficient for the 27B vision runner. The fixed settings
-were Qwen3.5 27B, `num_gpu=0`, `num_ctx=32768`, maximum edge 672, and a
-7,200-second client timeout. F30 is now the candidate for validation, not a final
-frozen choice. The next action is to document the sampling decision before any
-validation inference.
+Current state is `frozen_validation`. The fixed settings are Qwen3.5 27B,
+`num_gpu=0`, `num_ctx=32768`, F30 uniform endpoint sampling, maximum edge 672,
+and a 7,200-second client timeout. F30 is frozen because it was the best tested
+balance of descriptive recognition, hallucination severity, runtime, and room
+for later Dataset A context. It is not evidence of accurate frames-only football
+understanding: all four F30 validation responses missed the critical event.
 
 Earlier failures have been preserved rather than treated as experimental results:
 
@@ -72,9 +77,10 @@ Earlier failures have been preserved rather than treated as experimental results
 - an F20 attempt under the original 4,096-token context was used as a context-capacity diagnostic; and
 - the first 32,768-context F20 attempt reached the old 900-second client timeout, after which the timeout was increased and F20 completed successfully.
 
-These are diagnosed infrastructure or capacity failures. They must not be included as model-quality scores. The completed CPU runs are still pilot evidence, not final validation or test results.
+These are diagnosed infrastructure or capacity failures. They must not be included as model-quality scores. The completed CPU runs are pilot and validation evidence, not test results.
 
-Do **not** run B1–B5 or access test yet.
+Do **not** access the test split. B1–B5 may now run only under the frozen
+validation protocol.
 
 ## Experimental design
 
@@ -356,10 +362,10 @@ The completed review recorded:
 - elapsed time;
 - F60 capacity result.
 
-F30 is the validation candidate. It had the strongest descriptive recognition
+F30 was the validation candidate. It had the strongest descriptive recognition
 profile and the lowest mean hallucination severity, while F60 approximately
 doubled runtime without improving critical-event recognition. This is a pilot
-decision, not proof of a statistically reliable gain and not the final freeze.
+finding, not proof of a statistically reliable gain.
 
 The randomized package was created at
 `data/video_b/review/pilot_grading_v1`. Its revealing mapping is stored separately
@@ -368,18 +374,14 @@ only after all 32 score forms passed validation.
 
 B-TRAIN-0040 is an important test: lower human-review counts suggested a save, while F60 revealed a goal.
 
-Create the private decision:
+The private decision was completed and later approved after validation:
 
 ```powershell
 uv run football-coach init-sampling-decision
 ```
 
-Fill `data/video_b/private/sampling_decision_v0.3.0.json` using F30 as the
-candidate, real output paths, model tag/digest, F60 capacity evidence, the
-dimension-by-dimension findings, latency, and rationale. Candidate status is
-`candidate_for_validation`.
-
-**Stop and ask Codex to check the form before changing config status.**
+The immutable sampling freeze now records F30 as the best tested operational
+trade-off, not as an accurate frames-only setting.
 
 ---
 
@@ -411,27 +413,27 @@ reference contains and requires only F30, the selected candidate. During later
 frozen stages, a new reference requires only the frozen frame count. Do not add
 or fabricate judgments for unobserved sampling levels.
 
-After genuine confirmation:
-
-1. Add validation evidence paths to the decision.
-2. Change its status to `approved`.
-3. Run:
+This validation stage is complete. All four F30 responses had complete run
+status and valid answer format, and all four blinded score forms passed
+validation. Each response missed the critical event, confirming that the
+sampling setting is operationally feasible but the B0 model quality is poor.
+The decision was approved and frozen with:
 
 ```powershell
 uv run football-coach freeze-sampling
 ```
 
-Do not enter `frozen_validation` until this succeeds.
+The repository then entered `frozen_validation`.
 
 ---
 
 ## 8. Build the automatic Dataset A index
 
-After the sampling freeze, set status to `frozen_validation`.
+This step is complete under `frozen_validation`.
 
 ```powershell
 uv sync --extra dev --extra retrieval --system-certs
-uv run football-coach build-a-index --device cpu --batch-size 16
+uv run --system-certs --extra retrieval football-coach build-a-index --device cpu --batch-size 8
 ```
 
 Expected file:
@@ -440,22 +442,23 @@ Expected file:
 data/embeddings/dataset_a_clip_v0.3.0.npz
 ```
 
-It must contain exactly the 25 approved cases. B4 uses pinned CLIP pixel embeddings, mean pooling, cosine similarity, and `k=1`.
+The verified index contains exactly 25 approved cases, with one normalized
+512-dimensional vector per case and 20 sampled frames per case. Its SHA-256 is
+`933b1a773ec82943f8673409443db1192d7954326e7fdaf28b2bfbbd823d6e1a`.
+B4 uses pinned CLIP pixel embeddings, mean pooling, cosine similarity, and `k=1`.
 
 ---
 
 ## 9. Prepare B3 human-selected best-match pairings
 
-For each included validation clip, select the strongest A analogy using only frozen B frames and approved A cases. Do not use hidden labels, model answers, or B4 results.
+This step is complete for all four fixed validation clips. Each pairing was
+selected using only frozen B frames and approved A cases, documented in a
+private form, and validated before the corresponding B3 run. The selections
+were not based on hidden labels, model answers, or B4 results.
 
-Example only—A-0007 is not a real selection:
-
-```powershell
-uv run football-coach init-human-pair B-VALID-0049 A-0007 data/pairs/private/B-VALID-0049__A-0007.json
-uv run football-coach validate-human-pair data/pairs/private/B-VALID-0049__A-0007.json B-VALID-0049 A-0007
-```
-
-Between commands, fill the form with rationale, transferable principles, important differences, reviewer/time, approval, and both leakage flags set false.
+The private forms retain rationale, transferable principles, important
+differences, reviewer/time, approval, and leakage checks. Do not reveal the
+remaining pair identities while grading future comparisons.
 
 ---
 
@@ -485,6 +488,31 @@ Rules:
 
 Replace all uppercase placeholders with real frozen values.
 
+### Completed one-clip smoke comparison
+
+For B-VALID-0049, B0, B3, and B4 completed with valid output format and were
+placed into a randomized comparison package. Grading was completed before the
+private mapping was revealed. The revealed conditions were:
+
+- `COMPARE-001`: B3 human-selected case, A-0021;
+- `COMPARE-002`: B0 frames only; and
+- `COMPARE-003`: B4 automatic CLIP neighbour, A-0010, cosine similarity about
+  0.9066.
+
+All three responses scored zero on every recognition dimension, had
+hallucination severity 3, missed the critical goal, and had uncertainty score
+zero. B3 analogy relevance was 2 and B4 relevance was 1. Both case-assisted
+responses scored 1 for advice quality but zero for problem identification,
+practice representativeness, and coaching evidence support. Therefore neither
+B3 nor B4 improved recognition, and the small generic-advice score is not an
+evidence-supported coaching improvement. There was no direct copying, but both
+case-assisted responses showed severe unsupported transfer. This is evidence
+that the workflow operates on one clip, not a general effectiveness result.
+
+One completed reviewer note used the phrase `B5-type response` for the B3 item.
+The private mapping proves the run was B3. Preserve the original score form and
+treat that phrase only as a wording slip in the note, not as a condition change.
+
 ---
 
 ## 11. Score outputs
@@ -510,6 +538,17 @@ recognition-only views, full responses, human visual references, and generic fra
 copies in randomized `PILOT-001` to `PILOT-032` folders. Follow
 `GRADING_INSTRUCTIONS.txt` inside that package. Do not rerun the preparation
 command because it intentionally refuses to overwrite the grading package.
+
+For later same-clip comparisons, use the reusable blinded packager:
+
+```powershell
+uv run football-coach prepare-comparison-grading PACKAGE_ID CLIP_ID RUN_PATH_1 RUN_PATH_2 RUN_PATH_3
+```
+
+It checks complete and valid source runs, a shared exact model digest, frozen
+F30 inputs, identical B frame hashes, and unique conditions. It randomizes the
+runs into equal `COMPARE-*` folders and writes the revealing mapping separately
+under private data. Do not inspect that mapping until every score validates.
 
 Report each dimension separately; do not hide hallucination or copying in one total.
 
@@ -551,13 +590,21 @@ Do not claim the model independently understood the video better.
 
 ## Your next action only
 
-1. Change `config/project_v0.3.0.json` status from `draft_train_only` to
-   `sampling_validation` and record F30 as the candidate selection.
-2. Prepare F30 frames for the four fixed validation clips without contacting the
-   model.
-3. Create and complete one blind F30 human visual reference for each validation
-   clip before running the model.
-4. Finalize and validate those four references.
-5. Only then run the four B0 F30 validation responses.
+1. Run B1 random-case and B5 advice-only for B-VALID-0049. B5 must use the same
+   automatic A case already selected by B4.
+2. Put only those two new runs into a randomized smoke package with
+   `prepare-comparison-grading`, then complete and validate their scores before
+   revealing their mapping.
+3. Do not repackage the already revealed B0/B3/B4 answers as though they were
+   newly blinded. Report all five B-VALID-0049 conditions as smoke evidence.
+4. If that end-to-end control workflow passes, run the frozen conditions on
+   B-VALID-0033, B-VALID-0038, and B-VALID-0003. Create comparison packages and
+   keep each new mapping hidden until its scores validate.
+5. Treat B2 separately. Run it only for clips whose hidden action has an explicit
+   predeclared mapping; report unsupported clips as not evaluable without
+   substitution.
+6. Aggregate results dimension by dimension, decide the final validation
+   protocol, and freeze it before any test access.
 
-Do not run B1 to B5 yet.
+Do not rerun completed B0/B3/B4 cells, do not alter completed score forms, and
+do not access the test split.

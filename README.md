@@ -160,15 +160,14 @@ Changing the status string alone cannot unlock validation/test commands.
 4. Run `football-coach prepare-pilot-grading` once to verify all 32 cells and
    create the randomized private grading package. The 32 forms have now been
    scored, validated, unblinded, and analysed by frame count.
-5. Run `init-sampling-decision`; record F30 as the validation candidate, the
-   dimension-by-dimension pilot findings, and the real F60 capacity result.
-6. Change status to `sampling_validation`, run only the fixed validation cohort,
-   complete the decision, then create the sampling freeze with `freeze-sampling`.
-7. Change status to `frozen_validation`. Build the pixel-only Dataset A index
-   with `build-a-index`; B4 and B5 automatically use its rank-1 cosine neighbour.
-8. Run B0–B5 with identical frozen B frames and generation settings. Score
-   recognition first, then retrieval and coaching, using
-   `config/scoring_rubric.txt` and blinded plain-text score forms.
+5. Complete the sampling decision, confirm F30 on the fixed four-clip validation
+   cohort, and create the immutable sampling freeze with `freeze-sampling`.
+6. In `frozen_validation`, build and verify the pixel-only Dataset A index with
+   `build-a-index`; B4 and B5 automatically use its rank-1 cosine neighbour.
+7. Document B3 human-selected pairings without hidden labels or B4 results.
+8. Run B0–B5 with identical frozen B frames and generation settings. Use
+   `prepare-comparison-grading` to randomize comparable runs, then score
+   recognition first and case-dependent fields only after recognition is locked.
 9. Record the final validation choice in `init-protocol-decision`, run
    `freeze-protocol`, then and only then change status to `frozen_test`.
 
@@ -202,8 +201,18 @@ uv run football-coach prepare-pilot-grading
 
 This command verifies the source responses and frame hashes, randomizes their
 order behind `PILOT-001` to `PILOT-032`, writes the revealing mapping separately
-under private data, and refuses to overwrite an existing package. For later
-responses, create and validate an individual private form with:
+under private data, and refuses to overwrite an existing package. For a
+same-clip comparison, create an equivalent randomized package by supplying the
+completed run directories:
+
+```powershell
+uv run football-coach prepare-comparison-grading PACKAGE_ID CLIP_ID RUN_PATH_1 RUN_PATH_2 RUN_PATH_3
+```
+
+The command checks complete and valid responses, the exact model digest, frozen
+frame count, identical Dataset B frame hashes, and unique conditions. It then
+creates generic `COMPARE-*` folders and keeps the revealing mapping private.
+For an isolated response, create and validate an individual private form with:
 
 ```powershell
 uv run football-coach init-score BLIND_RUN_ID CLIP_ID data/video_b/review/scores/BLIND_RUN_ID.txt
@@ -217,14 +226,23 @@ overall mark.
 
 ## Current boundary
 
-The repository remains in `draft_train_only`. All eight train-pilot human
-references are finalized, all 32 B0 pilot cells are complete and valid, and a
-verified 32-item private grading package has been scored and validated in full.
-The results have been unblinded and aggregated without a combined overall mark.
-F30 is the train-pilot candidate for validation because it produced the strongest
-descriptive recognition and hallucination profile while avoiding F60's much
-higher runtime. F30 is not frozen or final until the four-clip validation check
-is completed. No validation or test condition has been run. The next action is
-to create and complete the private sampling-decision form. Failed capacity,
-retrieval, and model runs remain historical infrastructure evidence and are not
-model-quality scores.
+The repository is in `frozen_validation`. All 32 B0 train-pilot cells and the
+four fixed B0 F30 validation cells are complete, valid, and human-scored. F30
+was frozen as the best tested operational trade-off, not because frames-only
+performance was accurate: all four validation responses missed the critical
+event. The frozen pixel-only CLIP index contains all 25 approved Dataset A cases
+as normalized 512-dimensional vectors; its SHA-256 is
+`933b1a773ec82943f8673409443db1192d7954326e7fdaf28b2bfbbd823d6e1a`.
+
+Four B3 human-selected pairing forms are complete. A first randomized,
+human-scored B0/B3/B4 comparison on B-VALID-0049 confirmed that both retrieval
+pipelines execute, but neither B3 nor B4 improved recognition over B0 on this
+clip. B3's case was judged more analogous than B4's automatic neighbour, while
+both case-assisted answers received only a small generic-advice score and no
+evidence-supported coaching gain. This is a one-clip smoke result, not a general
+conclusion. The next action is to complete and grade the B1 and B5 controls for
+this clip as smoke checks, then continue the remaining validation matrix without
+revealing new comparison mappings before scoring. Because the B0/B3/B4 mapping
+for B-VALID-0049 has already been revealed, repackaging those answers would not
+restore blinding and must not be presented as a new blind comparison. No test
+split inference is authorized.

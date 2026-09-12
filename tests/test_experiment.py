@@ -1,11 +1,13 @@
 import csv
 import json
+import shutil
 from pathlib import Path
 
 import pytest
 
 from football_coach.domain import DatasetBHumanReference
 from football_coach.experiment import (
+    prepare_comparison_grading,
     prepare_pilot_grading,
     validate_pilot_cohort,
     validate_score,
@@ -275,6 +277,81 @@ def test_prepare_pilot_grading_builds_verified_non_overwriting_package(
     )
     with pytest.raises(FileExistsError, match="already exists"):
         prepare_pilot_grading(config, tmp_path, destination, mapping_path)
+
+
+def test_prepare_comparison_grading_builds_blinded_non_overwriting_package(
+    tmp_path: Path,
+) -> None:
+    config = _write_pilot_grading_fixture(tmp_path)
+    config["conditions"] = ["B0_frames_only", "B3_human_oracle", "B4_embedding_knn"]
+    config["input_feasibility"]["selected_frame_count"] = 10
+    clip_id = "B-TRAIN-0001"
+    model_directory = "qwen3.5_27b"
+    source = tmp_path / f"output/B0_frames_only/{model_directory}/{clip_id}/run-10"
+
+    frame_hashes = {}
+    for index in range(1, 11):
+        frame = (
+            tmp_path
+            / f"artifacts/model_inputs/dataset_b/{clip_id}/uniform_10/frame-{index}.jpg"
+        )
+        frame.parent.mkdir(parents=True, exist_ok=True)
+        frame.write_bytes(f"{clip_id}-{index}".encode())
+        frame_hashes[frame.relative_to(tmp_path).as_posix()] = sha256_file(frame)
+
+    runs = []
+    for condition in config["conditions"]:
+        run = tmp_path / f"output/{condition}/{model_directory}/{clip_id}/comparison"
+        shutil.copytree(source, run)
+        metadata = {
+            "condition": condition,
+            "dataset_b_clip_id": clip_id,
+            "dataset_b_frame_count": 10,
+            "dataset_a_case_id": None if condition == "B0_frames_only" else "A-0001",
+            "frame_sha256": frame_hashes,
+            "model": "qwen3.5:27b",
+            "model_digest": "b" * 64,
+            "run_status": "complete",
+            "answer_format_status": "valid",
+        }
+        (run / "metadata.txt").write_text(
+            "\n".join(f"{key}: {json.dumps(value)}" for key, value in metadata.items()),
+            encoding="utf-8",
+        )
+        (run / "prompt.txt").write_text("Exact model input.\n", encoding="utf-8")
+        runs.append(run)
+
+    destination = tmp_path / "data/video_b/review/comparison_test_v1"
+    mapping_path = tmp_path / "data/video_b/private/comparison_test_v1_mapping.json"
+    summary = prepare_comparison_grading(
+        config,
+        tmp_path,
+        "comparison_test_v1",
+        clip_id,
+        runs,
+        destination,
+        mapping_path,
+    )
+
+    assert summary["item_count"] == 3
+    assert summary["copied_frame_count"] == 30
+    assert len(list(destination.glob("COMPARE-*/recognition.txt"))) == 3
+    assert len(list(destination.glob("COMPARE-*/full_response.txt"))) == 3
+    assert len(list(destination.glob("COMPARE-*/score.txt"))) == 3
+    assert len(list(destination.glob("COMPARE-*/frames/*.jpg"))) == 30
+    assert len(list(destination.glob("COMPARE-*/case_frames_after_recognition"))) == 3
+    mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
+    assert {entry["condition"] for entry in mapping["entries"]} == set(config["conditions"])
+    with pytest.raises(FileExistsError, match="already exists"):
+        prepare_comparison_grading(
+            config,
+            tmp_path,
+            "comparison_test_v1",
+            clip_id,
+            runs,
+            destination,
+            mapping_path,
+        )
 
 
 def _reference_payload(clip_id: str, visibility_keys: list[str]) -> dict:

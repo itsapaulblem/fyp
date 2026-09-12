@@ -635,6 +635,251 @@ frame count cannot be concealed because the number of supplied images is visible
     }
 
 
+def prepare_comparison_grading(
+    config: dict[str, Any],
+    project_root: Path,
+    package_id: str,
+    clip_id: str,
+    run_paths: list[Path],
+    destination: Path,
+    private_mapping_path: Path,
+) -> dict[str, Any]:
+    """Create a non-overwriting blinded package for paired-condition grading."""
+    if not re.fullmatch(r"[a-z0-9][a-z0-9_-]*", package_id):
+        raise ValueError("Package ID must use lowercase letters, digits, hyphens, or underscores")
+    if destination.exists():
+        raise FileExistsError(f"Grading package already exists: {destination}")
+    if private_mapping_path.exists():
+        raise FileExistsError(f"Private grading mapping already exists: {private_mapping_path}")
+    if len(run_paths) < 2:
+        raise ValueError("Comparison grading requires at least two source runs")
+
+    score_template = project_root / config["scoring"]["score_template"]
+    rubric_path = project_root / config["scoring"]["rubric_path"]
+    reference_path = project_root / "data/video_b/review" / f"{clip_id}.json"
+    if not score_template.is_file() or not rubric_path.is_file():
+        raise FileNotFoundError("The score template and authoritative rubric must both exist")
+    reference = validate_human_reference(reference_path, clip_id)
+    selected_frame_count = int(config["input_feasibility"]["selected_frame_count"])
+
+    output_root = (project_root / "output").resolve()
+    validated: list[dict[str, Any]] = []
+    conditions: set[str] = set()
+    model_digests: set[str] = set()
+    shared_b_hashes: dict[str, str] | None = None
+    for supplied_path in run_paths:
+        run_path = supplied_path if supplied_path.is_absolute() else project_root / supplied_path
+        run_path = run_path.resolve()
+        if not run_path.is_relative_to(output_root):
+            raise ValueError(f"Source run must remain under output: {run_path}")
+        metadata_path = run_path / "metadata.txt"
+        response_path = run_path / config["model_output"]["answer_file"]
+        prompt_path = run_path / "prompt.txt"
+        for required in (metadata_path, response_path, prompt_path):
+            if not required.is_file() or not required.stat().st_size:
+                raise ValueError(f"Missing or empty source artifact: {required}")
+        metadata = _parse_run_metadata(metadata_path)
+        if metadata.get("run_status") != "complete":
+            raise ValueError(f"Source run is not complete: {run_path}")
+        if metadata.get("answer_format_status") != "valid":
+            raise ValueError(f"Source answer format is not valid: {run_path}")
+        if metadata.get("dataset_b_clip_id") != clip_id:
+            raise ValueError(f"Source run uses the wrong Dataset B clip: {run_path}")
+        if metadata.get("dataset_b_frame_count") != selected_frame_count:
+            raise ValueError(f"Source run does not use frozen F{selected_frame_count}: {run_path}")
+        condition = metadata.get("condition")
+        if not isinstance(condition, str) or condition not in config["conditions"]:
+            raise ValueError(f"Source run has an invalid condition: {run_path}")
+        if condition in conditions:
+            raise ValueError(f"Comparison contains duplicate condition: {condition}")
+        conditions.add(condition)
+        digest = metadata.get("model_digest")
+        if not isinstance(digest, str) or not digest:
+            raise ValueError(f"Source run lacks an exact model digest: {run_path}")
+        model_digests.add(digest)
+
+        frame_hashes = metadata.get("frame_sha256")
+        if not isinstance(frame_hashes, dict):
+            raise ValueError(f"Source run lacks frame hashes: {run_path}")
+        b_marker = f"artifacts/model_inputs/dataset_b/{clip_id}/"
+        b_hashes = {
+            relative: expected_hash
+            for relative, expected_hash in frame_hashes.items()
+            if relative.startswith(b_marker)
+        }
+        if len(b_hashes) != selected_frame_count:
+            raise ValueError(
+                f"Source run has the wrong number of Dataset B frame hashes: {run_path}"
+            )
+        if shared_b_hashes is None:
+            shared_b_hashes = b_hashes
+        elif b_hashes != shared_b_hashes:
+            raise ValueError("Compared runs do not use identical Dataset B frames")
+
+        checked_frames: list[tuple[Path, str, str]] = []
+        for relative, expected_hash in frame_hashes.items():
+            source_frame = project_root / relative
+            if not source_frame.is_file():
+                raise FileNotFoundError(source_frame)
+            if sha256_file(source_frame) != expected_hash:
+                raise ValueError(f"Source frame hash changed: {source_frame}")
+            frame_group = "frames" if relative in b_hashes else "case_frames_after_recognition"
+            checked_frames.append((source_frame, expected_hash, frame_group))
+
+        response = response_path.read_text(encoding="utf-8")
+        validated.append(
+            {
+                "run_path": run_path,
+                "metadata_path": metadata_path,
+                "response_path": response_path,
+                "prompt_path": prompt_path,
+                "recognition": _recognition_section(response, response_path),
+                "metadata": metadata,
+                "frames": checked_frames,
+            }
+        )
+    if len(model_digests) != 1:
+        raise ValueError(f"Compared runs use inconsistent model digests: {sorted(model_digests)}")
+
+    seed = int(config["seed"])
+    randomized = sorted(
+        validated,
+        key=lambda item: hashlib.sha256(
+            (
+                f"{seed}:{package_id}:{clip_id}:"
+                f"{item['run_path'].relative_to(project_root).as_posix()}"
+            ).encode()
+        ).hexdigest(),
+    )
+
+    visual = reference.visual_reference
+    visibility = reference.sampling_visibility[f"F{selected_frame_count}"]
+    reference_lines = [
+        "HUMAN VISUAL REFERENCE",
+        "",
+        "Chronological visible description:",
+        *(f"- {line}" for line in visual.chronological_visible_description),
+        "",
+        f"Possession: {visual.possession_by_visible_appearance}",
+        f"Tactical phase: {visual.tactical_phase}",
+        f"Main visible event: {visual.main_visible_event}",
+        f"Outcome: {visual.outcome}",
+        "",
+        f"Critical event visible in this sample: {visibility.event_visible}",
+        f"Sample-specific visibility note: {visibility.notes}",
+        "",
+        "Visibility limitations:",
+        *(f"- {line}" for line in visual.visibility_limitations),
+        "",
+    ]
+    reference_text = "\n".join(reference_lines)
+
+    destination.mkdir(parents=True)
+    private_mapping_path.parent.mkdir(parents=True, exist_ok=True)
+    mapping_entries: list[dict[str, Any]] = []
+    copied_frame_count = 0
+    for position, item in enumerate(randomized, 1):
+        blind_id = f"COMPARE-{position:03d}"
+        blind_root = destination / blind_id
+        blind_root.mkdir()
+        copied_hashes: dict[str, str] = {}
+        for group in ("frames", "case_frames_after_recognition"):
+            grouped = sorted(
+                (frame for frame in item["frames"] if frame[2] == group),
+                key=lambda frame: frame[0].name,
+            )
+            group_root = blind_root / group
+            group_root.mkdir()
+            if not grouped:
+                continue
+            for order, (source_frame, expected_hash, _) in enumerate(grouped, 1):
+                copied = group_root / f"frame_{order:03d}{source_frame.suffix.lower()}"
+                shutil.copy2(source_frame, copied)
+                if sha256_file(copied) != expected_hash:
+                    raise ValueError(f"Copied frame hash mismatch: {copied}")
+                copied_hashes[copied.relative_to(destination).as_posix()] = expected_hash
+                copied_frame_count += 1
+
+        full_response = blind_root / "full_response.txt"
+        full_input = blind_root / "input_after_recognition.txt"
+        shutil.copy2(item["response_path"], full_response)
+        shutil.copy2(item["prompt_path"], full_input)
+        if sha256_file(full_response) != sha256_file(item["response_path"]):
+            raise ValueError(f"Copied response hash mismatch: {full_response}")
+        if sha256_file(full_input) != sha256_file(item["prompt_path"]):
+            raise ValueError(f"Copied prompt hash mismatch: {full_input}")
+        write_text_exclusive(blind_root / "recognition.txt", item["recognition"])
+        write_text_exclusive(blind_root / "human_visual_reference.txt", reference_text)
+        initialize_text_from_template(
+            score_template,
+            blind_root / "score.txt",
+            {"BLIND_RUN_ID": blind_id, "DATASET_B_CLIP_ID": clip_id},
+        )
+        metadata = item["metadata"]
+        mapping_entries.append(
+            {
+                "blind_run_id": blind_id,
+                "condition": metadata["condition"],
+                "dataset_b_clip_id": clip_id,
+                "dataset_a_case_id": metadata.get("dataset_a_case_id"),
+                "retrieval_score": metadata.get("retrieval_score"),
+                "model": metadata.get("model"),
+                "model_digest": metadata["model_digest"],
+                "source_run": item["run_path"].relative_to(project_root).as_posix(),
+                "source_metadata_sha256": sha256_file(item["metadata_path"]),
+                "source_response_sha256": sha256_file(item["response_path"]),
+                "blind_response_sha256": sha256_file(full_response),
+                "source_prompt_sha256": sha256_file(item["prompt_path"]),
+                "blind_prompt_sha256": sha256_file(full_input),
+                "copied_frame_sha256": copied_hashes,
+            }
+        )
+
+    instructions = f"""BLINDED COMPARISON GRADING INSTRUCTIONS
+
+Grade COMPARE-001 onward in order. Do not open the private mapping.
+
+For each folder:
+1. Inspect human_visual_reference.txt and the images in frames.
+2. Open recognition.txt only. Fill every RECOGNITION score and Critical event
+   missed fields in score.txt before opening any after-recognition material.
+3. Set Recognition scored before case or condition reveal to yes.
+4. Then open full_response.txt and input_after_recognition.txt. If present, the
+   case_frames_after_recognition folder may now be inspected.
+5. Finish analogy relevance, coaching, failure modes, and uncertainty.
+6. If no Dataset A case was supplied, use N/A for Analogy relevance, Blind
+   copying, and Unsupported transfer, explaining that B0 supplied no Dataset A
+   material. Otherwise all three require numeric scores.
+7. Validate score.txt with football-coach validate-score before continuing.
+
+Use config/scoring_rubric.txt (version {config['scoring']['rubric_version']}).
+Never edit recognition.txt, full_response.txt, or input_after_recognition.txt.
+Do not calculate one combined overall mark.
+"""
+    write_text_exclusive(destination / "GRADING_INSTRUCTIONS.txt", instructions)
+    mapping = {
+        "mapping_version": "comparison-grading-v1",
+        "warning": "Do not inspect this mapping until every score form is complete and valid.",
+        "created_at_utc": timestamp_utc(),
+        "package_id": package_id,
+        "dataset_b_clip_id": clip_id,
+        "randomization_method": "ascending SHA-256 of seed, package ID, clip ID, and source run",
+        "randomization_seed": seed,
+        "rubric_version": config["scoring"]["rubric_version"],
+        "rubric_sha256": sha256_file(rubric_path),
+        "score_template_sha256": sha256_file(score_template),
+        "source_reference_sha256": sha256_file(reference_path),
+        "entries": mapping_entries,
+    }
+    write_json_exclusive(private_mapping_path, mapping)
+    return {
+        "item_count": len(mapping_entries),
+        "copied_frame_count": copied_frame_count,
+        "package_sha256": sha256_path(destination),
+        "mapping_sha256": sha256_file(private_mapping_path),
+    }
+
+
 def validate_sampling_candidate(config: dict[str, Any], project_root: Path) -> dict[str, Any]:
     decision_path = project_root / config["freezes"]["sampling_decision_path"]
     decision = load_json(decision_path)
