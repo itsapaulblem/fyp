@@ -17,6 +17,7 @@ from .experiment import (
     claim_test_attempt,
     create_protocol_freeze,
     create_sampling_freeze,
+    expected_reference_visibility_keys,
     initialize_from_template,
     initialize_text_from_template,
     prepare_pilot_grading,
@@ -266,11 +267,13 @@ def init_reference_b(
     record = find_b_clip(ROOT / config["dataset_b"]["private_manifest"], clip_id)
     require_allowed_split(config, record.split)
     destination = ROOT / config["human_reference"]["directory"] / f"{clip_id}.json"
-    initialize_from_template(
-        ROOT / config["human_reference"]["template"],
-        destination,
-        {"clip_id": clip_id},
-    )
+    payload = load_experiment_json(ROOT / config["human_reference"]["template"])
+    payload["clip_id"] = clip_id
+    visibility_keys = expected_reference_visibility_keys(config, record.split, ROOT)
+    payload["sampling_visibility"] = {
+        key: {"event_visible": None, "notes": ""} for key in sorted(visibility_keys)
+    }
+    write_json_exclusive(destination, payload)
     typer.echo(f"Created blind reference form at {destination}")
     typer.echo("Complete the visual review before attaching the hidden SoccerNet label")
 
@@ -303,10 +306,12 @@ def finalize_reference_b(
     if any(not reviewer.get(name) for name in reviewer):
         raise typer.BadParameter("Complete reviewer provenance before finalizing")
     visibility = payload.get("sampling_visibility", {})
-    if set(visibility) != {"F10", "F20", "F30", "F60"} or any(
+    required_visibility = expected_reference_visibility_keys(config, record.split, ROOT)
+    if set(visibility) != required_visibility or any(
         item.get("event_visible") is None for item in visibility.values()
     ):
-        raise typer.BadParameter("Complete visibility judgments for F10/F20/F30/F60")
+        required_text = "/".join(sorted(required_visibility))
+        raise typer.BadParameter(f"Complete visibility judgments for {required_text}")
     payload["hidden_reference"] = {
         "soccernet_action_label": record.action_class,
         "attached_only_after_visual_review": True,

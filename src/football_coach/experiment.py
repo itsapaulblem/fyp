@@ -657,6 +657,24 @@ def validate_sampling_candidate(config: dict[str, Any], project_root: Path) -> d
     return decision
 
 
+def expected_reference_visibility_keys(
+    config: dict[str, Any], split: str, project_root: Path
+) -> set[str]:
+    """Return the frame levels a blind Dataset B reference must review."""
+    status = config["status"]
+    if status == "draft_train_only":
+        if split != "train":
+            raise ValueError("Draft references are restricted to the training pilot")
+        return {f"F{int(count)}" for count in config["input_feasibility"]["frame_counts"]}
+    if status == "sampling_validation":
+        decision = validate_sampling_candidate(config, project_root)
+        return {f"F{int(decision['selected_frame_count'])}"}
+    if status in {"frozen_validation", "frozen_test"}:
+        freeze = validate_sampling_freeze(config, project_root)
+        return {f"F{int(freeze['frame_count'])}"}
+    raise ValueError(f"Unknown protocol status: {status}")
+
+
 def create_sampling_freeze(
     config: dict[str, Any], project_root: Path, destination: Path
 ) -> dict[str, Any]:

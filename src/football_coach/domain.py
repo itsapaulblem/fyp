@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from datetime import date, datetime
 from pathlib import Path, PurePosixPath
@@ -207,14 +208,25 @@ class DatasetBHumanReference(BaseModel):
     reviewer: ReviewerInfo
     review_protocol: ReferenceReviewProtocol
     visual_reference: VisualReference
-    sampling_visibility: dict[Literal["F10", "F20", "F30", "F60"], SamplingVisibility]
+    sampling_visibility: dict[str, SamplingVisibility]
     hidden_reference: HiddenBReference
 
     @model_validator(mode="after")
-    def require_all_sampling_conditions(self) -> DatasetBHumanReference:
-        required = {"F10", "F20", "F30", "F60"}
-        if set(self.sampling_visibility) != required:
-            raise ValueError(f"sampling_visibility must contain exactly {sorted(required)}")
+    def require_split_appropriate_sampling_conditions(self) -> DatasetBHumanReference:
+        keys = set(self.sampling_visibility)
+        invalid = sorted(key for key in keys if not re.fullmatch(r"F[1-9][0-9]*", key))
+        if invalid:
+            raise ValueError(f"Invalid sampling_visibility keys: {invalid}")
+        if self.clip_id.startswith("B-TRAIN-"):
+            required = {"F10", "F20", "F30", "F60"}
+            if keys != required:
+                raise ValueError(
+                    f"Training pilot sampling_visibility must contain exactly {sorted(required)}"
+                )
+        elif len(keys) != 1:
+            raise ValueError(
+                "Validation and test sampling_visibility must contain exactly one frozen candidate"
+            )
         return self
 
 

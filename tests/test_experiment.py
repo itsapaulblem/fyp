@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 
+from football_coach.domain import DatasetBHumanReference
 from football_coach.experiment import (
     prepare_pilot_grading,
     validate_pilot_cohort,
@@ -274,3 +275,58 @@ def test_prepare_pilot_grading_builds_verified_non_overwriting_package(
     )
     with pytest.raises(FileExistsError, match="already exists"):
         prepare_pilot_grading(config, tmp_path, destination, mapping_path)
+
+
+def _reference_payload(clip_id: str, visibility_keys: list[str]) -> dict:
+    return {
+        "reference_version": "0.3.0",
+        "clip_id": clip_id,
+        "review_status": "approved",
+        "reviewer": {
+            "name_or_code": "R1",
+            "football_qualification_or_experience": "Researcher",
+            "reviewed_at_utc": "2026-01-01T00:00:00Z",
+        },
+        "review_protocol": {
+            "used_only_neutral_id_and_frames": True,
+            "blinded_to_soccernet_label_during_visual_review": True,
+            "blinded_to_model_answers": True,
+            "blinded_to_dataset_a_pairs": True,
+        },
+        "visual_reference": {
+            "chronological_visible_description": ["A pass is visible."],
+            "possession_by_visible_appearance": "Red team",
+            "tactical_phase": "Open play",
+            "main_visible_event": "Pass",
+            "outcome": "Play continues",
+            "visibility_limitations": ["Wide view"],
+        },
+        "sampling_visibility": {
+            key: {"event_visible": True, "notes": "Visible"} for key in visibility_keys
+        },
+        "hidden_reference": {
+            "soccernet_action_label": "Corner",
+            "attached_only_after_visual_review": True,
+            "used_as_coaching_ground_truth": False,
+            "blind_snapshot_path": "private/snapshot.json",
+            "blind_snapshot_sha256": "a" * 64,
+        },
+    }
+
+
+def test_reference_requires_all_four_levels_for_training_pilot() -> None:
+    payload = _reference_payload("B-TRAIN-0001", ["F30"])
+    with pytest.raises(ValueError, match="Training pilot sampling_visibility"):
+        DatasetBHumanReference.model_validate(payload)
+
+
+def test_reference_accepts_one_level_for_validation() -> None:
+    payload = _reference_payload("B-VALID-0001", ["F30"])
+    reference = DatasetBHumanReference.model_validate(payload)
+    assert set(reference.sampling_visibility) == {"F30"}
+
+
+def test_reference_rejects_multiple_levels_for_validation() -> None:
+    payload = _reference_payload("B-VALID-0001", ["F10", "F20", "F30", "F60"])
+    with pytest.raises(ValueError, match="exactly one frozen candidate"):
+        DatasetBHumanReference.model_validate(payload)

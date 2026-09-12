@@ -403,9 +403,13 @@ uv run football-coach run-pair B-VALID-0038 --condition B0_frames_only --model q
 uv run football-coach run-pair B-VALID-0003 --condition B0_frames_only --model qwen3.5:27b
 ```
 
-### Blocker to correct first
+### Validation-reference workflow
 
-The current B-reference finalizer requires visibility judgments for all four counts, but `sampling_validation` permits only the chosen count. Do not fabricate missing judgments. Correct and test this validation-reference workflow before running this section.
+This blocker has been corrected and tested. Training-pilot references continue
+to require F10/F20/F30/F60. During `sampling_validation`, a new validation
+reference contains and requires only F30, the selected candidate. During later
+frozen stages, a new reference requires only the frozen frame count. Do not add
+or fabricate judgments for unobserved sampling levels.
 
 After genuine confirmation:
 
@@ -547,13 +551,13 @@ Do not claim the model independently understood the video better.
 
 ## Your next action only
 
-1. Run `uv run football-coach init-sampling-decision`.
-2. Fill `data/video_b/private/sampling_decision_v0.3.0.json` with F30 as the
-   validation candidate and cite the private pilot-results report.
-3. Record the exact Qwen3.5 27B tag and digest, the F60 capacity evidence, pilot
-   evidence paths, runtimes, findings, limitations, and candidate rationale.
-4. Set the decision status to `candidate_for_validation`.
-5. Ask Codex to validate the completed decision before changing project status
-   or running any validation clip.
+1. Change `config/project_v0.3.0.json` status from `draft_train_only` to
+   `sampling_validation` and record F30 as the candidate selection.
+2. Prepare F30 frames for the four fixed validation clips without contacting the
+   model.
+3. Create and complete one blind F30 human visual reference for each validation
+   clip before running the model.
+4. Finalize and validate those four references.
+5. Only then run the four B0 F30 validation responses.
 
 Do not run B1 to B5 yet.

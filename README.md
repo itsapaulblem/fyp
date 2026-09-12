@@ -148,7 +148,9 @@ Changing the status string alone cannot unlock validation/test commands.
 2. Run `football-coach sample-pilot-frames` to create every neutral F10/F20/F30/F60
    review input without contacting the MLLM. Complete the forms created by
    `init-reference-b`, then use `finalize-reference-b`; this preserves and hashes
-   a label-free snapshot before attaching the hidden SoccerNet label.
+   a label-free snapshot before attaching the hidden SoccerNet label. Training
+   pilot references require all four frame levels. Validation and test references
+   require exactly the single candidate or frozen frame level.
 3. Only after the blind references are finalized, run B0 on all pilot cells. The
    current Qwen3.5 27B CPU workflow uses
    `scripts/run_sampling_pilot_cpu.ps1`. Its dry-run mode lists completed and
