@@ -19,6 +19,7 @@ from .experiment import (
     create_sampling_freeze,
     initialize_from_template,
     initialize_text_from_template,
+    prepare_pilot_grading,
     validate_human_pair,
     validate_human_reference,
     validate_pilot_cohort,
@@ -424,6 +425,26 @@ def init_score(
         {"BLIND_RUN_ID": blind_run_id, "DATASET_B_CLIP_ID": clip_id},
     )
     typer.echo(f"Created blinded score form at {destination}")
+
+
+@app.command("prepare-pilot-grading")
+def prepare_pilot_grading_command(
+    config_path: Path = typer.Option(DEFAULT_CONFIG),
+) -> None:
+    """Build the randomized private grading package for all 32 B0 pilot runs."""
+    config = load_json(config_path)
+    destination = ROOT / "data/video_b/review/pilot_grading_v1"
+    mapping = ROOT / "data/video_b/private/pilot_grading_mapping_v1.json"
+    try:
+        summary = prepare_pilot_grading(
+            config, ROOT, destination, mapping, config_path=config_path
+        )
+    except (FileExistsError, FileNotFoundError, ValueError) as error:
+        raise typer.BadParameter(str(error)) from error
+    typer.echo(f"Created randomized pilot grading package at {destination}")
+    typer.echo(f"items={summary['item_count']} copied_frames={summary['frame_count']}")
+    typer.echo(f"package_sha256={summary['package_sha256']}")
+    typer.echo("Private mapping created separately; do not inspect it until grading is complete.")
 
 
 @app.command("init-human-pair")

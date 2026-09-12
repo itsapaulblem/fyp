@@ -155,16 +155,19 @@ Changing the status string alone cannot unlock validation/test commands.
    pending cells, and the real mode runs pending cells sequentially. It preserves
    successful runs, answer-format omissions, capacity failures, crashes, model
    digest, frame indices/hashes, and timing.
-4. Copy `templates/sampling_decision.template.json` with
+4. Run `football-coach prepare-pilot-grading` once to verify all 32 cells and
+   create the randomized private grading package. Score its folders in blind-ID
+   order before selecting a frame count.
+5. Copy `templates/sampling_decision.template.json` with
    `init-sampling-decision`; document the train decision and real F60 result.
-5. Change status to `sampling_validation`, run only the fixed validation cohort,
+6. Change status to `sampling_validation`, run only the fixed validation cohort,
    complete the decision, then create the sampling freeze with `freeze-sampling`.
-6. Change status to `frozen_validation`. Build the pixel-only Dataset A index
+7. Change status to `frozen_validation`. Build the pixel-only Dataset A index
    with `build-a-index`; B4 and B5 automatically use its rank-1 cosine neighbour.
-7. Run B0–B5 with identical frozen B frames and generation settings. Score
+8. Run B0–B5 with identical frozen B frames and generation settings. Score
    recognition first, then retrieval and coaching, using
    `config/scoring_rubric.txt` and blinded plain-text score forms.
-8. Record the final validation choice in `init-protocol-decision`, run
+9. Record the final validation choice in `init-protocol-decision`, run
    `freeze-protocol`, then and only then change status to `frozen_test`.
 
 Each frozen test clip/condition/model cell receives one private attempt marker
@@ -188,7 +191,17 @@ understanding.
 
 `config/scoring_rubric.txt` is the single authoritative rubric and declares
 `Rubric version: 1.0`. `templates/score.template.txt` is only a blank form, not
-a second rubric. Create and validate one private form per response:
+a second rubric. For the completed sampling pilot, the package and all 32 blank
+forms are created together:
+
+```powershell
+uv run football-coach prepare-pilot-grading
+```
+
+This command verifies the source responses and frame hashes, randomizes their
+order behind `PILOT-001` to `PILOT-032`, writes the revealing mapping separately
+under private data, and refuses to overwrite an existing package. For later
+responses, create and validate an individual private form with:
 
 ```powershell
 uv run football-coach init-score BLIND_RUN_ID CLIP_ID data/video_b/review/scores/BLIND_RUN_ID.txt
@@ -203,9 +216,9 @@ overall mark.
 ## Current boundary
 
 The repository remains in `draft_train_only`. All eight train-pilot human
-references are finalized. The local repository contains 21 complete, valid B0
-pilot cells and 11 locally pending cells; a previously started remote run may
-contain additional results that must be recovered and verified before rerunning
-them. No frame count has been selected, no validation or test condition has been
-run, and no formal score is claimed yet. Failed capacity, retrieval, and model
-runs must be preserved and analyzed rather than hidden.
+references are finalized, all 32 B0 pilot cells are complete and valid, and a
+verified 32-item private grading package has been created. No frame count has
+been selected, no validation or test condition has been run, and no formal score
+is claimed yet. The next action is to score the package in blind-ID order. Failed
+capacity, retrieval, and model runs remain historical infrastructure evidence and
+are not model-quality scores.

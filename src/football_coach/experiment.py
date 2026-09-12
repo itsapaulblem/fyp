@@ -4,6 +4,7 @@ import csv
 import hashlib
 import json
 import re
+import shutil
 from pathlib import Path
 from typing import Any
 
@@ -366,6 +367,272 @@ def validate_pilot_cohort(cohort_path: Path, public_manifest_path: Path) -> dict
     if cohort.get("selection_used_hidden_labels") is not False:
         raise ValueError("Pilot selection must explicitly exclude hidden labels")
     return cohort
+
+
+def _parse_run_metadata(path: Path) -> dict[str, Any]:
+    metadata: dict[str, Any] = {}
+    for line_number, raw_line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        if not raw_line.strip():
+            continue
+        if ":" not in raw_line:
+            raise ValueError(f"Invalid metadata line {line_number} in {path}")
+        name, raw_value = raw_line.split(":", 1)
+        try:
+            metadata[name.strip()] = json.loads(raw_value.strip())
+        except json.JSONDecodeError as error:
+            raise ValueError(
+                f"Invalid JSON metadata value on line {line_number} in {path}"
+            ) from error
+    return metadata
+
+
+def _recognition_section(response: str, path: Path) -> str:
+    match = re.search(
+        r"(?ms)^RECOGNITION\s*\r?\n(?P<body>.*?)(?=^ANALOGY\s*$)", response
+    )
+    if not match:
+        raise ValueError(f"Cannot isolate RECOGNITION before ANALOGY in {path}")
+    return f"RECOGNITION\n{match.group('body').rstrip()}\n"
+
+
+def prepare_pilot_grading(
+    config: dict[str, Any],
+    project_root: Path,
+    destination: Path,
+    private_mapping_path: Path,
+    config_path: Path | None = None,
+) -> dict[str, Any]:
+    """Create a non-overwriting, randomized package for scoring the B0 pilot."""
+    if destination.exists():
+        raise FileExistsError(f"Grading package already exists: {destination}")
+    if private_mapping_path.exists():
+        raise FileExistsError(f"Private grading mapping already exists: {private_mapping_path}")
+
+    cohort_path = project_root / config["input_feasibility"]["pilot_cohort_path"]
+    cohort = validate_pilot_cohort(
+        cohort_path, project_root / config["dataset_b"]["public_manifest"]
+    )
+    expected_cells = {
+        (clip_id, int(frame_count))
+        for clip_id in cohort["clip_ids"]
+        for frame_count in cohort["frame_counts"]
+    }
+    if len(expected_cells) != 32:
+        raise ValueError(f"Expected exactly 32 pilot cells, found {len(expected_cells)}")
+
+    current_config_hash = sha256_file(
+        config_path or project_root / "config/project_v0.3.0.json"
+    )
+    compatible_hashes = set(
+        config["input_feasibility"].get("compatible_pilot_config_sha256", [])
+    )
+    accepted_config_hashes = compatible_hashes | {current_config_hash}
+    model_tag = "qwen3.5:27b"
+    model_directory = model_tag.replace(":", "_")
+    output_root = project_root / "output" / cohort["condition"] / model_directory
+
+    candidates: dict[tuple[str, int], list[tuple[Path, dict[str, Any]]]] = {}
+    for metadata_path in sorted(output_root.glob("*/**/metadata.txt")):
+        metadata = _parse_run_metadata(metadata_path)
+        if metadata.get("run_status") != "complete":
+            continue
+        if metadata.get("answer_format_status") != "valid":
+            continue
+        if metadata.get("condition") != cohort["condition"]:
+            continue
+        if metadata.get("model") != model_tag:
+            continue
+        if metadata.get("config_sha256") not in accepted_config_hashes:
+            continue
+        key = (metadata.get("dataset_b_clip_id"), metadata.get("dataset_b_frame_count"))
+        if key in expected_cells:
+            candidates.setdefault(key, []).append((metadata_path.parent, metadata))
+
+    missing = sorted(expected_cells - candidates.keys())
+    duplicates = sorted(key for key, values in candidates.items() if len(values) != 1)
+    if missing:
+        raise ValueError(f"Missing complete valid pilot cells: {missing}")
+    if duplicates:
+        raise ValueError(f"Multiple complete valid runs found for pilot cells: {duplicates}")
+
+    score_template = project_root / config["scoring"]["score_template"]
+    rubric_path = project_root / config["scoring"]["rubric_path"]
+    if not score_template.is_file() or not rubric_path.is_file():
+        raise FileNotFoundError("The score template and authoritative rubric must both exist")
+
+    validated: list[dict[str, Any]] = []
+    model_digests: set[str] = set()
+    for clip_id, frame_count in sorted(expected_cells):
+        run_path, metadata = candidates[(clip_id, frame_count)][0]
+        response_path = run_path / config["model_output"]["answer_file"]
+        if not response_path.is_file() or not response_path.stat().st_size:
+            raise ValueError(f"Missing or empty response: {response_path}")
+        response = response_path.read_text(encoding="utf-8")
+        recognition = _recognition_section(response, response_path)
+
+        reference_path = project_root / "data/video_b/review" / f"{clip_id}.json"
+        reference = validate_human_reference(reference_path, clip_id)
+
+        frame_hashes = metadata.get("frame_sha256")
+        if not isinstance(frame_hashes, dict) or len(frame_hashes) != frame_count:
+            raise ValueError(f"Run has the wrong number of frame hashes: {run_path}")
+        checked_frames: list[tuple[Path, str]] = []
+        for relative, expected_hash in frame_hashes.items():
+            source_frame = project_root / relative
+            if not source_frame.is_file():
+                raise FileNotFoundError(source_frame)
+            actual_hash = sha256_file(source_frame)
+            if actual_hash != expected_hash:
+                raise ValueError(f"Source frame hash changed: {source_frame}")
+            checked_frames.append((source_frame, actual_hash))
+        checked_frames.sort(key=lambda item: item[0].name)
+
+        digest = metadata.get("model_digest")
+        if not isinstance(digest, str) or not digest:
+            raise ValueError(f"Run lacks an exact model digest: {run_path}")
+        model_digests.add(digest)
+        validated.append(
+            {
+                "clip_id": clip_id,
+                "frame_count": frame_count,
+                "run_path": run_path,
+                "metadata_path": run_path / "metadata.txt",
+                "response_path": response_path,
+                "recognition": recognition,
+                "reference_path": reference_path,
+                "reference": reference,
+                "frames": checked_frames,
+                "metadata": metadata,
+            }
+        )
+    if len(model_digests) != 1:
+        raise ValueError(f"Pilot runs use inconsistent model digests: {sorted(model_digests)}")
+
+    seed = int(config["seed"])
+    randomized = sorted(
+        validated,
+        key=lambda item: hashlib.sha256(
+            (
+                f"{seed}:pilot-grading-v1:{item['clip_id']}:{item['frame_count']}:"
+                f"{item['run_path'].name}"
+            ).encode()
+        ).hexdigest(),
+    )
+
+    destination.mkdir(parents=True)
+    private_mapping_path.parent.mkdir(parents=True, exist_ok=True)
+    mapping_entries: list[dict[str, Any]] = []
+    for position, item in enumerate(randomized, 1):
+        blind_id = f"PILOT-{position:03d}"
+        blind_root = destination / blind_id
+        frames_root = blind_root / "frames"
+        frames_root.mkdir(parents=True)
+
+        blind_frame_hashes: dict[str, str] = {}
+        source_frame_hashes: dict[str, str] = {}
+        for order, (source_frame, frame_hash) in enumerate(item["frames"], 1):
+            blind_frame = frames_root / f"frame_{order:03d}{source_frame.suffix.lower()}"
+            shutil.copy2(source_frame, blind_frame)
+            copied_hash = sha256_file(blind_frame)
+            if copied_hash != frame_hash:
+                raise ValueError(f"Copied frame hash mismatch: {blind_frame}")
+            source_frame_hashes[source_frame.relative_to(project_root).as_posix()] = frame_hash
+            blind_frame_hashes[blind_frame.relative_to(destination).as_posix()] = copied_hash
+
+        full_response = blind_root / "full_response.txt"
+        shutil.copy2(item["response_path"], full_response)
+        if sha256_file(full_response) != sha256_file(item["response_path"]):
+            raise ValueError(f"Copied response hash mismatch: {full_response}")
+        write_text_exclusive(blind_root / "recognition.txt", item["recognition"])
+
+        visual = item["reference"].visual_reference
+        sampling_visibility = item["reference"].sampling_visibility[
+            f"F{item['frame_count']}"
+        ]
+        reference_lines = [
+            "HUMAN VISUAL REFERENCE",
+            "",
+            "Chronological visible description:",
+            *(f"- {line}" for line in visual.chronological_visible_description),
+            "",
+            f"Possession: {visual.possession_by_visible_appearance}",
+            f"Tactical phase: {visual.tactical_phase}",
+            f"Main visible event: {visual.main_visible_event}",
+            f"Outcome: {visual.outcome}",
+            "",
+            f"Critical event visible in this sample: {sampling_visibility.event_visible}",
+            f"Sample-specific visibility note: {sampling_visibility.notes}",
+            "",
+            "Visibility limitations:",
+            *(f"- {line}" for line in visual.visibility_limitations),
+            "",
+        ]
+        write_text_exclusive(blind_root / "human_visual_reference.txt", "\n".join(reference_lines))
+        initialize_text_from_template(
+            score_template,
+            blind_root / "score.txt",
+            {"BLIND_RUN_ID": blind_id, "DATASET_B_CLIP_ID": item["clip_id"]},
+        )
+
+        mapping_entries.append(
+            {
+                "blind_run_id": blind_id,
+                "dataset_b_clip_id": item["clip_id"],
+                "frame_count": item["frame_count"],
+                "condition": item["metadata"]["condition"],
+                "model": item["metadata"]["model"],
+                "model_digest": item["metadata"]["model_digest"],
+                "source_run": item["run_path"].relative_to(project_root).as_posix(),
+                "source_metadata_sha256": sha256_file(item["metadata_path"]),
+                "source_response_sha256": sha256_file(item["response_path"]),
+                "blind_response_sha256": sha256_file(full_response),
+                "source_reference_sha256": sha256_file(item["reference_path"]),
+                "source_frame_sha256": source_frame_hashes,
+                "blind_frame_sha256": blind_frame_hashes,
+            }
+        )
+
+    instructions = """PILOT GRADING INSTRUCTIONS
+
+Grade folders in PILOT-001 to PILOT-032 order. Do not open the private mapping.
+
+For each folder:
+1. Inspect human_visual_reference.txt and the images in frames.
+2. Open recognition.txt only. Fill all RECOGNITION scores and Critical event missed
+   in score.txt before opening full_response.txt.
+3. Set Recognition scored before case or condition reveal to yes.
+4. Open full_response.txt and finish COACHING, FAILURE MODES, and UNCERTAINTY.
+5. Because this pilot is frames-only, enter N/A for Analogy relevance, Blind copying,
+   and Unsupported transfer, and explain that B0 supplied no Dataset A material.
+6. Validate the completed score with football-coach validate-score before continuing.
+
+Use config/scoring_rubric.txt. Never edit recognition.txt or full_response.txt.
+There is no combined overall mark. The randomized order reduces ordering bias, but
+frame count cannot be concealed because the number of supplied images is visible.
+"""
+    write_text_exclusive(destination / "GRADING_INSTRUCTIONS.txt", instructions)
+
+    mapping = {
+        "mapping_version": "pilot-grading-v1",
+        "warning": "Do not inspect this mapping until all 32 score forms are complete.",
+        "created_at_utc": timestamp_utc(),
+        "cohort_id": cohort["cohort_id"],
+        "cohort_sha256": sha256_file(cohort_path),
+        "randomization_method": "ascending SHA-256 of seed, purpose, clip, frame count, run ID",
+        "randomization_seed": seed,
+        "rubric_version": config["scoring"]["rubric_version"],
+        "rubric_sha256": sha256_file(rubric_path),
+        "score_template_sha256": sha256_file(score_template),
+        "accepted_pilot_config_sha256": sorted(accepted_config_hashes),
+        "entries": mapping_entries,
+    }
+    write_json_exclusive(private_mapping_path, mapping)
+    return {
+        "item_count": len(mapping_entries),
+        "frame_count": sum(item["frame_count"] for item in randomized),
+        "package_sha256": sha256_path(destination),
+        "mapping_sha256": sha256_file(private_mapping_path),
+    }
 
 
 def validate_sampling_candidate(config: dict[str, Any], project_root: Path) -> dict[str, Any]:

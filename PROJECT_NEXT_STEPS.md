@@ -50,10 +50,17 @@ Already completed:
 - a successful one-image Qwen3.5 27B vision diagnostic in CPU-only mode;
 - the active context window increased from 4,096 to 32,768 tokens;
 - the Ollama client timeout increased from 900 to 7,200 seconds for slow CPU inference;
-- a successful F60 technical capacity run for B-TRAIN-0025; and
-- 21 locally available, complete, valid B0 sampling-pilot cells: all four counts for B-TRAIN-0025, B-TRAIN-0054, B-TRAIN-0046, B-TRAIN-0051, and B-TRAIN-0006, plus F10 for B-TRAIN-0011.
+- a successful F60 technical capacity run for B-TRAIN-0025;
+- all 32 complete, valid B0 sampling-pilot cells; and
+- a verified randomized grading package containing 32 blind folders and 960
+  hash-checked frame copies.
 
-Current state is `draft_train_only`. Of the 32 B0 sampling-pilot cells, 21 are complete and valid in the local repository and 11 remain locally. A remote run may have completed additional cells, but those must be recovered and verified before the missing cells are rerun. The pilot uses sequential CPU inference because shared GPU memory was insufficient for the 27B vision runner. The active settings are Qwen3.5 27B, `num_gpu=0`, `num_ctx=32768`, maximum edge 672, and a 7,200-second client timeout.
+Current state is `draft_train_only`. All 32 B0 sampling-pilot cells are complete
+and valid in the local repository. The pilot used sequential CPU inference because
+shared GPU memory was insufficient for the 27B vision runner. The fixed settings
+were Qwen3.5 27B, `num_gpu=0`, `num_ctx=32768`, maximum edge 672, and a
+7,200-second client timeout. The next action is human grading, not more pilot
+inference.
 
 Earlier failures have been preserved rather than treated as experimental results:
 
@@ -256,7 +263,8 @@ When the GPU becomes genuinely available, GPU inference should be much faster. H
 
 ## 5. Run the sampling pilot
 
-The pilot matrix contains 8 training clips multiplied by 4 frame counts, for 32 cells. The local repository currently contains 21 complete, valid cells and has 11 remaining.
+The pilot matrix contains 8 training clips multiplied by 4 frame counts, for 32
+cells. All 32 are complete and valid in the local repository.
 
 First preview what the resumable runner will do:
 
@@ -267,38 +275,14 @@ $env:OLLAMA_TIMEOUT_SECONDS = "7200"
 powershell.exe -ExecutionPolicy Bypass -File .\scripts\run_sampling_pilot_cpu.ps1 -DryRun
 ```
 
-Check that it skips these completed cells:
-
-```text
-B-TRAIN-0025 F10, F20, F30, F60
-B-TRAIN-0054 F10, F20, F30, F60
-B-TRAIN-0046 F10, F20, F30, F60
-B-TRAIN-0051 F10, F20, F30, F60
-B-TRAIN-0006 F10, F20, F30, F60
-B-TRAIN-0011 F10
-```
-
-The remaining local cells are B-TRAIN-0011 F20/F30/F60 and all four counts for B-TRAIN-0040 and B-TRAIN-0024. If the remote runner was previously started, inspect and recover its outputs before starting the sequential runner again.
-
-```powershell
-powershell.exe -ExecutionPolicy Bypass -File .\scripts\run_sampling_pilot_cpu.ps1
-```
-
-Keep the tunnel open and prevent the Windows computer from sleeping. The script runs one cell at a time, skips already completed valid cells that match the current or explicitly documented compatible pilot config hash, and stops at the first failed cell. It does not run cells in parallel.
-
-If a cell fails, preserve it and inspect the cause before restarting the script. Once the cause is resolved, rerunning the same script will skip valid completed cells and continue from the remaining work.
-
-Do not change the prompt, frame counts, resolution, model tag, context, or generation settings during the matrix.
-
-After the runner finishes, repeat the dry run. The required completion check is:
+The dry run must report:
 
 ```text
 Completed cells to skip: 32
 Pending cells to run: 0
 ```
 
-If any cells remain pending, stop and inspect the latest preserved run before
-retrying. Do not hide or delete failures.
+This completion check has passed. Do not rerun the pilot cells.
 
 ---
 
@@ -350,6 +334,11 @@ Compare each answer with its blind human reference. Record:
 - F60 capacity result.
 
 Select the smallest count that reliably preserves needed temporal events without unacceptable failures or cost. Do not select based on answer length.
+
+The randomized package has already been created at
+`data/video_b/review/pilot_grading_v1`. Its revealing mapping is stored separately
+at `data/video_b/private/pilot_grading_mapping_v1.json`. Do not open that mapping
+until all 32 score forms have been completed and validated.
 
 B-TRAIN-0040 is an important test: lower human-review counts suggested a save, while F60 revealed a goal.
 
@@ -483,9 +472,11 @@ and explain that B0 supplied no Dataset A material. For B1 to B5, those three
 fields require numeric scores. Every other scoring dimension requires a numeric
 score and a written reason.
 
-### Blocker to correct first
-
-The repo creates score forms but does not create a randomized mapping from run folders to blind IDs. Because you are also the scorer, establish this process before main validation. Do not claim blinding unless it actually occurred.
+For the sampling pilot, `prepare-pilot-grading` has already created the forms,
+recognition-only views, full responses, human visual references, and generic frame
+copies in randomized `PILOT-001` to `PILOT-032` folders. Follow
+`GRADING_INSTRUCTIONS.txt` inside that package. Do not rerun the preparation
+command because it intentionally refuses to overwrite the grading package.
 
 Report each dimension separately; do not hide hallucination or copying in one total.
 
@@ -527,12 +518,13 @@ Do not claim the model independently understood the video better.
 
 ## Your next action only
 
-1. Restore SSH access to the remote workstation.
-2. Inspect the `fyp-pilot` tmux session without starting another pilot process.
-3. Recover and verify any additional remote outputs before rerunning missing cells.
-4. Run the resumable script with `-DryRun`; the current local baseline is 21 complete and 11 pending.
-5. Run only genuinely pending cells and do not run `ollama stop` during a request.
-6. Once all 32 cells are present, randomize them behind blind run IDs before formal scoring.
-7. Review all 32 pilot outputs against the human references before choosing F10, F20, F30, or F60.
+1. Open `data/video_b/review/pilot_grading_v1/GRADING_INSTRUCTIONS.txt`.
+2. Grade `PILOT-001` first: inspect its human visual reference and frames, then
+   score `recognition.txt` before opening `full_response.txt`.
+3. Complete that folder's `score.txt` using `config/scoring_rubric.txt`.
+4. Validate the score with `uv run football-coach validate-score PATH_TO_SCORE`.
+5. Continue in blind-ID order through `PILOT-032`.
+6. Only after all 32 forms validate, reveal the private mapping and compare frame
+   counts before documenting the sampling decision.
 
 Do not run B1 to B5 yet.
