@@ -1,6 +1,6 @@
 {
   "protocol_id": "retrieval-assisted-football-v0.3.0",
-  "status": "draft_train_only",
+  "status": "sampling_validation",
   "seed": 20260903,
   "dataset_a": {
     "pilot_target": 25,
@@ -40,8 +40,8 @@
       "66edb1be675192bdf4a2ba1a6c5fbaa0781f7959fc394c2c67e61fe75e19af6b"
     ],
     "compatible_pilot_config_note": "This preserved hash identifies the same Qwen3.5 27B CPU sampling settings before the scoring files were migrated from JSON to TXT. It may be used only to resume the B0 train sampling pilot.",
-    "selected_frame_count": null,
-    "selection_status": "pending_train_pilot_and_validation_confirmation",
+    "selected_frame_count": 30,
+    "selection_status": "candidate_for_validation",
     "capacity_gate": {
       "frame_count": 60,
       "ollama_num_ctx": 32768,
