@@ -156,10 +156,10 @@ Changing the status string alone cannot unlock validation/test commands.
    successful runs, answer-format omissions, capacity failures, crashes, model
    digest, frame indices/hashes, and timing.
 4. Run `football-coach prepare-pilot-grading` once to verify all 32 cells and
-   create the randomized private grading package. Score its folders in blind-ID
-   order before selecting a frame count.
-5. Copy `templates/sampling_decision.template.json` with
-   `init-sampling-decision`; document the train decision and real F60 result.
+   create the randomized private grading package. The 32 forms have now been
+   scored, validated, unblinded, and analysed by frame count.
+5. Run `init-sampling-decision`; record F30 as the validation candidate, the
+   dimension-by-dimension pilot findings, and the real F60 capacity result.
 6. Change status to `sampling_validation`, run only the fixed validation cohort,
    complete the decision, then create the sampling freeze with `freeze-sampling`.
 7. Change status to `frozen_validation`. Build the pixel-only Dataset A index
@@ -217,8 +217,12 @@ overall mark.
 
 The repository remains in `draft_train_only`. All eight train-pilot human
 references are finalized, all 32 B0 pilot cells are complete and valid, and a
-verified 32-item private grading package has been created. No frame count has
-been selected, no validation or test condition has been run, and no formal score
-is claimed yet. The next action is to score the package in blind-ID order. Failed
-capacity, retrieval, and model runs remain historical infrastructure evidence and
-are not model-quality scores.
+verified 32-item private grading package has been scored and validated in full.
+The results have been unblinded and aggregated without a combined overall mark.
+F30 is the train-pilot candidate for validation because it produced the strongest
+descriptive recognition and hallucination profile while avoiding F60's much
+higher runtime. F30 is not frozen or final until the four-clip validation check
+is completed. No validation or test condition has been run. The next action is
+to create and complete the private sampling-decision form. Failed capacity,
+retrieval, and model runs remain historical infrastructure evidence and are not
+model-quality scores.

@@ -53,14 +53,18 @@ Already completed:
 - a successful F60 technical capacity run for B-TRAIN-0025;
 - all 32 complete, valid B0 sampling-pilot cells; and
 - a verified randomized grading package containing 32 blind folders and 960
-  hash-checked frame copies.
+  hash-checked frame copies;
+- all 32 human score forms completed and validated;
+- the mapping revealed only after grading was complete; and
+- dimension-by-dimension results aggregated for F10, F20, F30, and F60.
 
 Current state is `draft_train_only`. All 32 B0 sampling-pilot cells are complete
 and valid in the local repository. The pilot used sequential CPU inference because
 shared GPU memory was insufficient for the 27B vision runner. The fixed settings
 were Qwen3.5 27B, `num_gpu=0`, `num_ctx=32768`, maximum edge 672, and a
-7,200-second client timeout. The next action is human grading, not more pilot
-inference.
+7,200-second client timeout. F30 is now the candidate for validation, not a final
+frozen choice. The next action is to document the sampling decision before any
+validation inference.
 
 Earlier failures have been preserved rather than treated as experimental results:
 
@@ -325,7 +329,26 @@ F60 was chosen as the pilot's practical upper bound, not as a claim that 60 is u
 
 F100 should be considered only if the completed pilot shows that F60 still misses meaningful events across several clips. The current evidence does not justify that expansion.
 
-Compare each answer with its blind human reference. Record:
+All 32 answers were compared with their blind human references and validated.
+The private result report is
+`data/video_b/review/pilot_grading_v1/pilot_results.txt`.
+
+The main unblinded results are:
+
+| Measure | F10 | F20 | F30 | F60 |
+|---|---:|---:|---:|---:|
+| Critical events missed | 8/8 | 7/8 | 7/8 | 8/8 |
+| Mean main-event score, max 2 | 0.125 | 0.125 | 0.250 | 0.125 |
+| Mean outcome score, max 2 | 0.125 | 0.250 | 0.250 | 0.000 |
+| Mean hallucination severity, lower is better | 2.750 | 2.750 | 2.625 | 2.875 |
+| Mean runtime in minutes | 10.28 | 16.42 | 28.07 | 55.52 |
+
+Visible-evidence scores were zero at every count. Coaching advice was generally
+plausible but generic and was not supported by correct recognition. The model
+therefore performed poorly at all frame counts, and these findings cannot support
+a claim of reliable independent football-video understanding.
+
+The completed review recorded:
 
 - recognition rubric dimensions;
 - hallucinations and missed events;
@@ -333,12 +356,15 @@ Compare each answer with its blind human reference. Record:
 - elapsed time;
 - F60 capacity result.
 
-Select the smallest count that reliably preserves needed temporal events without unacceptable failures or cost. Do not select based on answer length.
+F30 is the validation candidate. It had the strongest descriptive recognition
+profile and the lowest mean hallucination severity, while F60 approximately
+doubled runtime without improving critical-event recognition. This is a pilot
+decision, not proof of a statistically reliable gain and not the final freeze.
 
-The randomized package has already been created at
+The randomized package was created at
 `data/video_b/review/pilot_grading_v1`. Its revealing mapping is stored separately
-at `data/video_b/private/pilot_grading_mapping_v1.json`. Do not open that mapping
-until all 32 score forms have been completed and validated.
+at `data/video_b/private/pilot_grading_mapping_v1.json`. The mapping was revealed
+only after all 32 score forms passed validation.
 
 B-TRAIN-0040 is an important test: lower human-review counts suggested a save, while F60 revealed a goal.
 
@@ -348,7 +374,10 @@ Create the private decision:
 uv run football-coach init-sampling-decision
 ```
 
-Fill `data/video_b/private/sampling_decision_v0.3.0.json` using real output paths, model tag/digest, F60 evidence, findings, latency, and rationale. Candidate status is `candidate_for_validation`.
+Fill `data/video_b/private/sampling_decision_v0.3.0.json` using F30 as the
+candidate, real output paths, model tag/digest, F60 capacity evidence, the
+dimension-by-dimension findings, latency, and rationale. Candidate status is
+`candidate_for_validation`.
 
 **Stop and ask Codex to check the form before changing config status.**
 
@@ -518,13 +547,13 @@ Do not claim the model independently understood the video better.
 
 ## Your next action only
 
-1. Open `data/video_b/review/pilot_grading_v1/GRADING_INSTRUCTIONS.txt`.
-2. Grade `PILOT-001` first: inspect its human visual reference and frames, then
-   score `recognition.txt` before opening `full_response.txt`.
-3. Complete that folder's `score.txt` using `config/scoring_rubric.txt`.
-4. Validate the score with `uv run football-coach validate-score PATH_TO_SCORE`.
-5. Continue in blind-ID order through `PILOT-032`.
-6. Only after all 32 forms validate, reveal the private mapping and compare frame
-   counts before documenting the sampling decision.
+1. Run `uv run football-coach init-sampling-decision`.
+2. Fill `data/video_b/private/sampling_decision_v0.3.0.json` with F30 as the
+   validation candidate and cite the private pilot-results report.
+3. Record the exact Qwen3.5 27B tag and digest, the F60 capacity evidence, pilot
+   evidence paths, runtimes, findings, limitations, and candidate rationale.
+4. Set the decision status to `candidate_for_validation`.
+5. Ask Codex to validate the completed decision before changing project status
+   or running any validation clip.
 
 Do not run B1 to B5 yet.
