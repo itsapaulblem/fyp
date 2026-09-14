@@ -12,9 +12,9 @@ This review establishes the evidence and research gap behind that question. The 
 
 ### 2.1 Video understanding and frame selection
 
-Video-language models do not necessarily use temporal information simply because they receive multiple frames. S08 shows that strong single-frame performance can reveal static-appearance bias in video-language benchmarks. S11 likewise shows that adding more frames is not automatically beneficial and that selecting useful evidence can be more effective than processing every frame uniformly. Together, these papers justify a controlled frame-count pilot for this project, but they do not identify the best frame count for SoccerNet clips or for Qwen3.5. The final sampling choice must therefore come from the project's training and validation evidence.
+Video-language models do not necessarily use temporal information simply because they receive multiple frames. S08 shows that strong single-frame performance can reveal static-appearance bias in video-language benchmarks. S11 likewise shows that adding more frames is not automatically beneficial and that selecting useful evidence can be more effective than processing every frame uniformly. Together, these papers justify the controlled frame-count pilot used in this project, but they do not identify the best frame count for SoccerNet clips or for Qwen3.5. The project's sampling choice was therefore determined from its training and validation evidence rather than assumed from the literature.
 
-**One-sentence summary:** Existing research shows that both frame quantity and frame usefulness matter, so this project must determine its frame count experimentally.
+**One-sentence summary:** Existing research shows that both frame quantity and frame usefulness matter, so this project determined its frame count experimentally.
 
 ### 2.2 Retrieved examples and analogous cases
 
@@ -60,9 +60,9 @@ Across paired conditions, Dataset B frames, prompts, output requirements, genera
 
 ## 5. Expected contribution
 
-The expected contribution is an initial controlled account of whether analogous human coaching cases improve football-sequence recognition, coaching advice, both, or neither. It will also show whether an automatic pixel-only retriever approaches human selection and whether irrelevant or incomplete case information causes harm. The contribution is the controlled evidence and transparent evaluation procedure, not a claim that retrieval has already improved the model. Until the experiment is complete, the thesis should say that it investigates or addresses the gap, not that it solves it.
+The contribution is an initial controlled account of whether analogous human coaching cases improve football-sequence recognition, coaching advice, both, or neither. It also examines whether an automatic pixel-only retriever approaches human selection and whether irrelevant or incomplete case information causes harm. The contribution is the controlled evidence and transparent evaluation procedure, not an assumption that retrieval improves the model. Experimental findings are reported separately from this source review and must not be overstated as solving the research gap.
 
-**One-sentence summary:** The contribution will be controlled evidence about whether analogous cases help, which selection approach works, and what failure modes occur.
+**One-sentence summary:** The contribution is controlled evidence about whether analogous cases help, which selection approach works, and what failure modes occur.
 
 ## 6. Thematic source register
 

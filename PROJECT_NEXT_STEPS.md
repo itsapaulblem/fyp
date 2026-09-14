@@ -60,11 +60,17 @@ Already completed:
 - four B0 F30 validation responses completed and scored;
 - F30 frozen as the best tested operational trade-off, despite poor accuracy;
 - the pixel-only CLIP index built and verified for all 25 Dataset A cases;
-- four valid B3 human-selected pairing forms completed; and
-- one randomized B0/B3/B4 smoke comparison on B-VALID-0049 completed, graded,
-  validated, and unblinded.
+- four valid B3 human-selected pairing forms completed;
+- all 20 evaluable validation cells completed for B0, B1, B3, B4, and B5
+  across the four fixed validation clips;
+- B2 recorded as not evaluable for these clips, without substitute cases;
+- every comparison package graded before its private mapping was revealed;
+- all 21 validation-related score forms validated, including the additional
+  B-VALID-0049 B0 grading record; and
+- a verified private post-unblinding master index and final validation report.
 
-Current state is `frozen_validation`. The fixed settings are Qwen3.5 27B,
+Current repository state remains `frozen_validation`, but validation execution,
+grading, unblinding, and descriptive analysis are complete. The fixed settings are Qwen3.5 27B,
 `num_gpu=0`, `num_ctx=32768`, F30 uniform endpoint sampling, maximum edge 672,
 and a 7,200-second client timeout. F30 is frozen because it was the best tested
 balance of descriptive recognition, hallucination severity, runtime, and room
@@ -79,8 +85,10 @@ Earlier failures have been preserved rather than treated as experimental results
 
 These are diagnosed infrastructure or capacity failures. They must not be included as model-quality scores. The completed CPU runs are pilot and validation evidence, not test results.
 
-Do **not** access the test split. B1–B5 may now run only under the frozen
-validation protocol.
+Do **not** rerun accepted validation cells or access the test split. The next
+decision belongs to supervisor review: stop with the negative/inconclusive
+validation finding, define a separate train/validation diagnostic, or authorize
+one final frozen test protocol.
 
 ## Experimental design
 
@@ -164,7 +172,7 @@ Recognition is scored before coaching because plausible coaching language could 
 
 **Interpretation:** B4 outperforming B5 suggests the full case adds value beyond advice. Similar results suggest advice text may drive much of the effect. B5 below B0 suggests decontextualised advice may distract.
 
-### Planned comparisons
+### Analysis comparisons
 
 | Comparison | Meaning |
 |---|---|
@@ -267,7 +275,11 @@ Do not run `ollama stop qwen3.5:27b` while a pilot cell is running. It can termi
 
 ### Step 4.4 - Later GPU use
 
-When the GPU becomes genuinely available, GPU inference should be much faster. However, do not mix CPU and GPU outputs within the accepted pilot without recording and checking the backend change. The safest approach is to finish this sampling pilot with the current fixed CPU settings, then decide whether later validation conditions will use one consistently available backend.
+All accepted pilot and validation inference was completed with the fixed CPU-only
+settings. A later GPU run would be a backend change and must not be mixed into
+these accepted results as though it were directly interchangeable. If GPU
+inference is approved for a new diagnostic or final protocol, record and freeze
+that change before running it.
 
 ---
 
@@ -333,7 +345,9 @@ F60 was chosen as the pilot's practical upper bound, not as a claim that 60 is u
 4. F100 would add many visually similar frames, substantially increase CPU runtime, and might add confusion without adding meaningful temporal evidence.
 5. Adding F100 now would require preparing and human-reviewing another frame level and changing the planned pilot matrix.
 
-F100 should be considered only if the completed pilot shows that F60 still misses meaningful events across several clips. The current evidence does not justify that expansion.
+F100 was not added because the completed pilot did not justify that expansion.
+Any later higher-rate diagnostic must be declared as a separate protocol rather
+than appended retroactively to this pilot.
 
 All 32 answers were compared with their blind human references and validated.
 The private result report is
@@ -396,7 +410,8 @@ B-VALID-0038
 B-VALID-0003
 ```
 
-After candidate evidence is valid, status changes to `sampling_validation`. Intended B0 commands:
+At this completed stage, the status changed to `sampling_validation`. The B0
+command forms used were:
 
 ```powershell
 uv run football-coach run-pair B-VALID-0049 --condition B0_frames_only --model qwen3.5:27b
@@ -457,16 +472,21 @@ private form, and validated before the corresponding B3 run. The selections
 were not based on hidden labels, model answers, or B4 results.
 
 The private forms retain rationale, transferable principles, important
-differences, reviewer/time, approval, and leakage checks. Do not reveal the
-remaining pair identities while grading future comparisons.
+differences, reviewer/time, approval, and leakage checks. Their identities were
+revealed only after the corresponding comparison scores were completed.
 
 ---
 
-## 10. Run B0–B5 validation
+## 10. Completed B0–B5 validation
 
-Start only after the sampling freeze, sample size, two core comparisons, model plan, index, B3 pairs, and blinding plan are fixed.
+Validation execution is complete. Each of the four fixed clips has accepted B0,
+B1, B3, B4, and B5 runs, giving 20 evaluable condition-by-clip responses. B2 was
+not evaluable for these clips under the frozen mapping and was excluded rather
+than replaced. The final three-clip remote batch completed 12/12 pending cells
+with zero failures.
 
-For one clip:
+The command forms below are retained only as reproducibility documentation. Do
+not rerun accepted cells:
 
 ```powershell
 uv run football-coach run-pair CLIP_ID --condition B0_frames_only --model MODEL_TAG
@@ -488,30 +508,53 @@ Rules:
 
 Replace all uppercase placeholders with real frozen values.
 
-### Completed one-clip smoke comparison
+### Completed four-clip validation result
 
-For B-VALID-0049, B0, B3, and B4 completed with valid output format and were
-placed into a randomized comparison package. Grading was completed before the
-private mapping was revealed. The revealed conditions were:
+All packages were graded before their private mappings were opened. The
+post-unblinding master index is:
 
-- `COMPARE-001`: B3 human-selected case, A-0021;
-- `COMPARE-002`: B0 frames only; and
-- `COMPARE-003`: B4 automatic CLIP neighbour, A-0010, cosine similarity about
-  0.9066.
+`data/video_b/private/frozen_validation_post_unblinding_v1/MASTER_INDEX.txt`
 
-All three responses scored zero on every recognition dimension, had
-hallucination severity 3, missed the critical goal, and had uncertainty score
-zero. B3 analogy relevance was 2 and B4 relevance was 1. Both case-assisted
-responses scored 1 for advice quality but zero for problem identification,
-practice representativeness, and coaching evidence support. Therefore neither
-B3 nor B4 improved recognition, and the small generic-advice score is not an
-evidence-supported coaching improvement. There was no direct copying, but both
-case-assisted responses showed severe unsupported transfer. This is evidence
-that the workflow operates on one clip, not a general effectiveness result.
+The full tables and written findings are:
+
+`data/video_b/private/frozen_validation_post_unblinding_v1/VALIDATION_COMPARISON_REPORT.txt`
+
+Condition means across four clips were:
+
+| Condition | Temporal | Main event | Outcome | Advice quality | Hallucination severity | Critical misses |
+|---|---:|---:|---:|---:|---:|---:|
+| B0 | 0.00 | 0.00 | 0.00 | 0.00 | 3.00 | 4/4 |
+| B1 | 0.00 | 0.25 | 0.25 | 0.25 | 2.50 | 4/4 |
+| B3 | 0.25 | 0.25 | 0.50 | 0.50 | 2.75 | 4/4 |
+| B4 | 0.25 | 0.25 | 0.50 | 0.50 | 2.75 | 4/4 |
+| B5 | 0.00 | 0.00 | 0.00 | 0.00 | 3.00 | 4/4 |
+
+Lower hallucination severity is better; higher values are better for the other
+scored dimensions. These columns are not combined into one overall mark.
+
+B3 and B4 produced identical aggregate recognition and coaching scores. Their
+small gains over B0 were concentrated mainly in B-VALID-0038, while B1 also
+improved on that clip. Human-selected B3 cases had mean analogy relevance 1.00,
+compared with 0.50 for B4, but the relevance difference did not produce better
+downstream scores. B5 advice-only did not improve over B0. Every condition
+missed the critical event in all four clips, and temporal hallucination occurred
+for every condition on every clip.
+
+The validation evidence therefore does not establish a reliable benefit from
+case assistance. It supports a negative or inconclusive validation finding, not
+a claim that retrieval improved independent video understanding.
 
 One completed reviewer note used the phrase `B5-type response` for the B3 item.
 The private mapping proves the run was B3. Preserve the original score form and
 treat that phrase only as a wording slip in the note, not as a condition change.
+
+The post-unblinding consistency check also found that 14 case-assisted forms
+still contained B0-only `N/A` placeholders for analogy relevance, blind
+copying, and unsupported transfer. Those dimensions are intentionally assessed
+after case reveal. The reviewer completed only those missing case-dependent
+judgements and reasons; recognition and all previously completed scores were
+left unchanged. All 21 validation-related forms then passed both normal
+validation and the mapping-aware consistency check.
 
 ---
 
@@ -520,6 +563,10 @@ treat that phrase only as a wording slip in the note, not as a condition change.
 Rubric: `config/scoring_rubric.txt` (the single authoritative rubric, version 1.0).
 
 Score in order: recognition, retrieval relevance, coaching, failure modes, uncertainty.
+
+This step is complete for the sampling pilot and frozen validation evidence. The
+commands below are retained for reproducibility or a separately approved future
+protocol:
 
 ```powershell
 uv run football-coach init-score BLIND_RUN_ID CLIP_ID data/video_b/review/scores/BLIND_RUN_ID.txt
@@ -539,7 +586,8 @@ copies in randomized `PILOT-001` to `PILOT-032` folders. Follow
 `GRADING_INSTRUCTIONS.txt` inside that package. Do not rerun the preparation
 command because it intentionally refuses to overwrite the grading package.
 
-For later same-clip comparisons, use the reusable blinded packager:
+For any separately approved future same-clip comparison, use the reusable
+blinded packager:
 
 ```powershell
 uv run football-coach prepare-comparison-grading PACKAGE_ID CLIP_ID RUN_PATH_1 RUN_PATH_2 RUN_PATH_3
@@ -556,7 +604,10 @@ Report each dimension separately; do not hide hallucination or copying in one to
 
 ## 12. Select and freeze the final protocol
 
-Use validation only to choose the model, analysis, clip plan, outcomes, B2 handling, and limitations. Preserve both B3–B0 and B4–B0 as the core comparisons.
+The validation report is complete, but a final test protocol is not yet
+authorized. Review the negative/inconclusive result with the supervisor before
+creating or completing this decision. Preserve both B3–B0 and B4–B0 as the core
+comparisons if a test run is approved.
 
 ```powershell
 uv run football-coach init-protocol-decision
@@ -570,13 +621,18 @@ After review:
 uv run football-coach freeze-protocol
 ```
 
-Only after success may status become `frozen_test`.
+Only after a real supervisor-informed decision and successful freeze may status
+become `frozen_test`. Do not use the command merely to advance the project
+despite poor validation.
 
 ---
 
 ## 13. Run test once and conclude
 
-Use the Step 10 command patterns with only frozen test IDs/settings. A preserved crash counts as that cell's attempt. Do not change prompts, frames, encoder, `k`, Dataset A, rubric, or model after viewing test answers.
+This step is conditional and has not started. If it is explicitly authorized,
+use the Step 10 command patterns with only frozen test IDs/settings. A preserved
+crash counts as that cell's attempt. Do not change prompts, frames, encoder,
+`k`, Dataset A, rubric, or model after viewing test answers.
 
 Compare paired scores for both core tests: B3–B0 and B4–B0. Then compare B3–B4 to see whether automatic case selection performs as well as selection by a person. Analyse B1, B2, and B5 as supporting controls and diagnostics.
 
@@ -590,21 +646,17 @@ Do not claim the model independently understood the video better.
 
 ## Your next action only
 
-1. Run B1 random-case and B5 advice-only for B-VALID-0049. B5 must use the same
-   automatic A case already selected by B4.
-2. Put only those two new runs into a randomized smoke package with
-   `prepare-comparison-grading`, then complete and validate their scores before
-   revealing their mapping.
-3. Do not repackage the already revealed B0/B3/B4 answers as though they were
-   newly blinded. Report all five B-VALID-0049 conditions as smoke evidence.
-4. If that end-to-end control workflow passes, run the frozen conditions on
-   B-VALID-0033, B-VALID-0038, and B-VALID-0003. Create comparison packages and
-   keep each new mapping hidden until its scores validate.
-5. Treat B2 separately. Run it only for clips whose hidden action has an explicit
-   predeclared mapping; report unsupported clips as not evaluable without
-   substitution.
-6. Aggregate results dimension by dimension, decide the final validation
-   protocol, and freeze it before any test access.
+1. Read the private validation report and prepare its short supervisor summary.
+2. Show that B3 and B4 had only small, clip-specific descriptive gains, B1 also
+   improved on the same clip, and every condition missed all four critical
+   events.
+3. Ask the supervisor to choose among:
+   - stopping the current protocol at validation and reporting the
+     negative/inconclusive finding;
+   - approving a separate train/validation diagnostic using simple observable
+     pass or kick counts and a newly declared sampling-rate protocol; or
+   - authorizing a final protocol freeze and one untouched test run.
+4. Record the decision before changing configuration or running new inference.
 
-Do not rerun completed B0/B3/B4 cells, do not alter completed score forms, and
-do not access the test split.
+Do not rerun completed validation cells, do not silently alter completed score
+forms, and do not access the test split without the explicit decision and freeze.

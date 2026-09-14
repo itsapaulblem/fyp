@@ -165,11 +165,15 @@ Changing the status string alone cannot unlock validation/test commands.
 6. In `frozen_validation`, build and verify the pixel-only Dataset A index with
    `build-a-index`; B4 and B5 automatically use its rank-1 cosine neighbour.
 7. Document B3 human-selected pairings without hidden labels or B4 results.
-8. Run B0–B5 with identical frozen B frames and generation settings. Use
-   `prepare-comparison-grading` to randomize comparable runs, then score
-   recognition first and case-dependent fields only after recognition is locked.
-9. Record the final validation choice in `init-protocol-decision`, run
-   `freeze-protocol`, then and only then change status to `frozen_test`.
+8. Run B0–B5 with identical frozen B frames and generation settings. This
+   validation stage is complete for every evaluable condition: B0, B1, B3, B4,
+   and B5 on four fixed clips. B2 was not evaluable for these clips. Comparable
+   runs were randomized, recognition was scored before condition reveal, and
+   all post-reveal case-dependent fields were checked against the private maps.
+9. Review the completed validation report with the supervisor. Only if an
+   untouched test run is explicitly justified should the final decision be
+   recorded with `init-protocol-decision`, frozen with `freeze-protocol`, and
+   the project status changed to `frozen_test`.
 
 Each frozen test clip/condition/model cell receives one private attempt marker
 immediately before inference. A preserved crash counts as that cell's attempt;
@@ -220,29 +224,36 @@ uv run football-coach validate-score data/video_b/review/scores/BLIND_RUN_ID.txt
 ```
 
 Fill the form between these commands. Score recognition before revealing the
-case or condition. Missing values, invalid `N/A` use, and out-of-range scores
-are rejected. Report dimensions separately and do not combine them into one
-overall mark.
+case or condition. Missing values and out-of-range scores are rejected. Because
+the blinded validator cannot know the hidden condition, perform a mapping-aware
+check after unblinding to confirm that `N/A` was used only for B0 case-dependent
+fields. Report dimensions separately and do not combine them into one overall
+mark.
 
 ## Current boundary
 
-The repository is in `frozen_validation`. All 32 B0 train-pilot cells and the
-four fixed B0 F30 validation cells are complete, valid, and human-scored. F30
-was frozen as the best tested operational trade-off, not because frames-only
-performance was accurate: all four validation responses missed the critical
-event. The frozen pixel-only CLIP index contains all 25 approved Dataset A cases
-as normalized 512-dimensional vectors; its SHA-256 is
-`933b1a773ec82943f8673409443db1192d7954326e7fdaf28b2bfbbd823d6e1a`.
+The repository remains in `frozen_validation`, but validation execution and
+human grading are complete. All 32 B0 train-pilot cells and all 20 evaluable
+validation cells are complete. The validation matrix contains B0, B1, B3, B4,
+and B5 on four fixed clips; B2 was excluded as not evaluable rather than given a
+substitute case. All score forms validate, the private maps were revealed only
+after grading, and the final post-unblinding consistency checks passed.
 
-Four B3 human-selected pairing forms are complete. A first randomized,
-human-scored B0/B3/B4 comparison on B-VALID-0049 confirmed that both retrieval
-pipelines execute, but neither B3 nor B4 improved recognition over B0 on this
-clip. B3's case was judged more analogous than B4's automatic neighbour, while
-both case-assisted answers received only a small generic-advice score and no
-evidence-supported coaching gain. This is a one-clip smoke result, not a general
-conclusion. The next action is to complete and grade the B1 and B5 controls for
-this clip as smoke checks, then continue the remaining validation matrix without
-revealing new comparison mappings before scoring. Because the B0/B3/B4 mapping
-for B-VALID-0049 has already been revealed, repackaging those answers would not
-restore blinding and must not be presented as a new blind comparison. No test
-split inference is authorized.
+F30 remains frozen as the best tested operational trade-off, not because
+frames-only performance was accurate. Every condition missed the critical event
+on all four validation clips. B3 and B4 produced identical mean recognition and
+coaching scores and only small descriptive gains over B0, concentrated mainly in
+one clip. B1 also improved some dimensions on that clip, weakening any claim
+that the gains were caused by analogy relevance. Human-selected B3 cases had
+higher mean judged relevance than B4 cases, but this did not translate into
+better aggregate recognition or coaching. B5 advice-only did not improve over
+B0.
+
+The private report is
+`data/video_b/private/frozen_validation_post_unblinding_v1/VALIDATION_COMPARISON_REPORT.txt`.
+It reports each rubric dimension separately and does not calculate one overall
+mark. The validation evidence does not establish a reliable benefit from case
+assistance. The next action is supervisor review and an explicit decision to
+stop with the negative/inconclusive validation result, run a separately defined
+train/validation diagnostic, or authorize a single frozen test run. No test-split
+inference is currently authorized.
