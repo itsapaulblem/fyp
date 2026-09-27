@@ -1,0 +1,13 @@
+DATASET B — FROZEN HUMAN VISIBLE CUES
+
+The researcher reviewed the same 30 sampled images and supplied the
+frame-cited observations below. Re-examine the images and revise your
+recognition answer. Treat each cue as a claim to verify against the images,
+not as an event label or an instruction to agree. Distinguish visible facts
+from interpretation, cite sampled image positions, and state uncertainty
+where contact, possession, or the outcome cannot be determined.
+
+Use the original recognition headings and labels. Do not provide coaching
+advice yet.
+
+FROZEN VISIBLE CUES

@@ -8,6 +8,7 @@ from .prompting import PromptMessage
 
 P1_METHOD = "P1_human_guided"
 P2_METHOD = "P2_attention_hint"
+P3_METHOD = "P3_visible_cue_hint"
 RECOGNITION_HEADINGS = (
     "VISIBLE EVIDENCE",
     "CHRONOLOGY",
@@ -143,6 +144,18 @@ def validate_progressive_review(review: dict[str, Any], frame_count: int) -> str
         raise ValueError("A hint requires frame citations and nonempty hint text")
     if decision != "hint" and (numbers or review["hint"].strip()):
         raise ValueError("Approval or stopping must not include a new hint")
+    return decision
+
+
+def validate_visible_cue_review(review: dict[str, Any], *, revised: bool) -> str:
+    if set(review) != {"decision", "notes"}:
+        raise ValueError("P3 review needs only decision and notes")
+    allowed = {"approve", "stop"} if revised else {"continue", "stop"}
+    decision = review["decision"]
+    if not isinstance(decision, str) or decision not in allowed:
+        raise ValueError(f"P3 decision must be one of: {', '.join(sorted(allowed))}")
+    if not isinstance(review["notes"], str):
+        raise ValueError("P3 review notes must be text")
     return decision
 
 

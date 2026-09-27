@@ -1,0 +1,18 @@
+{
+  "protocol_id": "evidence-first-football-v0.4.0",
+  "condition": "P3_visible_cue_hint",
+  "revision": "frozen_cues_v1",
+  "status": "draft_train_diagnostic",
+  "starting_point": "fresh_recognition_from_30_frames",
+  "allowed_split": "train",
+  "initial_diagnostic_clip_id": "B-TRAIN-0025",
+  "output_directory": "output/v0.4/prompt_chain/P3_visible_cue_hint",
+  "cue_sheet_path": "output/v0.4/prompt_chain/P3_visible_cue_hint/B-TRAIN-0025_visible_cues.v1.txt",
+  "cue_sheet_sha256": "5e698bc8f2aba86ab6d7377f4010a1472c45b1cd2fd39079d36cfda4bacd1f08",
+  "source_draft_sha256": "f0286ec0177699a4dc11a09fd849d512ce2b93b22207a6bcb1a2b91b7a5a6a48",
+  "cue_prompt_path": "input_prompts/v0.4/p3_visible_cue_revision.txt",
+  "maximum_cue_packets": 1,
+  "human_review_before_and_after_cues": true,
+  "coaching_requires_approved_recognition": true,
+  "cue_policy": "Human-approved sampled-frame observations only; no event names, hidden labels, full event answer, or previous P1/P2 responses"
+}

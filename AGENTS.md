@@ -13,8 +13,8 @@ understanding. The completed development runs are `P1_human_guided` and
 `P2_attention_hint`; neither is an automatic no-feedback chain.
 The v0.4 `prompt_chain` output has four condition folders: `P0_no_feedback`,
 `P1_human_guided` (explicit correction), `P2_attention_hint`, and
-`P3_visible_cue_hint`. P1 and progressive P2 are runnable; P0 and P3 are
-placeholders. P2 `progressive_v1` starts from a fresh recognition call on the
+`P3_visible_cue_hint`. P1, progressive P2, and frozen-cue P3 are runnable;
+P0 is a placeholder. P2 `progressive_v1` starts from a fresh recognition call on the
 same 30 frames, then allows at most three human-authored, frame-cited hint
 turns with review after every answer. It is declared in
 `config/p2_progressive_hints_v0.4.1.json`. It writes directly under
@@ -25,19 +25,24 @@ completed B-TRAIN-0025 P1 run intact and never relabel the historical v0.3 B0
 result as a v0.4 no-feedback run. The B-TRAIN-0025 progressive P2 run was
 stopped after three hints because recognition remained insufficient; no P2
 coaching was requested.
+P3 uses the approved B-TRAIN-0025 cue sheet frozen by SHA-256 in
+`config/p3_visible_cues_v0.4.0.json`. It starts a fresh recognition call,
+pauses for review, sends the one frozen cue packet, and pauses again before
+coaching. Never import P1 or P2 answers into P3 or edit the frozen cues.
+The first B-TRAIN-0025 P3 run was stopped after the cue revision because
+recognition remained insufficient; no P3 coaching was requested.
 
 ## Immediate work
 
 - Follow `PROJECT_NEXT_STEPS.md` for the current execution gate.
-- Review the recognition, revision, and coaching prompts in
-  `input_prompts/v0.4/` and the draft rubric before the first P1 diagnostic.
+- Follow the P3 execution gate in `PROJECT_NEXT_STEPS.md`. Preserve the
+  completed B-TRAIN-0025 P3 run and its stopped outcome.
 - Validate the train-only setup with `football-coach validate-prompt-chain`.
-- The first declared diagnostic clip is `B-TRAIN-0025` with
-  `qwen3.5:27b`. Run `start-prompt-review`, review its initial answer,
-  record an approval or sampled-frame corrections, use
-  `revise-prompt-recognition` if corrections are needed, approve the revision,
-  and only then use `finish-prompt-coaching`. A still-wrong revision must be
-  rejected and closed without a coaching request.
+- Use `start-visible-cue-review B-TRAIN-0025 --model qwen3.5:27b` for a fresh
+  answer. After reviewing it, mark `review_stage_1.json` as `continue` or
+  `stop`. `continue-visible-cue-review` sends the frozen cues once.
+  Review the revision and mark `review_stage_2.json` as `approve` or `stop`;
+  `finish-visible-cue-coaching` sends coaching only after approval.
 - Preserve the original answer, review files, exact feedback, revision, and
   coaching. Permit at most one revision in this draft workflow. Never replace
   a model answer in place or add hidden labels to human feedback.
@@ -51,7 +56,7 @@ coaching was requested.
 
 - Dataset B is immutable SoccerNet GSR v1.3: 57 train, 58 valid, 49 test clips.
   Each clip contains 750 ordered JPEGs at 25 fps (30 seconds).
-- P1 development may use only the declared B-train cohort. Validation is not
+- v0.4 development may use only the declared B-train cohort. Validation is not
   authorized during draft prompt development; test remains sealed.
 - The model receives the 30 selected B images, declared prompts, its earlier
   answers, and the researcher's frame-cited feedback when revision is needed.

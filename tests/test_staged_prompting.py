@@ -14,7 +14,25 @@ from football_coach.staged_prompting import (
     revision_messages,
     validate_progressive_review,
     validate_review,
+    validate_visible_cue_review,
 )
+
+
+def test_visible_cue_review_requires_an_explicit_stage_decision() -> None:
+    with pytest.raises(ValueError, match="P3 decision"):
+        validate_visible_cue_review({"decision": "PENDING", "notes": ""}, revised=False)
+    assert validate_visible_cue_review(
+        {"decision": "continue", "notes": "Checked frames"}, revised=False
+    ) == "continue"
+    assert validate_visible_cue_review(
+        {"decision": "approve", "notes": "Supported"}, revised=True
+    ) == "approve"
+    with pytest.raises(ValueError, match="P3 decision"):
+        validate_visible_cue_review({"decision": "continue", "notes": ""}, revised=True)
+    with pytest.raises(ValueError, match="only decision and notes"):
+        validate_visible_cue_review(
+            {"decision": "stop", "notes": "", "event_label": "Corner"}, revised=True
+        )
 
 
 def test_human_review_uses_only_feedback_and_notes() -> None:
@@ -556,3 +574,143 @@ def test_fresh_progressive_p2_allows_three_hints_then_coaching(
         "recognition_rejected"
     )
     assert len(histories) == 6
+
+
+def test_frozen_visible_cue_p3_is_fresh_and_requires_approval(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    monkeypatch.setattr(cli, "ROOT", tmp_path)
+    frames_dir = tmp_path / "frames"
+    frames_dir.mkdir()
+    frames = []
+    for index in range(1, 31):
+        frame = frames_dir / f"{index:02d}_frame_{index:06d}.jpg"
+        frame.write_bytes(f"frame {index}".encode())
+        frames.append(frame)
+    prompts = tmp_path / "input_prompts/v0.4"
+    prompts.mkdir(parents=True)
+    for name in ("recognition", "revision", "coaching"):
+        (prompts / f"{name}.txt").write_text(name, encoding="utf-8")
+    cue_prompt = prompts / "visible.txt"
+    cue_prompt.write_text("Check these frame-based observations.\nFROZEN VISIBLE CUES\n")
+    cue_path = (
+        tmp_path / "output/v0.4/prompt_chain/P3_visible_cue_hint/B-TRAIN-0025_cues.txt"
+    )
+    cue_path.parent.mkdir(parents=True)
+    cue_path.write_text("Images 1-6: players gather near goal.\n", encoding="utf-8")
+    condition_path = tmp_path / "condition.json"
+    condition_path.write_text(json.dumps({
+        "protocol_id": "evidence-first-football-v0.4.0",
+        "condition": "P3_visible_cue_hint",
+        "revision": "frozen_cues_v1",
+        "status": "draft_train_diagnostic",
+        "starting_point": "fresh_recognition_from_30_frames",
+        "allowed_split": "train",
+        "initial_diagnostic_clip_id": "B-TRAIN-0025",
+        "output_directory": "output/v0.4/prompt_chain/P3_visible_cue_hint",
+        "maximum_cue_packets": 1,
+        "cue_sheet_path": cue_path.relative_to(tmp_path).as_posix(),
+        "cue_sheet_sha256": cli.sha256_file(cue_path),
+        "cue_prompt_path": cue_prompt.relative_to(tmp_path).as_posix(),
+        "human_review_before_and_after_cues": True,
+        "coaching_requires_approved_recognition": True,
+    }), encoding="utf-8")
+    monkeypatch.setattr(cli, "P3_VISIBLE_CONFIG", condition_path)
+    config = {
+        "protocol_id": "evidence-first-football-v0.4.0",
+        "development": {"cohort_path": "cohort.json"},
+        "dataset_b": {"human_reference_directory": "data/video_b/review"},
+        "sampling": {"frame_count": 30, "maximum_edge": 672},
+        "prompts": {"P1_human_guided": {
+            name: f"input_prompts/v0.4/{name}.txt"
+            for name in ("recognition", "revision", "coaching")
+        }},
+        "output_root": "output/v0.4/prompt_chain",
+        "models": ["qwen3.5:27b"],
+        "generation": {"options": {"temperature": 0}, "think": False, "require_gpu": True},
+    }
+    config_path = tmp_path / "config.json"
+    config_path.write_text(json.dumps(config), encoding="utf-8")
+    (tmp_path / "cohort.json").write_text('{"clip_ids":["B-TRAIN-0025"]}')
+    reference = tmp_path / "data/video_b/review/B-TRAIN-0025.json"
+    reference.parent.mkdir(parents=True)
+    reference.write_text("{}")
+    monkeypatch.setattr(
+        cli, "validate_prompt_chain_config", lambda *_: {"clip_ids": ["B-TRAIN-0025"]}
+    )
+    monkeypatch.setattr(
+        cli, "find_b_clip", lambda *_: SimpleNamespace(clip_id="B-TRAIN-0025", split="train")
+    )
+    monkeypatch.setattr(cli, "validate_human_reference", lambda *_: None)
+    monkeypatch.setattr(cli, "sample_dataset_b", lambda *_: frames)
+    monkeypatch.setattr(cli, "load_dotenv", lambda *_: None)
+    answers = iter(["fresh P3 recognition", "cue-revised recognition", "P3 advice",
+                    "fresh stopped recognition"])
+    histories: list[list[Any]] = []
+
+    class FakeOllama:
+        def model_metadata(self, _model: str) -> dict[str, str]:
+            return {"digest": "a" * 64}
+
+        def gpu_status(
+            self, model: str, options: dict[str, Any], *, preload: bool = True
+        ) -> dict[str, Any]:
+            return {"model": model, "digest": "a" * 64, "size_vram_bytes": 10}
+
+        def chat(
+            self, model: str, messages: list[Any], *args: Any, **kwargs: Any
+        ) -> dict[str, Any]:
+            histories.append(messages)
+            return {"message": {"content": next(answers)}}
+
+    monkeypatch.setattr(cli, "OllamaClient", FakeOllama)
+    manifest = tmp_path / "manifest"
+    cli.start_visible_cue_review("B-TRAIN-0025", "qwen3.5:27b", config_path, manifest)
+    root = tmp_path / "output/v0.4/prompt_chain/P3_visible_cue_hint"
+    run_dir = next(root.glob("*/*/*"))
+    assert len(histories[0]) == 1
+    assert len(histories[0][0].images) == 30
+    assert (run_dir / "stage_1_response.txt").read_text() == "fresh P3 recognition"
+    assert (run_dir / "frozen_visible_cues.txt").read_text() == cue_path.read_text()
+    with pytest.raises(Exception, match="P3 decision"):
+        cli.continue_visible_cue_review(run_dir, config_path, manifest)
+    (run_dir / "review_stage_1.json").write_text(
+        json.dumps({"decision": "continue", "notes": "initial answer checked"})
+    )
+    cue_path.write_text("Changed cue text.")
+    with pytest.raises(Exception, match="Invalid or changed frozen P3 cue"):
+        cli.continue_visible_cue_review(run_dir, config_path, manifest)
+    cue_path.write_text("Images 1-6: players gather near goal.\n")
+    cli.continue_visible_cue_review(run_dir, config_path, manifest)
+    assert len(histories[1]) == 3
+    assert histories[1][1].content == "fresh P3 recognition"
+    assert "Images 1-6" in histories[1][2].content
+    assert "P1_human_guided" not in histories[1][2].content
+    assert "P2_attention_hint" not in histories[1][2].content
+    assert (run_dir / "review_stage_2.json").exists()
+    with pytest.raises(Exception, match="P3 decision"):
+        cli.finish_visible_cue_coaching(run_dir, config_path, manifest)
+    response = run_dir / "stage_2_revision_response.txt"
+    response.write_text("altered answer")
+    with pytest.raises(Exception, match="P3 revision provenance changed"):
+        cli.finish_visible_cue_coaching(run_dir, config_path, manifest)
+    response.write_text("cue-revised recognition")
+    (run_dir / "review_stage_2.json").write_text(
+        json.dumps({"decision": "approve", "notes": "supported"})
+    )
+    cli.finish_visible_cue_coaching(run_dir, config_path, manifest)
+    assert (run_dir / "stage_3_coaching_response.txt").read_text() == "P3 advice"
+    assert len(histories[2]) == 5
+    assert cli.read_metadata(run_dir / "metadata.txt")["run_status"] == "complete"
+
+    cli.start_visible_cue_review("B-TRAIN-0025", "qwen3.5:27b", config_path, manifest)
+    stopped_run = sorted(root.glob("*/*/*"))[-1]
+    (stopped_run / "review_stage_1.json").write_text(
+        json.dumps({"decision": "stop", "notes": "recognition insufficient"})
+    )
+    cli.finish_visible_cue_coaching(stopped_run, config_path, manifest)
+    assert cli.read_metadata(stopped_run / "metadata.txt")["run_status"] == (
+        "recognition_rejected"
+    )
+    assert not (stopped_run / "stage_2_revision_response.txt").exists()
+    assert len(histories) == 4

@@ -53,6 +53,7 @@ from .staged_prompting import (
     COACHING_HEADINGS,
     P1_METHOD,
     P2_METHOD,
+    P3_METHOD,
     RECOGNITION_HEADINGS,
     coaching_messages,
     feedback_text,
@@ -65,6 +66,7 @@ from .staged_prompting import (
     revision_messages,
     validate_progressive_review,
     validate_review,
+    validate_visible_cue_review,
     write_json,
     write_metadata,
 )
@@ -79,6 +81,7 @@ DEFAULT_B_INTEGRITY_REPORT = ROOT / "data/video_b/private/integrity_v1.3.json"
 P2_ATTENTION_PROMPT = ROOT / "input_prompts/v0.4/p2_attention_hint.txt"
 P2_ATTENTION_CONFIG = ROOT / "config/p2_attention_hint_v0.4.0.json"
 P2_PROGRESSIVE_CONFIG = ROOT / "config/p2_progressive_hints_v0.4.1.json"
+P3_VISIBLE_CONFIG = ROOT / "config/p3_visible_cues_v0.4.0.json"
 
 
 def pending_progressive_review() -> dict:
@@ -105,6 +108,31 @@ def progressive_condition(config: dict) -> tuple[dict, Path]:
     ):
         raise typer.BadParameter("Invalid progressive P2 condition declaration")
     return condition, prompt_path
+
+
+def visible_cue_condition(config: dict) -> tuple[dict, Path, Path]:
+    condition = load_json(P3_VISIBLE_CONFIG)
+    output_root = (ROOT / config["output_root"] / P3_METHOD).resolve()
+    cue_path = (ROOT / condition.get("cue_sheet_path", "")).resolve()
+    prompt_path = ROOT / condition.get("cue_prompt_path", "")
+    if (
+        condition.get("protocol_id") != config["protocol_id"]
+        or condition.get("condition") != P3_METHOD
+        or condition.get("revision") != "frozen_cues_v1"
+        or condition.get("status") != "draft_train_diagnostic"
+        or condition.get("starting_point") != "fresh_recognition_from_30_frames"
+        or condition.get("allowed_split") != "train"
+        or condition.get("output_directory") != f"{config['output_root']}/{P3_METHOD}"
+        or condition.get("maximum_cue_packets") != 1
+        or condition.get("human_review_before_and_after_cues") is not True
+        or condition.get("coaching_requires_approved_recognition") is not True
+        or not cue_path.is_relative_to(output_root)
+        or not cue_path.is_file()
+        or not prompt_path.is_file()
+        or sha256_file(cue_path) != condition.get("cue_sheet_sha256")
+    ):
+        raise typer.BadParameter("Invalid or changed frozen P3 cue declaration")
+    return condition, cue_path, prompt_path
 
 
 def load_prompt_development_cohort(config: dict) -> dict:
@@ -1699,6 +1727,421 @@ def finish_progressive_coaching(
     )
     write_metadata(run_dir / "metadata.txt", metadata)
     typer.echo(f"Preserved progressive P2 coaching run at {run_dir}")
+
+
+def pending_visible_cue_review() -> dict:
+    return {"decision": "PENDING", "notes": ""}
+
+
+@app.command("start-visible-cue-review")
+def start_visible_cue_review(
+    clip_b_id: str,
+    model: str = typer.Option(..., help="Exact Ollama model tag"),
+    config_path: Path = typer.Option(DEFAULT_V04_CONFIG),
+    manifest: Path = typer.Option(DEFAULT_B_MANIFEST),
+) -> None:
+    """Start a fresh P3 recognition; pause before sending frozen visible cues."""
+    config = load_json(config_path)
+    cohort = validate_prompt_chain_config(config, config_path)
+    condition, cue_path, cue_prompt_path = visible_cue_condition(config)
+    if clip_b_id != condition["initial_diagnostic_clip_id"] or clip_b_id not in cohort["clip_ids"]:
+        raise typer.BadParameter("Clip is not the declared P3 B-train diagnostic")
+    if model not in config["models"]:
+        raise typer.BadParameter(f"Model must be one of {config['models']}")
+    record = find_b_clip(manifest, clip_b_id)
+    if record.split != "train":
+        raise typer.BadParameter("P3 is restricted to Dataset B train")
+    reference_path = ROOT / config["dataset_b"]["human_reference_directory"] / f"{clip_b_id}.json"
+    validate_human_reference(reference_path, clip_b_id)
+    sampling = config["sampling"]
+    frame_count = int(sampling["frame_count"])
+    maximum_edge = int(sampling["maximum_edge"])
+    if frame_count != 30:
+        raise typer.BadParameter("The declared P3 diagnostic requires 30 frames")
+    frames = sample_dataset_b(
+        record, ROOT,
+        ROOT / "artifacts/model_inputs/dataset_b" / record.clip_id
+        / f"uniform_{frame_count}_edge_{maximum_edge}",
+        frame_count, maximum_edge,
+    )
+    recognition_path = ROOT / config["prompts"][P1_METHOD]["recognition"]
+    coaching_path = ROOT / config["prompts"][P1_METHOD]["coaching"]
+    messages = recognition_messages(recognition_path.read_text(encoding="utf-8"), frames)
+    timestamp = timestamp_utc()
+    run_dir = (
+        ROOT / config["output_root"] / P3_METHOD
+        / model.replace(":", "_") / clip_b_id / timestamp
+    )
+    run_dir.mkdir(parents=True, exist_ok=False)
+    cue_snapshot = run_dir / "frozen_visible_cues.txt"
+    copyfile(cue_path, cue_snapshot)
+    prompt_path = run_dir / "stage_1_prompt.txt"
+    prompt_path.write_text(readable_transcript(messages, ROOT), encoding="utf-8")
+    metadata = {
+        "protocol_id": config["protocol_id"],
+        "method": P3_METHOD,
+        "method_revision": condition["revision"],
+        "dataset_b_clip_id": clip_b_id,
+        "dataset_b_split": "train",
+        "development_only": True,
+        "human_assisted": True,
+        "human_intervention_inside_run": True,
+        "hidden_b_action_sent_to_model": False,
+        "dataset_a_material_sent_to_model": False,
+        "frame_sha256": {
+            path.relative_to(ROOT).as_posix(): sha256_file(path) for path in frames
+        },
+        "dataset_b_frame_count": frame_count,
+        "dataset_b_frame_indices_1_based": [
+            int(path.stem.rsplit("_", 1)[1]) for path in frames
+        ],
+        "model": model,
+        "model_digest": None,
+        "generation": config["generation"],
+        "config_sha256": sha256_file(config_path),
+        "condition_sha256": sha256_file(P3_VISIBLE_CONFIG),
+        "cohort_sha256": sha256_file(ROOT / config["development"]["cohort_path"]),
+        "human_reference_sha256": sha256_file(reference_path),
+        "recognition_prompt_sha256": sha256_file(recognition_path),
+        "coaching_prompt_sha256": sha256_file(coaching_path),
+        "cue_prompt_sha256": sha256_file(cue_prompt_path),
+        "cue_sheet_sha256": sha256_file(cue_path),
+        "cue_snapshot_sha256": sha256_file(cue_snapshot),
+        "stage_1_prompt_sha256": sha256_file(prompt_path),
+        "run_status": "started",
+        "created_at_utc": timestamp,
+    }
+    write_metadata(run_dir / "metadata.txt", metadata)
+    load_dotenv(ROOT / ".env")
+    client = OllamaClient()
+    started = perf_counter()
+    stage = "model_metadata"
+    try:
+        digest = client.model_metadata(model).get("digest")
+        if not isinstance(digest, str) or len(digest) != 64:
+            raise ValueError("Ollama did not provide a full model digest")
+        metadata["model_digest"] = digest
+        options = dict(config["generation"]["options"])
+        stage = "stage_1_gpu_preflight"
+        metadata["stage_1_gpu_preflight"] = checked_prompt_gpu(
+            client, model, options, digest, preload=True
+        )
+        stage = "stage_1_recognition"
+        raw = client.chat(model, messages, options, bool(config["generation"]["think"]))
+        response_path = run_dir / "stage_1_response.txt"
+        response_path.write_text(response_text(raw), encoding="utf-8")
+        raw_path = run_dir / "stage_1_raw_api_response.json"
+        write_json(raw_path, raw)
+        stage = "stage_1_gpu_postcheck"
+        metadata["stage_1_gpu_postcheck"] = checked_prompt_gpu(
+            client, model, options, digest, preload=False
+        )
+    except Exception as error:
+        metadata.update(
+            run_status="crash", crash_stage=stage,
+            error_type=type(error).__name__, error_message=str(error),
+            stage_1_elapsed_seconds=perf_counter() - started,
+        )
+        write_json(run_dir / "stage_1_error.json", {"stage": stage, "message": str(error)})
+        write_metadata(run_dir / "metadata.txt", metadata)
+        typer.echo(f"Preserved failed P3 run at {run_dir}")
+        raise
+    issues = heading_issues(response_path.read_text(encoding="utf-8"), RECOGNITION_HEADINGS)
+    metadata.update(
+        run_status="awaiting_initial_review",
+        stage_1_elapsed_seconds=perf_counter() - started,
+        stage_1_response_sha256=sha256_file(response_path),
+        stage_1_raw_sha256=sha256_file(raw_path),
+        stage_1_format_status="valid" if not issues else "invalid",
+        stage_1_format_issues=issues,
+    )
+    write_json(run_dir / "review_stage_1.json", pending_visible_cue_review())
+    write_metadata(run_dir / "metadata.txt", metadata)
+    typer.echo(f"Review fresh recognition at {response_path}")
+    typer.echo("Edit review_stage_1.json: choose continue or stop.")
+    typer.echo(f"Preserved separate P3 run at {run_dir}")
+
+
+def visible_cue_run_context(
+    run_dir: Path, config_path: Path, manifest: Path
+) -> tuple[dict, dict, list[Path], Path, list[str], str | None, Path]:
+    config = load_json(config_path)
+    cohort = validate_prompt_chain_config(config, config_path)
+    condition, cue_path, cue_prompt_path = visible_cue_condition(config)
+    root = (ROOT / config["output_root"] / P3_METHOD).resolve()
+    run_dir = run_dir.resolve()
+    if not run_dir.is_relative_to(root):
+        raise typer.BadParameter(f"P3 run must be under {root}")
+    metadata = read_metadata(run_dir / "metadata.txt")
+    clip_id = metadata.get("dataset_b_clip_id")
+    if (
+        metadata.get("protocol_id") != config["protocol_id"]
+        or metadata.get("method") != P3_METHOD
+        or metadata.get("method_revision") != condition["revision"]
+        or metadata.get("dataset_b_split") != "train"
+        or clip_id != condition["initial_diagnostic_clip_id"]
+        or clip_id not in cohort["clip_ids"]
+        or metadata.get("model") not in config["models"]
+        or not metadata.get("model_digest")
+    ):
+        raise typer.BadParameter("Not an eligible P3 train run")
+    if find_b_clip(manifest, clip_id).split != "train":
+        raise typer.BadParameter("P3 clip is not in Dataset B train")
+    recognition_path = ROOT / config["prompts"][P1_METHOD]["recognition"]
+    coaching_path = ROOT / config["prompts"][P1_METHOD]["coaching"]
+    expected_hashes = {
+        "config_sha256": config_path,
+        "condition_sha256": P3_VISIBLE_CONFIG,
+        "cohort_sha256": ROOT / config["development"]["cohort_path"],
+        "human_reference_sha256": (
+            ROOT / config["dataset_b"]["human_reference_directory"] / f"{clip_id}.json"
+        ),
+        "recognition_prompt_sha256": recognition_path,
+        "coaching_prompt_sha256": coaching_path,
+        "cue_prompt_sha256": cue_prompt_path,
+        "cue_sheet_sha256": cue_path,
+        "cue_snapshot_sha256": run_dir / "frozen_visible_cues.txt",
+        "stage_1_prompt_sha256": run_dir / "stage_1_prompt.txt",
+        "stage_1_response_sha256": run_dir / "stage_1_response.txt",
+        "stage_1_raw_sha256": run_dir / "stage_1_raw_api_response.json",
+    }
+    for field, path in expected_hashes.items():
+        if metadata.get(field) != sha256_file(path):
+            raise typer.BadParameter(f"P3 provenance changed: {field}")
+    if metadata["cue_snapshot_sha256"] != condition["cue_sheet_sha256"]:
+        raise typer.BadParameter("P3 cue snapshot differs from frozen cue sheet")
+    frames = [ROOT / path for path in metadata["frame_sha256"]]
+    if len(frames) != metadata["dataset_b_frame_count"] or any(
+        not frame.is_file() or sha256_file(frame) != expected
+        for frame, expected in zip(frames, metadata["frame_sha256"].values(), strict=True)
+    ):
+        raise typer.BadParameter("Sampled frames changed since P3 recognition")
+    recognition = recognition_path.read_text(encoding="utf-8")
+    if (run_dir / "stage_1_prompt.txt").read_text(encoding="utf-8") != readable_transcript(
+        recognition_messages(recognition, frames), ROOT
+    ):
+        raise typer.BadParameter("Original P3 recognition prompt changed")
+    initial = (run_dir / "stage_1_response.txt").read_text(encoding="utf-8")
+    if initial != response_text(load_json(run_dir / "stage_1_raw_api_response.json")):
+        raise typer.BadParameter("Original P3 answer differs from raw API response")
+    answers = [initial]
+    cue_packet: str | None = None
+    if metadata.get("cue_sent"):
+        stage_2_hashes = {
+            "initial_review_sha256": run_dir / "review_stage_1.json",
+            "cue_packet_sha256": run_dir / "cue_packet.txt",
+            "stage_2_prompt_sha256": run_dir / "stage_2_revision_prompt.txt",
+            "stage_2_response_sha256": run_dir / "stage_2_revision_response.txt",
+            "stage_2_raw_sha256": run_dir / "stage_2_revision_raw_api_response.json",
+        }
+        for field, path in stage_2_hashes.items():
+            if metadata.get(field) != sha256_file(path):
+                raise typer.BadParameter(f"P3 revision provenance changed: {field}")
+        cue_packet = (run_dir / "cue_packet.txt").read_text(encoding="utf-8")
+        expected_packet = (
+            cue_prompt_path.read_text(encoding="utf-8").rstrip()
+            + "\n" + (run_dir / "frozen_visible_cues.txt").read_text(encoding="utf-8")
+        )
+        if cue_packet != expected_packet:
+            raise typer.BadParameter("P3 cue packet differs from frozen source")
+        messages = progressive_messages(recognition, frames, answers, [], cue_packet)
+        if (run_dir / "stage_2_revision_prompt.txt").read_text(
+            encoding="utf-8"
+        ) != readable_transcript(messages, ROOT):
+            raise typer.BadParameter("P3 revision transcript changed")
+        revised = (run_dir / "stage_2_revision_response.txt").read_text(encoding="utf-8")
+        if revised != response_text(load_json(run_dir / "stage_2_revision_raw_api_response.json")):
+            raise typer.BadParameter("P3 revision differs from raw API response")
+        answers.append(revised)
+    return config, metadata, frames, run_dir, answers, cue_packet, cue_prompt_path
+
+
+def checked_visible_cue_review(run_dir: Path, stage: int) -> tuple[dict, str]:
+    path = run_dir / f"review_stage_{stage}.json"
+    if not path.is_file():
+        raise typer.BadParameter(f"Complete the review file first: {path}")
+    review = load_json(path)
+    try:
+        decision = validate_visible_cue_review(review, revised=stage == 2)
+    except ValueError as error:
+        raise typer.BadParameter(str(error)) from error
+    return review, decision
+
+
+@app.command("continue-visible-cue-review")
+def continue_visible_cue_review(
+    run_dir: Path,
+    config_path: Path = typer.Option(DEFAULT_V04_CONFIG),
+    manifest: Path = typer.Option(DEFAULT_B_MANIFEST),
+) -> None:
+    """Send the single frozen P3 cue packet after initial recognition review."""
+    config, metadata, frames, run_dir, answers, cue_packet, cue_prompt_path = (
+        visible_cue_run_context(run_dir, config_path, manifest)
+    )
+    if metadata["run_status"] != "awaiting_initial_review" or cue_packet is not None:
+        raise typer.BadParameter("P3 run is not awaiting its initial review")
+    review, decision = checked_visible_cue_review(run_dir, 1)
+    if decision != "continue":
+        raise typer.BadParameter("Use finish-visible-cue-coaching to stop this P3 run")
+    review_path = run_dir / "review_stage_1.json"
+    write_json(
+        run_dir / "review_stage_1_snapshot.json",
+        {**review, "submitted_at_utc": timestamp_utc()},
+    )
+    packet = (
+        cue_prompt_path.read_text(encoding="utf-8").rstrip()
+        + "\n" + (run_dir / "frozen_visible_cues.txt").read_text(encoding="utf-8")
+    )
+    packet_path = run_dir / "cue_packet.txt"
+    packet_path.write_text(packet, encoding="utf-8")
+    recognition = (
+        ROOT / config["prompts"][P1_METHOD]["recognition"]
+    ).read_text(encoding="utf-8")
+    messages = progressive_messages(recognition, frames, answers, [], packet)
+    prompt_path = run_dir / "stage_2_revision_prompt.txt"
+    prompt_path.write_text(readable_transcript(messages, ROOT), encoding="utf-8")
+    metadata.update(
+        run_status="cue_started",
+        initial_review_sha256=sha256_file(review_path),
+        cue_packet_sha256=sha256_file(packet_path),
+        stage_2_prompt_sha256=sha256_file(prompt_path),
+    )
+    write_metadata(run_dir / "metadata.txt", metadata)
+    load_dotenv(ROOT / ".env")
+    client = OllamaClient()
+    started = perf_counter()
+    stage = "stage_2_model_metadata"
+    try:
+        if client.model_metadata(metadata["model"]).get("digest") != metadata["model_digest"]:
+            raise ValueError("Installed model digest differs from original P3 recognition")
+        options = dict(config["generation"]["options"])
+        stage = "stage_2_gpu_preflight"
+        metadata["stage_2_gpu_preflight"] = checked_prompt_gpu(
+            client, metadata["model"], options, metadata["model_digest"], preload=True
+        )
+        stage = "stage_2_revision"
+        raw = client.chat(
+            metadata["model"], messages, options, bool(config["generation"]["think"])
+        )
+        response_path = run_dir / "stage_2_revision_response.txt"
+        response_path.write_text(response_text(raw), encoding="utf-8")
+        raw_path = run_dir / "stage_2_revision_raw_api_response.json"
+        write_json(raw_path, raw)
+        stage = "stage_2_gpu_postcheck"
+        metadata["stage_2_gpu_postcheck"] = checked_prompt_gpu(
+            client, metadata["model"], options, metadata["model_digest"], preload=False
+        )
+    except Exception as error:
+        metadata.update(
+            run_status="crash", crash_stage=stage,
+            error_type=type(error).__name__, error_message=str(error),
+            stage_2_elapsed_seconds=perf_counter() - started,
+        )
+        write_json(run_dir / "stage_2_error.json", {"stage": stage, "message": str(error)})
+        write_metadata(run_dir / "metadata.txt", metadata)
+        raise
+    issues = heading_issues(response_path.read_text(encoding="utf-8"), RECOGNITION_HEADINGS)
+    metadata.update(
+        run_status="awaiting_revision_review",
+        cue_sent=True,
+        stage_2_elapsed_seconds=perf_counter() - started,
+        stage_2_response_sha256=sha256_file(response_path),
+        stage_2_raw_sha256=sha256_file(raw_path),
+        stage_2_format_status="valid" if not issues else "invalid",
+        stage_2_format_issues=issues,
+    )
+    write_json(run_dir / "review_stage_2.json", pending_visible_cue_review())
+    write_metadata(run_dir / "metadata.txt", metadata)
+    typer.echo(f"Review visible-cue recognition at {response_path}")
+    typer.echo("Edit review_stage_2.json: choose approve or stop.")
+    typer.echo(f"Preserved separate P3 run at {run_dir}")
+
+
+@app.command("finish-visible-cue-coaching")
+def finish_visible_cue_coaching(
+    run_dir: Path,
+    config_path: Path = typer.Option(DEFAULT_V04_CONFIG),
+    manifest: Path = typer.Option(DEFAULT_B_MANIFEST),
+) -> None:
+    """Stop P3, or request coaching only after cue-revised recognition is approved."""
+    config, metadata, frames, run_dir, answers, cue_packet, _ = visible_cue_run_context(
+        run_dir, config_path, manifest
+    )
+    if metadata["run_status"] not in {"awaiting_initial_review", "awaiting_revision_review"}:
+        raise typer.BadParameter("P3 run is not awaiting a human review")
+    stage = 2 if metadata["run_status"] == "awaiting_revision_review" else 1
+    review, decision = checked_visible_cue_review(run_dir, stage)
+    if decision == "continue":
+        raise typer.BadParameter("Use continue-visible-cue-review to send the frozen cues")
+    review_path = run_dir / f"review_stage_{stage}.json"
+    write_json(
+        run_dir / f"review_stage_{stage}_snapshot.json",
+        {**review, "submitted_at_utc": timestamp_utc()},
+    )
+    metadata["final_review_sha256"] = sha256_file(review_path)
+    metadata["final_review_decision"] = decision
+    if decision == "stop":
+        metadata["run_status"] = "recognition_rejected"
+        write_metadata(run_dir / "metadata.txt", metadata)
+        typer.echo(f"Preserved stopped P3 run without coaching at {run_dir}")
+        return
+    if stage != 2 or cue_packet is None or not answers[-1].strip():
+        raise typer.BadParameter("P3 coaching requires a nonempty approved cue revision")
+    recognition = (
+        ROOT / config["prompts"][P1_METHOD]["recognition"]
+    ).read_text(encoding="utf-8")
+    coaching = (
+        ROOT / config["prompts"][P1_METHOD]["coaching"]
+    ).read_text(encoding="utf-8")
+    messages = progressive_messages(recognition, frames, answers, [cue_packet], coaching)
+    prompt_path = run_dir / "stage_3_coaching_prompt.txt"
+    prompt_path.write_text(readable_transcript(messages, ROOT), encoding="utf-8")
+    metadata["run_status"] = "coaching_started"
+    metadata["stage_3_prompt_sha256"] = sha256_file(prompt_path)
+    write_metadata(run_dir / "metadata.txt", metadata)
+    load_dotenv(ROOT / ".env")
+    client = OllamaClient()
+    started = perf_counter()
+    stage_name = "stage_3_model_metadata"
+    try:
+        if client.model_metadata(metadata["model"]).get("digest") != metadata["model_digest"]:
+            raise ValueError("Installed model digest differs from original P3 recognition")
+        options = dict(config["generation"]["options"])
+        stage_name = "stage_3_gpu_preflight"
+        metadata["stage_3_gpu_preflight"] = checked_prompt_gpu(
+            client, metadata["model"], options, metadata["model_digest"], preload=True
+        )
+        stage_name = "stage_3_coaching"
+        raw = client.chat(
+            metadata["model"], messages, options, bool(config["generation"]["think"])
+        )
+        response_path = run_dir / "stage_3_coaching_response.txt"
+        response_path.write_text(response_text(raw), encoding="utf-8")
+        write_json(run_dir / "stage_3_coaching_raw_api_response.json", raw)
+        stage_name = "stage_3_gpu_postcheck"
+        metadata["stage_3_gpu_postcheck"] = checked_prompt_gpu(
+            client, metadata["model"], options, metadata["model_digest"], preload=False
+        )
+    except Exception as error:
+        metadata.update(
+            run_status="crash", crash_stage=stage_name,
+            error_type=type(error).__name__, error_message=str(error),
+            stage_3_elapsed_seconds=perf_counter() - started,
+        )
+        write_json(
+            run_dir / "stage_3_error.json", {"stage": stage_name, "message": str(error)}
+        )
+        write_metadata(run_dir / "metadata.txt", metadata)
+        raise
+    issues = heading_issues(response_path.read_text(encoding="utf-8"), COACHING_HEADINGS)
+    metadata.update(
+        run_status="complete",
+        stage_3_elapsed_seconds=perf_counter() - started,
+        stage_3_format_status="valid" if not issues else "invalid",
+        stage_3_format_issues=issues,
+    )
+    write_metadata(run_dir / "metadata.txt", metadata)
+    typer.echo(f"Preserved visible-cue P3 coaching run at {run_dir}")
 
 
 @app.command("start-attention-review", hidden=True)

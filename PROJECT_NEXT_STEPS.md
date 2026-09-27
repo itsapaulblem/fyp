@@ -54,6 +54,9 @@ correction.
 |---|---|
 | Train-only protocol and model settings | `config/project_v0.4.0.json` |
 | P2 progressive condition declaration | `config/p2_progressive_hints_v0.4.1.json` |
+| P3 frozen cue declaration and SHA-256 | `config/p3_visible_cues_v0.4.0.json` |
+| P3 approved cue sheet (local, Git-ignored) | `output/v0.4/prompt_chain/P3_visible_cue_hint/B-TRAIN-0025_visible_cues.v1.txt` |
+| P3 cue revision wrapper | `input_prompts/v0.4/p3_visible_cue_revision.txt` |
 | Eight known development clips | `config/prompt_development_cohort_v0.4.0.json` |
 | Initial recognition prompt | `input_prompts/v0.4/p1_recognition.txt` |
 | Revision prompt | `input_prompts/v0.4/p1_revision.txt` |
@@ -74,7 +77,7 @@ holdout. The eight known B-train clips are not unseen evaluation examples.
 | No feedback | `output/v0.4/prompt_chain/P0_no_feedback/` | Contains only a byte-for-byte historical v0.3 B0 B-TRAIN-0025 reference; no v0.4 P0 run yet |
 | Explicit frame-based correction | `output/v0.4/prompt_chain/P1_human_guided/` | Contains the completed B-TRAIN-0025 diagnostic |
 | Progressive human hints | `output/v0.4/prompt_chain/P2_attention_hint/` | B-TRAIN-0025 stopped after three hints; no coaching requested |
-| Visible cues without event labels | `output/v0.4/prompt_chain/P3_visible_cue_hint/` | Empty placeholder for a separate branch |
+| Visible cues without event labels | `output/v0.4/prompt_chain/P3_visible_cue_hint/` | B-TRAIN-0025 stopped after one frozen cue packet; no coaching requested |
 
 The P0 copy is under `historical_v0.3_B0_reference/qwen3.5_27b/B-TRAIN-0025/20260908T094048609964Z/`.
 It is the 30-frame PILOT-010 B0 run, copied from
@@ -83,7 +86,7 @@ Its original v0.3 metadata and prompt remain unchanged. This is context, not
 a matched v0.4 no-feedback result; the pilot score remains in
 `data/video_b/review/pilot_grading_v1/PILOT-010/score.txt`.
 
-P1 and the new progressive P2 are implemented; P0 and P3 are not. The earlier
+P1, progressive P2, and frozen-cue P3 are implemented; P0 is not. The earlier
 one-hint P2 run that reused P1's first answer was deleted at the researcher's
 request; do not report it as a retained result. New P2 runs begin with a fresh
 call on the same 30 frames and are stored directly under
@@ -140,6 +143,55 @@ uv run --system-certs football-coach finish-progressive-coaching "P2_RUN_DIR"
 
 Score the initial answer and every revision separately using the P2 draft
 score form. P2 is human-assisted; the v0.3 B0 copy is not a matched control.
+
+## P3 frozen visible-cue workflow and completed B-TRAIN-0025 diagnostic
+
+The first P3 run at
+`P3_visible_cue_hint/qwen3.5_27b/B-TRAIN-0025/20260927T163258749494Z/`
+was stopped after its single cue revision. The answer became more cautious
+and noticed the apparent late stoppage, but did not identify the specific
+restart or grey-team clearance and still suggested red moved the ball away
+from goal. No coaching call was made. This is a known B-train development
+result, not a blinded test or a matched automatic control.
+
+The researcher approved the cue observations in
+`B-TRAIN-0025_visible_cues.draft.txt`. A separate v1 copy is frozen at the
+path above; its SHA-256 is
+`5e698bc8f2aba86ab6d7377f4010a1472c45b1cd2fd39079d36cfda4bacd1f08`.
+The declaration checks this digest before every P3 stage and each run stores
+its own byte-for-byte cue snapshot. Do not change the frozen file; make a
+new version and declaration if the cues need correction. The frozen cue file
+is Git-ignored and must be retained locally for reproducibility.
+
+Keep the Ollama tunnel open. From local PowerShell in the project root, begin
+a fresh run with the same 30 frames, model, and generation settings:
+
+```powershell
+uv run --system-certs football-coach start-visible-cue-review B-TRAIN-0025 --model qwen3.5:27b
+```
+
+Read the printed P3 run directory's `stage_1_response.txt` against the
+sampled frames. Edit its actual `review_stage_1.json`: use
+`{"decision":"continue","notes":"..."}` to send the frozen cue sheet, or
+`{"decision":"stop","notes":"..."}` to close without a cue or coaching call.
+`PENDING` cannot advance. For `continue`, run:
+
+```powershell
+uv run --system-certs football-coach continue-visible-cue-review "P3_RUN_DIR"
+```
+
+Read `stage_2_revision_response.txt`. Edit `review_stage_2.json` with
+`decision` `approve` only if the recognition is sufficiently supported by
+the frames; otherwise use `stop`. Close the run with:
+
+```powershell
+uv run --system-certs football-coach finish-visible-cue-coaching "P3_RUN_DIR"
+```
+
+The finish command sends a coaching request only after stage-2 approval.
+P3 remains human-assisted, and B-TRAIN-0025 remains a known development clip.
+Score recognition before cues, recognition after cues, and any final coaching
+separately. Do not treat the historical v0.3 B0 copy as a matched control.
 
 ## First development clip
 

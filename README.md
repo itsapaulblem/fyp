@@ -310,6 +310,13 @@ are in `PROJECT_NEXT_STEPS.md`. New runs write directly under
 `output/v0.4/prompt_chain/P2_attention_hint/`. The earlier one-hint P2 output
 was deleted at the researcher's request and is not a retained result.
 
+For P3, the approved B-TRAIN-0025 visible cues are frozen by SHA-256 in
+`config/p3_visible_cues_v0.4.0.json`. Use `start-visible-cue-review` for a
+fresh recognition, `continue-visible-cue-review` after reviewing its initial
+answer to send the single frozen cue packet, and `finish-visible-cue-coaching`
+only after reviewing the revision. A `stop` decision closes the run without
+coaching. See `PROJECT_NEXT_STEPS.md` for the exact PowerShell commands.
+
 A rejected revision is preserved without a coaching request. Frame citations
 in review files refer to sampled image positions 1–30.
 
