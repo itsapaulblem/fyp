@@ -60,6 +60,12 @@ uv run football-coach ollama-check --model qwen3.5:27b
 uv run football-coach ollama-check --model qwen3.5:35b
 ```
 
+For v0.4 GPU-required development, add `--require-gpu` to `ollama-check`.
+This preloads the model and requires Ollama to report nonzero GPU residency.
+Each v0.4 stage repeats this check before and after inference and records the
+observed VRAM placement. v0.3's preserved `num_gpu: 0` setting was CPU-only;
+it is not used by v0.4.
+
 ## Dataset A workflow
 
 Create a case template without overwriting existing work:
@@ -271,28 +277,38 @@ Validate the train-only environment, then start the first development clip:
 
 ```powershell
 uv run football-coach validate-prompt-chain
-uv run football-coach ollama-check --model qwen3.5:27b
+uv run football-coach ollama-check --model qwen3.5:27b --require-gpu
 uv run football-coach start-prompt-review B-TRAIN-0025 --model qwen3.5:27b
 ```
 
 The start command prints a timestamped `RUN_DIR` under
 `output/v0.4/prompt_chain/P1_human_guided/`. Read
-`stage_1_response.txt`, copy `initial_review.template.json` to
-`initial_review.json`, and record your decision using only the sampled frames.
-For `approve`, remove the example feedback item. For `revise`, replace it
-with frame-cited evidence and a specific correction:
+`stage_1_response.txt`, then edit the already-created `initial_review.json`:
+replace `PENDING_REVIEW` in `notes` and fill `feedback` using the sampled
+frames, never hidden labels. Empty feedback means approval; add frame-cited
+evidence and a specific correction to request one recognition revision:
 
 ```powershell
 uv run football-coach revise-prompt-recognition RUN_DIR
 ```
 
-Read the revised answer and complete `revision_review.json` from its
-template. Set `approve` if recognition is supported, or `reject` if it
-remains wrong. Then close the review:
+Read the revised answer and edit the already-created `revision_review.json`,
+replacing `PENDING_REVIEW` in `notes`. Empty feedback approves it; frame-cited feedback records why it
+remains wrong and rejects it. Then close the review:
 
 ```powershell
 uv run football-coach finish-prompt-coaching RUN_DIR
 ```
+
+For the separate B-TRAIN-0025 progressive-hint diagnostic, start a fresh
+recognition call with `start-progressive-review`. Review the initial answer,
+then use `continue-progressive-review` for at most three human-authored hints
+with a review after each answer. Use `finish-progressive-coaching` only after
+approving recognition, or to stop without coaching. The declaration is in
+`config/p2_progressive_hints_v0.4.1.json`; commands and review-file details
+are in `PROJECT_NEXT_STEPS.md`. New runs write directly under
+`output/v0.4/prompt_chain/P2_attention_hint/`. The earlier one-hint P2 output
+was deleted at the researcher's request and is not a retained result.
 
 A rejected revision is preserved without a coaching request. Frame citations
 in review files refer to sampled image positions 1–30.

@@ -1,0 +1,21 @@
+{
+  "protocol_id": "evidence-first-football-v0.4.0",
+  "condition": "P2_attention_hint",
+  "status": "draft_train_diagnostic",
+  "source_method": "P1_human_guided",
+  "source_run": "output/v0.4/prompt_chain/P1_human_guided/qwen3.5_27b/B-TRAIN-0025/20260927T104444767548Z",
+  "source_stage": "stage_1_only",
+  "allowed_split": "train",
+  "clip_id": "B-TRAIN-0025",
+  "prompt_path": "input_prompts/v0.4/p2_attention_hint.txt",
+  "output_folder": "P2_attention_hint",
+  "feedback_type": "human_selected_attention_ranges_without_event_labels",
+  "maximum_recognition_revisions": 1,
+  "coaching_requires_human_approval": true,
+  "excluded_source_history": [
+    "initial_review.json",
+    "human_feedback.txt",
+    "stage_2_revision_response.txt",
+    "stage_3_coaching_response.txt"
+  ]
+}

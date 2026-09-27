@@ -1,0 +1,10 @@
+DATASET B — PROGRESSIVE HUMAN HINT
+
+The researcher has reviewed your latest recognition against the same 30
+sampled images. Their frame-cited hint follows. Re-examine the images and
+produce a complete revised recognition using the original recognition
+headings and labels. Check the hint against the frames rather than assuming
+it is correct. Explain any remaining ambiguity and do not give coaching
+advice yet.
+
+HUMAN HINT

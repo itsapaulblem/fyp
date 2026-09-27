@@ -9,8 +9,22 @@ frame-cited corrections when needed, reviews the revised answer, and requests
 coaching only after approving recognition. This is a human-assisted result.
 
 This is analysis of ordered sampled images supplied to Ollama, not native video
-understanding. The current method is `P1_human_guided`. An automatic
-no-feedback chain is a separate future comparison, not the active workflow.
+understanding. The completed development runs are `P1_human_guided` and
+`P2_attention_hint`; neither is an automatic no-feedback chain.
+The v0.4 `prompt_chain` output has four condition folders: `P0_no_feedback`,
+`P1_human_guided` (explicit correction), `P2_attention_hint`, and
+`P3_visible_cue_hint`. P1 and progressive P2 are runnable; P0 and P3 are
+placeholders. P2 `progressive_v1` starts from a fresh recognition call on the
+same 30 frames, then allows at most three human-authored, frame-cited hint
+turns with review after every answer. It is declared in
+`config/p2_progressive_hints_v0.4.1.json`. It writes directly under
+`output/v0.4/prompt_chain/P2_attention_hint/` and never sends P1's original
+answer, explicit feedback, revision, or coaching. The old one-hint P2 run was
+deleted at the researcher's request and is not a retained result. Keep the
+completed B-TRAIN-0025 P1 run intact and never relabel the historical v0.3 B0
+result as a v0.4 no-feedback run. The B-TRAIN-0025 progressive P2 run was
+stopped after three hints because recognition remained insufficient; no P2
+coaching was requested.
 
 ## Immediate work
 
@@ -27,6 +41,9 @@ no-feedback chain is a separate future comparison, not the active workflow.
 - Preserve the original answer, review files, exact feedback, revision, and
   coaching. Permit at most one revision in this draft workflow. Never replace
   a model answer in place or add hidden labels to human feedback.
+- New v0.4 runs create the actual review JSON with a pending marker; they do
+  not generate separate review template JSON files. A pending review cannot
+  advance to the next model call.
 - Do not present the eight known B-train development clips as unseen evaluation.
   Choose and freeze a separate train holdout before comparative scoring.
 

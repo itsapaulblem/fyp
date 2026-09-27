@@ -1,0 +1,11 @@
+DATASET B — ATTENTION-ONLY RECOGNITION REVIEW
+
+Re-examine the same 30 sampled images, especially positions 1–10, 21–26,
+and 27–30. Check ball visibility and location, which players or units move,
+which team appears to have the ball, and whether the state of play changes.
+
+Revise any claim in your first recognition answer that the images do not
+support. Give a complete revised recognition answer using the same headings
+and labels. Cite sampled image positions for material claims. Distinguish
+direct observations from interpretations and state uncertainty when contact,
+possession, or outcome cannot be determined. Do not provide coaching advice.

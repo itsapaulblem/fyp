@@ -1,0 +1,15 @@
+{
+  "protocol_id": "evidence-first-football-v0.4.0",
+  "condition": "P2_attention_hint",
+  "revision": "progressive_v1",
+  "status": "draft_train_diagnostic",
+  "starting_point": "fresh_recognition_from_30_frames",
+  "allowed_split": "train",
+  "initial_diagnostic_clip_id": "B-TRAIN-0025",
+  "output_directory": "output/v0.4/prompt_chain/P2_attention_hint",
+  "maximum_hints": 3,
+  "hint_prompt_path": "input_prompts/v0.4/p2_progressive_hint.txt",
+  "human_review_after_every_recognition": true,
+  "coaching_requires_approved_recognition": true,
+  "hint_policy": "Researcher-authored frame-cited questions or cues from sampled images; no hidden labels, full event answer, or prior P1/P2 response text"
+}

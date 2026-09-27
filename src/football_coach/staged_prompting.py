@@ -5,9 +5,9 @@ from pathlib import Path
 from typing import Any
 
 from .prompting import PromptMessage
-from .provenance import sha256_file
 
 P1_METHOD = "P1_human_guided"
+P2_METHOD = "P2_attention_hint"
 RECOGNITION_HEADINGS = (
     "VISIBLE EVIDENCE",
     "CHRONOLOGY",
@@ -47,52 +47,29 @@ def read_metadata(path: Path) -> dict[str, Any]:
     return values
 
 
-def review_template(answer_sha256: str, *, revised: bool = False) -> dict[str, Any]:
-    return {
-        "decision": "PENDING",
-        "reviewer_code": "REPLACE_ME",
-        "reviewed_at_utc": "REPLACE_ME",
-        "used_only_sampled_frames": None,
-        "used_hidden_labels": None,
-        "answer_sha256": answer_sha256,
-        "feedback": [] if revised else [
-            {
-                "frame_numbers_1_based": [],
-                "observed_evidence": "REPLACE_ME",
-                "correction": "REPLACE_ME",
-            }
-        ],
-        "notes": "",
-    }
+def review_template() -> dict[str, Any]:
+    return {"feedback": [], "notes": ""}
+
+
+def pending_guided_review() -> dict[str, Any]:
+    return {"feedback": [], "notes": "PENDING_REVIEW"}
 
 
 def validate_review(
     review: dict[str, Any],
-    answer_path: Path,
     allowed_frame_numbers: set[int],
     *,
     revised: bool = False,
-) -> None:
-    allowed_decisions = {"approve", "reject"} if revised else {"approve", "revise"}
-    if review.get("decision") not in allowed_decisions:
-        raise ValueError(f"Review decision must be one of {sorted(allowed_decisions)}")
-    if review.get("answer_sha256") != sha256_file(answer_path):
-        raise ValueError("Review answer hash does not match the preserved response")
-    if review.get("used_only_sampled_frames") is not True:
-        raise ValueError("Reviewer must confirm use of sampled frames only")
-    if review.get("used_hidden_labels") is not False:
-        raise ValueError("Reviewer must confirm hidden labels were not used")
-    for field in ("reviewer_code", "reviewed_at_utc"):
-        value = review.get(field)
-        if not isinstance(value, str) or not value.strip() or value == "REPLACE_ME":
-            raise ValueError(f"Review requires {field}")
+) -> str:
+    if set(review) != {"feedback", "notes"}:
+        raise ValueError("Review must contain only feedback and notes")
     feedback = review.get("feedback")
     if not isinstance(feedback, list):
         raise ValueError("Review feedback must be a list")
-    if review["decision"] in {"approve", "reject"} and feedback:
-        raise ValueError("Approval or rejection must not include correction feedback")
-    if review["decision"] == "revise" and not feedback:
-        raise ValueError("Revision requires frame-cited feedback")
+    if not isinstance(review.get("notes"), str):
+        raise ValueError("Review notes must be text")
+    if review["notes"] == "PENDING_REVIEW":
+        raise ValueError("Review is pending; edit notes after checking the frames")
     for item in feedback:
         if not isinstance(item, dict):
             raise ValueError("Each feedback item must be an object")
@@ -112,6 +89,7 @@ def validate_review(
             value = item.get(field)
             if not isinstance(value, str) or not value.strip() or value == "REPLACE_ME":
                 raise ValueError(f"Each correction requires {field}")
+    return ("reject" if revised else "revise") if feedback else "approve"
 
 
 def feedback_text(review: dict[str, Any], prompt: str) -> str:
@@ -145,6 +123,46 @@ def revision_messages(
         PromptMessage("assistant", initial_answer),
         PromptMessage("user", correction_text),
     ]
+
+
+def validate_progressive_review(review: dict[str, Any], frame_count: int) -> str:
+    if set(review) != {"decision", "frame_numbers_1_based", "hint", "notes"}:
+        raise ValueError("Progressive review needs decision, frame numbers, hint, and notes")
+    decision = review["decision"]
+    if not isinstance(decision, str) or decision not in {"hint", "approve", "stop"}:
+        raise ValueError("Decision must be hint, approve, or stop")
+    numbers = review["frame_numbers_1_based"]
+    if not isinstance(numbers, list) or any(
+        not isinstance(n, int) or isinstance(n, bool) or n < 1 or n > frame_count
+        for n in numbers
+    ) or len(set(numbers)) != len(numbers):
+        raise ValueError("Hint must cite valid, unique sampled frame numbers")
+    if not isinstance(review["hint"], str) or not isinstance(review["notes"], str):
+        raise ValueError("Hint and notes must be text")
+    if decision == "hint" and (not numbers or not review["hint"].strip()):
+        raise ValueError("A hint requires frame citations and nonempty hint text")
+    if decision != "hint" and (numbers or review["hint"].strip()):
+        raise ValueError("Approval or stopping must not include a new hint")
+    return decision
+
+
+def progressive_messages(
+    recognition_prompt: str,
+    frames: list[Path],
+    answers: list[str],
+    hints: list[str],
+    next_prompt: str | None = None,
+) -> list[PromptMessage]:
+    if len(answers) != len(hints) + 1:
+        raise ValueError("Each completed hint needs one subsequent recognition answer")
+    messages = recognition_messages(recognition_prompt, frames)
+    for index, answer in enumerate(answers):
+        messages.append(PromptMessage("assistant", answer))
+        if index < len(hints):
+            messages.append(PromptMessage("user", hints[index]))
+    if next_prompt is not None:
+        messages.append(PromptMessage("user", next_prompt))
+    return messages
 
 
 def coaching_messages(

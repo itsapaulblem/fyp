@@ -1,0 +1,57 @@
+# P2 PROGRESSIVE-HINT DEVELOPMENT SCORE FORM
+# Use config/scoring_rubric_v0.4.txt. This is a B-train diagnostic, not unseen evaluation.
+
+Run ID:
+Dataset B clip ID:
+P2 run path:
+Method revision: progressive_v1
+Fresh stage-1 model call: yes or no
+Number of human hint turns (maximum 3):
+
+# INITIAL RECOGNITION (BEFORE ANY HINT)
+Direct-observation accuracy score:
+Frame grounding score:
+Observation/inference separation score:
+Ball and possession evidence score:
+Temporal sequence score:
+Main event score:
+Outcome score:
+Critical event missed:
+Initial recognition evidence and reasons:
+
+# HUMAN HINT AND REVISED RECOGNITION (REPEAT FOR EACH TURN)
+Hint turn number:
+Review file path:
+Cited sampled frame numbers:
+Exact hint file path:
+Hint type and information disclosed:
+Direct-observation accuracy score:
+Frame grounding score:
+Observation/inference separation score:
+Ball and possession evidence score:
+Temporal sequence score:
+Main event score:
+Outcome score:
+Critical event missed:
+Revision result score:
+Hint influence and remaining errors:
+Decision after this answer: hint, approve, or stop
+
+Repeat this section for each completed hint turn. Do not omit failed revisions.
+
+# FINAL COACHING (ONLY IF RECOGNITION APPROVED)
+Problem identification score:
+Advice quality score:
+Practice representativeness score:
+Coaching evidence support score:
+Recognition-to-coaching propagation score:
+Hallucination categories:
+Hallucination severity score:
+Uncertainty calibration score:
+Coaching evidence and reasons:
+
+# REVIEW RECORD
+Reviewed at UTC:
+Reviewer notes: Human-authored hints are an intervention. The
+v0.3 B0 historical copy is context, not a matched v0.4 control. The old
+single-hint P2 output was deleted at the researcher's request.

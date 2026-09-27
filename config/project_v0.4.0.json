@@ -72,7 +72,8 @@
     },
     "think": false,
     "stream": false,
-    "device_policy": "Ollama automatic GPU/offload; record observed runtime separately"
+    "require_gpu": true,
+    "device_policy": "Ollama chooses GPU layer placement; require nonzero GPU residency via /api/ps before and after each stage. CPU-only execution fails; partial GPU offload is permitted and recorded."
   },
   "scoring": {
     "rubric_path": "config/scoring_rubric_v0.4.txt",

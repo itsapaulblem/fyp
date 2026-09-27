@@ -42,6 +42,40 @@ class OllamaClient:
                 return item
         raise ValueError(f"Model {model!r} was not returned by Ollama /api/tags")
 
+    def gpu_status(
+        self, model: str, options: dict[str, Any], *, preload: bool = True
+    ) -> dict[str, Any]:
+        """Report Ollama's observed GPU residency, optionally loading the model first."""
+        with httpx.Client(headers=self.headers, timeout=self.timeout) as client:
+            if preload:
+                response = client.post(
+                    f"{self.base_url}/api/chat",
+                    json={
+                        "model": model,
+                        "messages": [],
+                        "options": options,
+                        "stream": False,
+                        "keep_alive": "10m",
+                    },
+                )
+                response.raise_for_status()
+            response = client.get(f"{self.base_url}/api/ps")
+            response.raise_for_status()
+            running = response.json().get("models", [])
+        for item in running:
+            if item.get("name") == model or item.get("model") == model:
+                vram = item.get("size_vram")
+                if not isinstance(vram, int):
+                    raise ValueError("Ollama /api/ps did not report size_vram")
+                return {
+                    "model": model,
+                    "digest": item.get("digest"),
+                    "size_bytes": item.get("size"),
+                    "size_vram_bytes": vram,
+                    "context_length": item.get("context_length"),
+                }
+        raise ValueError(f"Model {model!r} was not loaded according to Ollama /api/ps")
+
     def chat(
         self,
         model: str,
