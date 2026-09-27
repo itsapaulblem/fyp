@@ -1,0 +1,84 @@
+{
+  "protocol_id": "evidence-first-football-v0.4.0",
+  "parent_protocol_id": "retrieval-assisted-football-v0.3.0",
+  "parent_git_tag": "v0.3-validation-complete",
+  "status": "draft_train_prompt_development",
+  "seed": 20260903,
+  "research_question": "Does a two-turn recognition-before-coaching prompt improve football-event recognition and evidence-supported coaching relative to the existing single-prompt approach?",
+  "dataset_b": {
+    "name": "SoccerNet Game State Reconstruction v1.3",
+    "archives": {
+      "train": "data/raw/gamestate/gamestate-2024/train.zip",
+      "valid": "data/raw/gamestate/gamestate-2024/valid.zip",
+      "test": "data/raw/gamestate/gamestate-2024/test.zip"
+    },
+    "expected_split_counts": {"train": 57, "valid": 58, "test": 49},
+    "expected_frames": 750,
+    "expected_fps": 25,
+    "public_manifest": "data/video_b/manifests/soccernet_gsr_v1.3_public.csv",
+    "private_manifest": "data/video_b/private/soccernet_gsr_v1.3_reference.csv",
+    "human_reference_directory": "data/video_b/review"
+  },
+  "development": {
+    "cohort_path": "config/prompt_development_cohort_v0.4.0.json",
+    "allowed_split": "train",
+    "initial_diagnostic_clip_id": "B-TRAIN-0025",
+    "human_feedback_between_runs_allowed": true,
+    "human_intervention_inside_run_allowed": false,
+    "accepted_runs_may_not_be_silently_repaired": true
+  },
+  "sampling": {
+    "frame_count": 30,
+    "maximum_edge": 672,
+    "algorithm": "uniform_endpoints_v1",
+    "image_encoding": "JPEG quality 92 after OpenCV INTER_AREA resize",
+    "source": "frozen v0.3 sampling decision; reused without claiming accurate recognition"
+  },
+  "methods": {
+    "active": ["P1_two_turn"],
+    "baseline": "P0_existing_single_prompt",
+    "planned_after_P1_diagnosis": ["P2_verified_chain"]
+  },
+  "prompts": {
+    "P1_two_turn": {
+      "recognition": "input_prompts/v0.4/p1_recognition.txt",
+      "coaching": "input_prompts/v0.4/p1_coaching.txt"
+    }
+  },
+  "model_output": {
+    "format": "plain_text",
+    "recognition_required_headings": [
+      "VISIBLE EVIDENCE",
+      "CHRONOLOGY",
+      "EVENT ASSESSMENT",
+      "EVIDENCE LIMITS"
+    ],
+    "coaching_required_headings": [
+      "TACTICAL INTERPRETATION",
+      "COACHING",
+      "SAFETY AND UNCERTAINTY"
+    ]
+  },
+  "models": ["qwen3.5:27b", "qwen3.5:35b"],
+  "generation": {
+    "options": {
+      "temperature": 0,
+      "seed": 20260903,
+      "num_ctx": 32768
+    },
+    "think": false,
+    "stream": false,
+    "device_policy": "Ollama automatic GPU/offload; record observed runtime separately"
+  },
+  "scoring": {
+    "rubric_path": "config/scoring_rubric_v0.4.txt",
+    "rubric_status": "draft_for_train_prompt_development",
+    "score_template": "templates/v0.4/prompt_chain_score.template.txt"
+  },
+  "output_root": "output/v0.4/prompt_chain",
+  "split_policy": {
+    "train": "prompt development and later frozen internal holdout",
+    "valid": "not authorized during draft prompt development",
+    "test": "sealed"
+  }
+}

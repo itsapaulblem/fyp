@@ -1,7 +1,7 @@
 [project]
 name = "football-mllm-coach"
-version = "0.3.0"
-description = "Retrieval-assisted multimodal football recognition and coaching evaluation"
+version = "0.4.0"
+description = "Evidence-first multimodal football recognition and coaching evaluation"
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
 dependencies = [

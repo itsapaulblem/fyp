@@ -12,6 +12,10 @@ Do not describe retrieval-assisted performance as independent video understandin
   inconclusive result. Never modify or rerun its accepted cells.
 - Protocol v0.4 is a separate train-first diagnostic of evidence-first staged
   prompting before coaching generation.
+- The active v0.4 P1 method is exactly two turns: recognition/sequence first,
+  then coaching from the preserved first answer. P2 verification is not active.
+- Human feedback may revise prompts between development runs, but never correct
+  or replace an intermediate answer inside an accepted automatic run.
 - Keep v0.3 and v0.4 prompts, configuration, outputs, scores, and conclusions
   separate. Do not reinterpret v0.4 as another B0-B5 condition.
 - The Dataset B test split remains sealed until a new supervisor-approved

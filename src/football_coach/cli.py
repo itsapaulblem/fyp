@@ -48,13 +48,60 @@ from .soccernet import (
     write_private_manifest,
     write_public_manifest,
 )
+from .staged_prompting import (
+    COACHING_HEADINGS,
+    P1_METHOD,
+    RECOGNITION_HEADINGS,
+    build_coaching_messages,
+    build_recognition_messages,
+    heading_issues,
+    response_text,
+    write_json,
+    write_metadata,
+)
 
 app = typer.Typer(no_args_is_help=True)
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONFIG = ROOT / "config/project_v0.3.0.json"
+DEFAULT_V04_CONFIG = ROOT / "config/project_v0.4.0.json"
 DEFAULT_B_MANIFEST = ROOT / "data/video_b/private/soccernet_gsr_v1.3_reference.csv"
 DEFAULT_B_PUBLIC_MANIFEST = ROOT / "data/video_b/manifests/soccernet_gsr_v1.3_public.csv"
 DEFAULT_B_INTEGRITY_REPORT = ROOT / "data/video_b/private/integrity_v1.3.json"
+
+
+def load_prompt_development_cohort(config: dict) -> dict:
+    path = ROOT / config["development"]["cohort_path"]
+    cohort = load_json(path)
+    if cohort.get("split") != "train":
+        raise ValueError("Prompt-development cohort must use Dataset B train")
+    if cohort.get("selection_used_hidden_labels") is not False:
+        raise ValueError("Prompt-development selection must exclude hidden labels")
+    if cohort.get("selection_used_model_answers") is not False:
+        raise ValueError("Prompt-development selection must exclude model answers")
+    clip_ids = cohort.get("clip_ids", [])
+    if not clip_ids or len(clip_ids) != len(set(clip_ids)):
+        raise ValueError("Prompt-development cohort needs unique clip IDs")
+    return cohort
+
+
+def validate_prompt_chain_config(config: dict, config_path: Path) -> dict:
+    if config.get("protocol_id") != "evidence-first-football-v0.4.0":
+        raise ValueError("Prompt-chain command requires the v0.4 protocol")
+    if config.get("status") != "draft_train_prompt_development":
+        raise ValueError("Prompt-chain command is restricted to draft train development")
+    if config["development"].get("allowed_split") != "train":
+        raise ValueError("v0.4 development must remain train-only")
+    if config["split_policy"].get("test") != "sealed":
+        raise ValueError("v0.4 test split must remain sealed")
+    if P1_METHOD not in config["methods"]["active"]:
+        raise ValueError(f"{P1_METHOD} is not active in {config_path}")
+    prompt_paths = config["prompts"][P1_METHOD]
+    for name in ("recognition", "coaching"):
+        path = ROOT / prompt_paths[name]
+        if not path.is_file():
+            raise ValueError(f"Missing {name} prompt: {path}")
+    cohort = load_prompt_development_cohort(config)
+    return cohort
 
 
 def load_json(path: Path) -> dict:
@@ -669,6 +716,224 @@ def retrieve(
     query = np.load(query_vector_path, allow_pickle=False)
     for hit in index.search(query, k):
         typer.echo(f"{hit.rank}\t{hit.case_id}\t{hit.similarity:.6f}")
+
+
+@app.command("validate-prompt-chain")
+def validate_prompt_chain(
+    config_path: Path = typer.Option(DEFAULT_V04_CONFIG),
+    manifest: Path = typer.Option(DEFAULT_B_MANIFEST),
+) -> None:
+    """Validate the train-only v0.4 P1 environment without contacting Ollama."""
+    config = load_json(config_path)
+    cohort = validate_prompt_chain_config(config, config_path)
+    records = {record.clip_id: record for record in read_manifest(manifest)}
+    for clip_id in cohort["clip_ids"]:
+        record = records.get(clip_id)
+        if record is None or record.split != "train":
+            raise typer.BadParameter(f"Development clip is missing or not train: {clip_id}")
+        reference_path = (
+            ROOT / config["dataset_b"]["human_reference_directory"] / f"{clip_id}.json"
+        )
+        try:
+            validate_human_reference(reference_path, clip_id)
+        except Exception as error:
+            raise typer.BadParameter(
+                f"Development clip lacks a valid human reference: {clip_id}: {error}"
+            ) from error
+    typer.echo(f"protocol_id={config['protocol_id']}")
+    typer.echo(f"status={config['status']}")
+    typer.echo(f"method={P1_METHOD}")
+    typer.echo(f"development_clips={len(cohort['clip_ids'])}")
+    typer.echo("allowed_split=train")
+    typer.echo("test_split=sealed")
+
+
+@app.command("run-prompt-chain")
+def run_prompt_chain(
+    clip_b_id: str,
+    model: str = typer.Option(..., help="Exact Ollama model tag"),
+    method: str = typer.Option(P1_METHOD, help="Active v0.4 prompting method"),
+    config_path: Path = typer.Option(DEFAULT_V04_CONFIG),
+    manifest: Path = typer.Option(DEFAULT_B_MANIFEST),
+) -> None:
+    """Run one preserved, train-only recognition-then-coaching conversation."""
+    config = load_json(config_path)
+    cohort = validate_prompt_chain_config(config, config_path)
+    if method != P1_METHOD:
+        raise typer.BadParameter(f"Only {P1_METHOD} is active")
+    if model not in config["models"]:
+        raise typer.BadParameter(f"Model must be one of {config['models']}")
+    if clip_b_id not in cohort["clip_ids"]:
+        raise typer.BadParameter("Clip is not in the declared prompt-development cohort")
+
+    record = find_b_clip(manifest, clip_b_id)
+    if record.split != "train":
+        raise typer.BadParameter("Draft v0.4 prompting is restricted to Dataset B train")
+    reference_path = (
+        ROOT / config["dataset_b"]["human_reference_directory"] / f"{clip_b_id}.json"
+    )
+    try:
+        validate_human_reference(reference_path, clip_b_id)
+    except Exception as error:
+        raise typer.BadParameter(
+            f"Finalize the pixel-only human reference before inference: {error}"
+        ) from error
+
+    sampling = config["sampling"]
+    frame_count = int(sampling["frame_count"])
+    maximum_edge = int(sampling["maximum_edge"])
+    frames = sample_dataset_b(
+        record,
+        ROOT,
+        ROOT
+        / "artifacts/model_inputs/dataset_b"
+        / record.clip_id
+        / f"uniform_{frame_count}_edge_{maximum_edge}",
+        frame_count,
+        maximum_edge,
+    )
+
+    prompt_paths = {
+        name: ROOT / path
+        for name, path in config["prompts"][P1_METHOD].items()
+    }
+    recognition_prompt = prompt_paths["recognition"].read_text(encoding="utf-8")
+    coaching_prompt = prompt_paths["coaching"].read_text(encoding="utf-8")
+    recognition_messages = build_recognition_messages(recognition_prompt, frames)
+
+    timestamp = timestamp_utc()
+    run_dir = (
+        ROOT
+        / config["output_root"]
+        / method
+        / model.replace(":", "_")
+        / clip_b_id
+        / timestamp
+    )
+    run_dir.mkdir(parents=True, exist_ok=False)
+    (run_dir / "stage_1_prompt.txt").write_text(
+        readable_transcript(recognition_messages, ROOT),
+        encoding="utf-8",
+    )
+
+    metadata = {
+        "protocol_id": config["protocol_id"],
+        "parent_protocol_id": config["parent_protocol_id"],
+        "method": method,
+        "dataset_b_clip_id": clip_b_id,
+        "dataset_b_split": record.split,
+        "development_only": True,
+        "hidden_b_action_sent_to_model": False,
+        "hidden_b_action_used_for_selection": False,
+        "human_intervention_inside_run": False,
+        "dataset_a_material_sent_to_model": False,
+        "dataset_b_frame_count": frame_count,
+        "dataset_b_frame_indices_1_based": [
+            int(path.stem.rsplit("_", 1)[1]) for path in frames
+        ],
+        "maximum_edge": maximum_edge,
+        "sampling_algorithm": sampling["algorithm"],
+        "image_construction": sampling["image_encoding"],
+        "frame_sha256": {
+            path.relative_to(ROOT).as_posix(): sha256_file(path) for path in frames
+        },
+        "config_sha256": sha256_file(config_path),
+        "cohort_sha256": sha256_file(ROOT / config["development"]["cohort_path"]),
+        "human_reference_sha256": sha256_file(reference_path),
+        "recognition_prompt_sha256": sha256_file(prompt_paths["recognition"]),
+        "coaching_prompt_sha256": sha256_file(prompt_paths["coaching"]),
+        "model": model,
+        "model_digest": None,
+        "generation": config["generation"],
+        "run_status": "started",
+        "created_at_utc": timestamp,
+    }
+    write_metadata(run_dir / "metadata.txt", metadata)
+
+    load_dotenv(ROOT / ".env")
+    client = OllamaClient()
+    options = dict(config["generation"]["options"])
+    think = bool(config["generation"]["think"])
+    current_stage = "model_metadata"
+    total_started = perf_counter()
+    try:
+        model_metadata = client.model_metadata(model)
+        metadata["model_digest"] = model_metadata.get("digest")
+
+        current_stage = "stage_1_recognition"
+        stage_started = perf_counter()
+        raw_recognition = client.chat(
+            model=model,
+            messages=recognition_messages,
+            options=options,
+            think=think,
+        )
+        recognition_seconds = perf_counter() - stage_started
+        recognition_answer = response_text(raw_recognition)
+        (run_dir / "stage_1_response.txt").write_text(
+            recognition_answer, encoding="utf-8"
+        )
+        write_json(run_dir / "stage_1_raw_api_response.json", raw_recognition)
+
+        coaching_messages = build_coaching_messages(
+            recognition_prompt,
+            frames,
+            recognition_answer,
+            coaching_prompt,
+        )
+        (run_dir / "stage_2_prompt.txt").write_text(
+            readable_transcript(coaching_messages, ROOT),
+            encoding="utf-8",
+        )
+
+        current_stage = "stage_2_coaching"
+        stage_started = perf_counter()
+        raw_coaching = client.chat(
+            model=model,
+            messages=coaching_messages,
+            options=options,
+            think=think,
+        )
+        coaching_seconds = perf_counter() - stage_started
+        coaching_answer = response_text(raw_coaching)
+        (run_dir / "stage_2_response.txt").write_text(
+            coaching_answer, encoding="utf-8"
+        )
+        write_json(run_dir / "stage_2_raw_api_response.json", raw_coaching)
+    except Exception as error:
+        metadata.update(
+            {
+                "run_status": "crash",
+                "crash_stage": current_stage,
+                "error_type": type(error).__name__,
+                "error_message": str(error),
+                "elapsed_seconds": perf_counter() - total_started,
+            }
+        )
+        write_json(
+            run_dir / "error.json",
+            {"stage": current_stage, "type": type(error).__name__, "message": str(error)},
+        )
+        write_metadata(run_dir / "metadata.txt", metadata)
+        typer.echo(f"Preserved failed run at {run_dir}")
+        raise
+
+    recognition_issues = heading_issues(recognition_answer, RECOGNITION_HEADINGS)
+    coaching_issues = heading_issues(coaching_answer, COACHING_HEADINGS)
+    metadata.update(
+        {
+            "run_status": "complete",
+            "stage_1_elapsed_seconds": recognition_seconds,
+            "stage_2_elapsed_seconds": coaching_seconds,
+            "elapsed_seconds": perf_counter() - total_started,
+            "stage_1_format_status": "valid" if not recognition_issues else "invalid",
+            "stage_1_format_issues": recognition_issues,
+            "stage_2_format_status": "valid" if not coaching_issues else "invalid",
+            "stage_2_format_issues": coaching_issues,
+        }
+    )
+    write_metadata(run_dir / "metadata.txt", metadata)
+    typer.echo(f"Preserved two-turn run at {run_dir}")
 
 
 @app.command("ollama-check")

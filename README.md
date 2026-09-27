@@ -258,3 +258,54 @@ assistance. Following supervisor review, the project is preparing a separate
 v0.4 train-first diagnostic of evidence-first staged prompting. This new work
 must not alter or be mixed with completed v0.3 evidence. Its active plan is in
 `PROJECT_NEXT_STEPS.md`. No test-split inference is currently authorized.
+
+## v0.4 two-turn prompt development
+
+Protocol v0.4 implements the supervisor-requested recognition-before-coaching
+experiment as a separate train-only workflow:
+
+1. Turn 1 receives 30 ordered Dataset B frames and produces visible evidence,
+   chronology, event assessment, and limitations without coaching.
+2. Turn 2 continues the same conversation with the exact Turn 1 answer and
+   produces conditional, evidence-supported coaching.
+
+Validate the local files and development references without contacting Ollama:
+
+```powershell
+uv run football-coach validate-prompt-chain
+```
+
+Check the installed local models:
+
+```powershell
+uv run football-coach ollama-check --model qwen3.5:27b
+uv run football-coach ollama-check --model qwen3.5:35b
+```
+
+After reviewing the draft prompts and rubric, the declared first development
+diagnostic is:
+
+```powershell
+uv run football-coach run-prompt-chain B-TRAIN-0025 --model qwen3.5:27b
+```
+
+The final command performs real inference. It accepts only the eight declared
+B-train development clips and refuses validation/test clips. It preserves both
+prompts, both answers, untouched API responses, model digest, timing, hashes,
+format failures, and crash provenance under:
+
+```text
+output/v0.4/prompt_chain/P1_two_turn/MODEL/CLIP_ID/TIMESTAMP/
+```
+
+The active files are:
+
+- `config/project_v0.4.0.json`;
+- `config/prompt_development_cohort_v0.4.0.json`;
+- `input_prompts/v0.4/p1_recognition.txt`;
+- `input_prompts/v0.4/p1_coaching.txt`;
+- `config/scoring_rubric_v0.4.txt`;
+- `templates/v0.4/prompt_chain_score.template.txt`.
+
+P2 event-hypothesis verification, fine-tuning, and frontier APIs remain later
+gates. Do not mix them into P1 development.

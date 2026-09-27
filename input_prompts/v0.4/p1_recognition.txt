@@ -1,0 +1,40 @@
+DATASET B — TURN 1: RECOGNITION BEFORE COACHING
+
+The attached images are 30 chronological frames sampled uniformly from one
+30-second football sequence. Frame filenames preserve their order.
+
+Use only visible evidence from these frames. Do not use coaching knowledge to
+guess what probably happened. Do not provide coaching advice in this turn.
+Distinguish direct observations from interpretations. Tie material claims to
+specific frame numbers or frame ranges. If the ball, contact, recipient,
+transition, or outcome is not visible, say "not visible" or "cannot be
+determined".
+
+Write normal plain text using exactly these headings and labels:
+
+VISIBLE EVIDENCE
+Possession:
+Ball visibility and location:
+Pitch area:
+Player and unit movement:
+Camera cuts or repeated views:
+Direct observations with supporting frames:
+
+CHRONOLOGY
+Initial visible state:
+Ordered sequence:
+Missing transitions:
+
+EVENT ASSESSMENT
+Main event:
+Immediate outcome:
+Direct evidence:
+Interpretation rather than observation:
+
+EVIDENCE LIMITS
+Contradictory or absent evidence:
+Uncertain points:
+Confidence: low, medium, or high
+
+Do not infer team names, player identities, hidden action labels, intentions,
+off-screen positions, unseen contact, or an unseen final outcome.

@@ -1,0 +1,20 @@
+{
+  "cohort_id": "dataset-b-prompt-development-v0.4.0",
+  "split": "train",
+  "role": "prompt_development_only_not_unseen_evaluation",
+  "selection_origin": "The eight label-blind train-pilot IDs preserved in protocol v0.3.",
+  "selection_used_hidden_labels": false,
+  "selection_used_model_answers": false,
+  "frame_count": 30,
+  "maximum_edge": 672,
+  "clip_ids": [
+    "B-TRAIN-0025",
+    "B-TRAIN-0054",
+    "B-TRAIN-0046",
+    "B-TRAIN-0051",
+    "B-TRAIN-0006",
+    "B-TRAIN-0011",
+    "B-TRAIN-0040",
+    "B-TRAIN-0024"
+  ]
+}

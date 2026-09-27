@@ -1,0 +1,109 @@
+FOOTBALL MLLM STAGED-PROMPTING DEVELOPMENT RUBRIC
+Rubric version: 0.4.0-draft
+Status: train prompt development only; freeze before an internal holdout
+
+1. PURPOSE
+
+Evaluate the two-turn P1 pipeline without combining dimensions into one score.
+Score Turn 1 before reading Turn 2. The principal reference is the finalized
+pixel-only human review of the same F30 Dataset B frames. Hidden SoccerNet labels
+are not model input or coaching ground truth.
+
+Never edit a model response while scoring it. Human correction inside a run is
+not part of P1.
+
+2. TURN 1 — VISIBLE EVIDENCE
+
+Direct-observation accuracy (0–2)
+0 = Material observations are invented or contradicted.
+1 = A mixture of correct, vague, and unsupported observations.
+2 = Material observations are accurate and appropriately limited.
+
+Frame grounding (0–2)
+0 = Claims lack frame support or cite contradictory frames.
+1 = Some claims are linked correctly but grounding is incomplete.
+2 = Material claims are accurately linked to frame numbers or ranges.
+
+Observation/inference separation (0–2)
+0 = Interpretations are repeatedly stated as visible facts.
+1 = Separation is inconsistent.
+2 = Direct observations, interpretations, and unknowns are clearly separated.
+
+Ball and possession evidence (0–2)
+0 = Materially wrong or invented.
+1 = Partly correct, vague, or appropriately uncertain.
+2 = Correct and visibly supported.
+
+3. TURN 1 — EVENT RECOGNITION
+
+Temporal sequence (0–4)
+0 = Mostly invented, reversed, or unrelated.
+1 = One isolated event is correct but progression is substantially wrong.
+2 = Main progression is partly correct with important omissions or ordering errors.
+3 = Key events are correctly ordered with a minor omission or error.
+4 = Key visible events and transitions are correctly ordered.
+
+Main event (0–2)
+0 = Wrong, invented, or misses the critical event.
+1 = Partly correct or too vague.
+2 = Correct and visibly supported.
+
+Outcome (0–2)
+0 = Wrong or invented.
+1 = Partly correct, incomplete, or appropriately cautious.
+2 = Correct and visibly supported.
+
+Critical event missed (yes/no)
+Use yes when a decisive visible event needed to understand the sequence is absent.
+
+4. TURN 2 — COACHING
+
+Problem identification (0–2)
+0 = Unsupported, irrelevant, unsafe, or based on a misread event.
+1 = Plausible but generic, secondary, or partly supported.
+2 = A priority problem follows from the visible evidence.
+
+Advice quality (0–3)
+0 = Unsafe, irrelevant, contradictory, or unusable.
+1 = Generic with little connection to the sequence.
+2 = Specific and plausible advice connected to the problem.
+3 = Specific, actionable, prioritised, and evidence-linked.
+
+Practice representativeness (0–2)
+0 = Unrelated or trains the wrong problem.
+1 = Partly representative but missing useful constraints or cues.
+2 = Reproduces the relevant problem with usable constraints and cues.
+
+Coaching evidence support (0–2)
+0 = Coaching does not follow from visible evidence.
+1 = Some claims are supported while others are assumed.
+2 = Problem, advice, and practice consistently follow from visible evidence.
+
+5. FAILURE PROPAGATION AND UNCERTAINTY
+
+Recognition-to-coaching propagation (0–2, lower is better)
+0 = No material Turn 1 error is propagated, or Turn 1 is materially correct.
+1 = A minor or qualified recognition error influences coaching.
+2 = A material recognition hallucination becomes a definite tactical diagnosis.
+
+Hallucination categories
+Choose any: object or relation; temporal; semantic detail; extrinsic factual;
+extrinsic non-factual; none.
+
+Hallucination severity (0–3, lower is better)
+0 = None.
+1 = Minor unsupported detail.
+2 = Material unsupported claim changes recognition, diagnosis, or advice.
+3 = Unsupported claims dominate or reverse the interpretation.
+
+Uncertainty calibration (0–2)
+0 = Confident despite missing/contradictory evidence, or fails to recognise clear evidence.
+1 = Partly calibrated.
+2 = Confidence and limitations match the frames.
+
+6. REPORTING
+
+- Report every dimension separately; do not calculate an overall mark.
+- Preserve Turn 1, Turn 2, and all reasons.
+- A blank, out-of-range value, or missing reason invalidates the score form.
+- Development scores may guide prompt revision but are not holdout evidence.

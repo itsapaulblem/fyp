@@ -52,52 +52,42 @@ model and frozen prompt chain?
 | ID | Method | Purpose |
 |---|---|---|
 | P0 | Existing single prompt | Pretrained prompting baseline |
-| P1 | Linear staged chain | Evidence extraction before interpretation and advice |
-| P2 | Chain with limited event hypotheses | Explicit verification before event selection |
+| P1 | Two-turn chain | Turn 1 recognition and sequence; Turn 2 coaching |
+| P2 | Five-stage verified chain | Later refinement if P1 remains unreliable |
 
-P2 generates at most three candidate interpretations. It is a controlled branch,
-not an unrestricted Tree of Thoughts system.
+P1 is the direct implementation of the supervisor request. P2 may later generate
+at most three candidate interpretations; it is not active yet.
 
 Across paired comparisons, preserve the same ordered frames, resolution, model
 tag and digest, decoding settings, human reference, rubric, and output contract.
 Record extra calls, runtime, context use, failures, and API cost.
 
-## 5. Proposed prompting chain
+## 5. Active P1 two-turn chain
 
-### Stage 1 — Visible evidence
+### Turn 1 — Recognition before coaching
 
-Extract only ball visibility and approximate location, possession evidence,
-pitch region, player movement, changes across chronological frame groups,
-restarts or stoppages, camera cuts, replay-like repetition, and important
-information that cannot be seen. Do not identify the main event or give advice.
+Using the same 30 ordered frames, extract visible evidence, construct the
+chronology, identify the main event and immediate outcome, and state limitations.
+Material claims must cite supporting frame numbers or ranges. No coaching is
+allowed in this turn.
 
-### Stage 2 — Chronology
+### Turn 2 — Coaching
 
-Construct an evidence-linked sequence: initial state, initiating action,
-intermediate changes, decisive event, immediate outcome, and missing transitions
-caused by sampling.
+Continue the same conversation using the exact Turn 1 response. Interpret the
+tactical phase and provide at most one evidence-supported priority problem,
+coach message, and representative practice. If Turn 1 is uncertain or
+unsupported, advice must remain conditional.
 
-### Stage 3 — Event verification
+There is no human correction inside an accepted P1 run. Prompt revision is
+allowed only between development runs, with every failed output preserved.
 
-Generate up to three candidates. For each, record supporting evidence,
-contradictory evidence, required-but-unseen evidence, and confidence. Select one
-only when supported; otherwise return `insufficient visual evidence`.
+## 6. Deferred P2 refinement
 
-### Stage 4 — Tactical interpretation
+If P1 remains unreliable, P2 will separate visible evidence, chronology, event
+hypotheses, tactical interpretation, and coaching into five stages. Its prompts
+must be declared only after P1 failures justify the added complexity.
 
-Identify the phase, attacking and defending roles, and at most one observable
-tactical problem. Keep conclusions conditional when recognition is uncertain.
-
-### Stage 5 — Coaching
-
-Generate one coach message, one representative practice, observable success
-cues, and limitations. Do not give highly specific advice when the decisive
-event or tactical problem is unsupported.
-
-Save every stage exactly as generated. Later stages must record hashes of
-earlier stage inputs and outputs.
-
-## 6. Data plan
+## 7. Data plan
 
 Use the existing eight B-train pilot clips for prompt development because their
 references and diagnosed failures already exist. Do not present them as unseen
@@ -115,7 +105,7 @@ Before comparative evaluation:
 
 The holdout size and selection rule remain to be decided before inference.
 
-## 7. Model plan
+## 8. Model plan
 
 Local Ollama inventory:
 
@@ -132,7 +122,7 @@ using the same sampled JPEGs. External API use requires permission to transmit
 frames, an exact model identifier, cost tracking, and raw response preservation.
 The remote GPU does not run Claude inference.
 
-## 8. Fine-tuning decision gate
+## 9. Fine-tuning decision gate
 
 Do not fine-tune until prompt-only diagnostics identify a stable failure that
 training is intended to correct.
@@ -149,7 +139,7 @@ If fine-tuning is justified:
 Dataset A's 25 cases remain the v0.3 coaching library. They are not sufficient
 by themselves for a video-language fine-tuning dataset.
 
-## 9. Workspace layout
+## 10. Workspace layout
 
 ```text
 input_prompts/v0.4/       staged prompt templates
@@ -162,7 +152,7 @@ output/v0.4/model_comparison/ cross-model runs
 Generated outputs remain Git-ignored. Folder creation does not freeze a prompt
 or configuration.
 
-## 10. Execution gates
+## 11. Execution gates
 
 1. **Design:** agree the intermediate information and scoring contract.
 2. **Prompt development:** use only known B-train development material.
@@ -175,16 +165,14 @@ or configuration.
 7. **Validation decision:** proceed only if train evidence warrants it.
 8. **Test decision:** keep test sealed without a later approved full freeze.
 
-## 11. Immediate next action only
+## 12. Immediate next action only
 
-Design the Stage 1 visible-evidence contract using existing B-train human
-references. Decide:
+Review the draft P1 prompts and rubric, then validate the local environment with:
 
-1. whether evidence is recorded per frame or chronological frame group;
-2. which fields are directly observable;
-3. how missing visibility and uncertainty are represented;
-4. what Stage 1 is forbidden to infer;
-5. how Stage 1 is scored independently of later coaching.
+```powershell
+uv run football-coach validate-prompt-chain
+uv run football-coach ollama-check --model qwen3.5:27b
+```
 
-Do not run new inference, select the holdout, create v0.4 configuration, or
-fine-tune until this contract is agreed.
+After review, run only the declared initial B-train diagnostic clip. Do not
+select a holdout, access validation/test, activate P2, or fine-tune yet.
