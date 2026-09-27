@@ -232,8 +232,9 @@ mark.
 
 ## Current boundary
 
-The repository remains in `frozen_validation`, but validation execution and
-human grading are complete. All 32 B0 train-pilot cells and all 20 evaluable
+Protocol v0.3 remains in `frozen_validation`, but validation execution and
+human grading are complete. The state is preserved by the Git tag
+`v0.3-validation-complete`. All 32 B0 train-pilot cells and all 20 evaluable
 validation cells are complete. The validation matrix contains B0, B1, B3, B4,
 and B5 on four fixed clips; B2 was excluded as not evaluable rather than given a
 substitute case. All score forms validate, the private maps were revealed only
@@ -253,7 +254,7 @@ The private report is
 `data/video_b/private/frozen_validation_post_unblinding_v1/VALIDATION_COMPARISON_REPORT.txt`.
 It reports each rubric dimension separately and does not calculate one overall
 mark. The validation evidence does not establish a reliable benefit from case
-assistance. The next action is supervisor review and an explicit decision to
-stop with the negative/inconclusive validation result, run a separately defined
-train/validation diagnostic, or authorize a single frozen test run. No test-split
-inference is currently authorized.
+assistance. Following supervisor review, the project is preparing a separate
+v0.4 train-first diagnostic of evidence-first staged prompting. This new work
+must not alter or be mixed with completed v0.3 evidence. Its active plan is in
+`PROJECT_NEXT_STEPS.md`. No test-split inference is currently authorized.

@@ -6,6 +6,20 @@ Test whether a human-annotated analogous football case retrieved from Dataset A
 improves an MLLM's recognition and coaching advice for a new Dataset B sequence.
 Do not describe retrieval-assisted performance as independent video understanding.
 
+## Current protocol boundary
+
+- Protocol v0.3 is complete at validation and is preserved as a negative or
+  inconclusive result. Never modify or rerun its accepted cells.
+- Protocol v0.4 is a separate train-first diagnostic of evidence-first staged
+  prompting before coaching generation.
+- Keep v0.3 and v0.4 prompts, configuration, outputs, scores, and conclusions
+  separate. Do not reinterpret v0.4 as another B0-B5 condition.
+- The Dataset B test split remains sealed until a new supervisor-approved
+  protocol freeze explicitly authorizes it.
+- Fine-tuning is conditional on a diagnosed prompt-stage failure and may use
+  only human-authored B-train pixel-derived targets, never hidden labels as
+  ordinary input or coaching ground truth.
+
 ## FYP standard
 
 - Demonstrate independent learning and justify every material design choice.
