@@ -52,10 +52,15 @@ from .staged_prompting import (
     COACHING_HEADINGS,
     P1_METHOD,
     RECOGNITION_HEADINGS,
-    build_coaching_messages,
-    build_recognition_messages,
+    coaching_messages,
+    feedback_text,
     heading_issues,
+    read_metadata,
+    recognition_messages,
     response_text,
+    review_template,
+    revision_messages,
+    validate_review,
     write_json,
     write_metadata,
 )
@@ -96,7 +101,7 @@ def validate_prompt_chain_config(config: dict, config_path: Path) -> dict:
     if P1_METHOD not in config["methods"]["active"]:
         raise ValueError(f"{P1_METHOD} is not active in {config_path}")
     prompt_paths = config["prompts"][P1_METHOD]
-    for name in ("recognition", "coaching"):
+    for name in ("recognition", "revision", "coaching"):
         path = ROOT / prompt_paths[name]
         if not path.is_file():
             raise ValueError(f"Missing {name} prompt: {path}")
@@ -748,15 +753,15 @@ def validate_prompt_chain(
     typer.echo("test_split=sealed")
 
 
-@app.command("run-prompt-chain")
-def run_prompt_chain(
+@app.command("start-prompt-review")
+def start_prompt_review(
     clip_b_id: str,
     model: str = typer.Option(..., help="Exact Ollama model tag"),
     method: str = typer.Option(P1_METHOD, help="Active v0.4 prompting method"),
     config_path: Path = typer.Option(DEFAULT_V04_CONFIG),
     manifest: Path = typer.Option(DEFAULT_B_MANIFEST),
 ) -> None:
-    """Run one preserved, train-only recognition-then-coaching conversation."""
+    """Generate recognition and stop for frame-based human review."""
     config = load_json(config_path)
     cohort = validate_prompt_chain_config(config, config_path)
     if method != P1_METHOD:
@@ -798,8 +803,7 @@ def run_prompt_chain(
         for name, path in config["prompts"][P1_METHOD].items()
     }
     recognition_prompt = prompt_paths["recognition"].read_text(encoding="utf-8")
-    coaching_prompt = prompt_paths["coaching"].read_text(encoding="utf-8")
-    recognition_messages = build_recognition_messages(recognition_prompt, frames)
+    messages = recognition_messages(recognition_prompt, frames)
 
     timestamp = timestamp_utc()
     run_dir = (
@@ -812,7 +816,7 @@ def run_prompt_chain(
     )
     run_dir.mkdir(parents=True, exist_ok=False)
     (run_dir / "stage_1_prompt.txt").write_text(
-        readable_transcript(recognition_messages, ROOT),
+        readable_transcript(messages, ROOT),
         encoding="utf-8",
     )
 
@@ -825,7 +829,8 @@ def run_prompt_chain(
         "development_only": True,
         "hidden_b_action_sent_to_model": False,
         "hidden_b_action_used_for_selection": False,
-        "human_intervention_inside_run": False,
+        "human_intervention_inside_run": True,
+        "human_assisted": True,
         "dataset_a_material_sent_to_model": False,
         "dataset_b_frame_count": frame_count,
         "dataset_b_frame_indices_1_based": [
@@ -841,6 +846,7 @@ def run_prompt_chain(
         "cohort_sha256": sha256_file(ROOT / config["development"]["cohort_path"]),
         "human_reference_sha256": sha256_file(reference_path),
         "recognition_prompt_sha256": sha256_file(prompt_paths["recognition"]),
+        "revision_prompt_sha256": sha256_file(prompt_paths["revision"]),
         "coaching_prompt_sha256": sha256_file(prompt_paths["coaching"]),
         "model": model,
         "model_digest": None,
@@ -859,12 +865,18 @@ def run_prompt_chain(
     try:
         model_metadata = client.model_metadata(model)
         metadata["model_digest"] = model_metadata.get("digest")
+        if (
+            not isinstance(metadata["model_digest"], str)
+            or len(metadata["model_digest"]) != 64
+            or any(character not in "0123456789abcdef" for character in metadata["model_digest"])
+        ):
+            raise ValueError("Ollama did not provide a full model digest")
 
         current_stage = "stage_1_recognition"
         stage_started = perf_counter()
         raw_recognition = client.chat(
             model=model,
-            messages=recognition_messages,
+            messages=messages,
             options=options,
             think=think,
         )
@@ -875,31 +887,6 @@ def run_prompt_chain(
         )
         write_json(run_dir / "stage_1_raw_api_response.json", raw_recognition)
 
-        coaching_messages = build_coaching_messages(
-            recognition_prompt,
-            frames,
-            recognition_answer,
-            coaching_prompt,
-        )
-        (run_dir / "stage_2_prompt.txt").write_text(
-            readable_transcript(coaching_messages, ROOT),
-            encoding="utf-8",
-        )
-
-        current_stage = "stage_2_coaching"
-        stage_started = perf_counter()
-        raw_coaching = client.chat(
-            model=model,
-            messages=coaching_messages,
-            options=options,
-            think=think,
-        )
-        coaching_seconds = perf_counter() - stage_started
-        coaching_answer = response_text(raw_coaching)
-        (run_dir / "stage_2_response.txt").write_text(
-            coaching_answer, encoding="utf-8"
-        )
-        write_json(run_dir / "stage_2_raw_api_response.json", raw_coaching)
     except Exception as error:
         metadata.update(
             {
@@ -919,21 +906,277 @@ def run_prompt_chain(
         raise
 
     recognition_issues = heading_issues(recognition_answer, RECOGNITION_HEADINGS)
-    coaching_issues = heading_issues(coaching_answer, COACHING_HEADINGS)
     metadata.update(
         {
-            "run_status": "complete",
+            "run_status": "awaiting_human_review",
             "stage_1_elapsed_seconds": recognition_seconds,
-            "stage_2_elapsed_seconds": coaching_seconds,
             "elapsed_seconds": perf_counter() - total_started,
             "stage_1_format_status": "valid" if not recognition_issues else "invalid",
             "stage_1_format_issues": recognition_issues,
-            "stage_2_format_status": "valid" if not coaching_issues else "invalid",
-            "stage_2_format_issues": coaching_issues,
         }
     )
+    write_json(
+        run_dir / "initial_review.template.json",
+        review_template(sha256_file(run_dir / "stage_1_response.txt")),
+    )
     write_metadata(run_dir / "metadata.txt", metadata)
-    typer.echo(f"Preserved two-turn run at {run_dir}")
+    typer.echo(f"Review recognition at {run_dir / 'stage_1_response.txt'}")
+    typer.echo("Copy initial_review.template.json to initial_review.json and complete it.")
+    typer.echo(f"Preserved run at {run_dir}")
+
+
+def guided_run_context(
+    run_dir: Path, config_path: Path, manifest: Path
+) -> tuple[dict, dict, list[Path], Path]:
+    config = load_json(config_path)
+    cohort = validate_prompt_chain_config(config, config_path)
+    root = (ROOT / config["output_root"]).resolve()
+    run_dir = run_dir.resolve()
+    if not run_dir.is_relative_to(root):
+        raise typer.BadParameter(f"Run must be under {root}")
+    metadata = read_metadata(run_dir / "metadata.txt")
+    clip_id = metadata.get("dataset_b_clip_id")
+    if (
+        metadata.get("protocol_id") != config["protocol_id"]
+        or metadata.get("method") != P1_METHOD
+        or metadata.get("dataset_b_split") != "train"
+        or clip_id not in cohort["clip_ids"]
+    ):
+        raise typer.BadParameter("Run is not an eligible v0.4 train development run")
+    if metadata.get("config_sha256") != sha256_file(config_path):
+        raise typer.BadParameter("v0.4 config changed since recognition")
+    if metadata.get("cohort_sha256") != sha256_file(
+        ROOT / config["development"]["cohort_path"]
+    ):
+        raise typer.BadParameter("Development cohort changed since recognition")
+    reference_path = (
+        ROOT / config["dataset_b"]["human_reference_directory"] / f"{clip_id}.json"
+    )
+    if metadata.get("human_reference_sha256") != sha256_file(reference_path):
+        raise typer.BadParameter("Human reference changed since recognition")
+    record = find_b_clip(manifest, clip_id)
+    if record.split != "train":
+        raise typer.BadParameter("Run clip is not in Dataset B train")
+    prompt_paths = {
+        name: ROOT / path for name, path in config["prompts"][P1_METHOD].items()
+    }
+    for name in ("recognition", "revision", "coaching"):
+        if metadata.get(f"{name}_prompt_sha256") != sha256_file(prompt_paths[name]):
+            raise typer.BadParameter(f"{name} prompt changed since recognition")
+    frames = [ROOT / path for path in metadata["frame_sha256"]]
+    if any(
+        not path.is_file() or sha256_file(path) != expected
+        for path, expected in zip(frames, metadata["frame_sha256"].values(), strict=True)
+    ):
+        raise typer.BadParameter("Sampled frames changed since recognition")
+    if metadata.get("model") not in config["models"] or not metadata.get("model_digest"):
+        raise typer.BadParameter("Run lacks an eligible exact model digest")
+    return config, metadata, frames, run_dir
+
+
+def checked_review(
+    run_dir: Path,
+    file_name: str,
+    answer_path: Path,
+    frames: list[Path],
+    *,
+    revised: bool = False,
+) -> dict:
+    path = run_dir / file_name
+    if not path.is_file():
+        raise typer.BadParameter(f"Complete the review file first: {path}")
+    review = load_json(path)
+    try:
+        validate_review(review, answer_path, set(range(1, len(frames) + 1)), revised=revised)
+    except ValueError as error:
+        raise typer.BadParameter(str(error)) from error
+    return review
+
+
+@app.command("revise-prompt-recognition")
+def revise_prompt_recognition(
+    run_dir: Path,
+    config_path: Path = typer.Option(DEFAULT_V04_CONFIG),
+    manifest: Path = typer.Option(DEFAULT_B_MANIFEST),
+) -> None:
+    """Send one frame-cited human correction and preserve revised recognition."""
+    config, metadata, frames, run_dir = guided_run_context(run_dir, config_path, manifest)
+    if metadata["run_status"] != "awaiting_human_review":
+        raise typer.BadParameter("Run is not awaiting its initial human review")
+    initial_path = run_dir / "stage_1_response.txt"
+    review = checked_review(run_dir, "initial_review.json", initial_path, frames)
+    if review["decision"] != "revise":
+        raise typer.BadParameter("Use finish-prompt-coaching for an approved initial answer")
+    if not initial_path.read_text(encoding="utf-8").strip():
+        raise typer.BadParameter("Cannot revise an empty recognition answer")
+
+    paths = {
+        name: ROOT / path for name, path in config["prompts"][P1_METHOD].items()
+    }
+    correction = feedback_text(
+        review, paths["revision"].read_text(encoding="utf-8")
+    )
+    messages = revision_messages(
+        paths["recognition"].read_text(encoding="utf-8"),
+        frames,
+        initial_path.read_text(encoding="utf-8"),
+        correction,
+    )
+    write_json(run_dir / "initial_review_snapshot.json", review)
+    (run_dir / "human_feedback.txt").write_text(correction, encoding="utf-8")
+    (run_dir / "stage_2_revision_prompt.txt").write_text(
+        readable_transcript(messages, ROOT), encoding="utf-8"
+    )
+    metadata["initial_review_sha256"] = sha256_file(run_dir / "initial_review.json")
+    metadata["human_feedback_sha256"] = sha256_file(run_dir / "human_feedback.txt")
+    metadata["run_status"] = "revision_started"
+    write_metadata(run_dir / "metadata.txt", metadata)
+
+    load_dotenv(ROOT / ".env")
+    client = OllamaClient()
+    started = perf_counter()
+    try:
+        if client.model_metadata(metadata["model"]).get("digest") != metadata["model_digest"]:
+            raise ValueError("Installed model digest differs from initial recognition")
+        raw = client.chat(
+            metadata["model"],
+            messages,
+            dict(config["generation"]["options"]),
+            bool(config["generation"]["think"]),
+        )
+        answer = response_text(raw)
+        (run_dir / "stage_2_revision_response.txt").write_text(answer, encoding="utf-8")
+        write_json(run_dir / "stage_2_revision_raw_api_response.json", raw)
+    except Exception as error:
+        metadata.update(
+            run_status="crash",
+            crash_stage="recognition_revision",
+            error_type=type(error).__name__,
+            error_message=str(error),
+            stage_2_elapsed_seconds=perf_counter() - started,
+        )
+        write_json(
+            run_dir / "stage_2_error.json",
+            {"type": type(error).__name__, "message": str(error)},
+        )
+        write_metadata(run_dir / "metadata.txt", metadata)
+        raise
+    issues = heading_issues(answer, RECOGNITION_HEADINGS)
+    metadata.update(
+        run_status="awaiting_revision_approval",
+        stage_2_elapsed_seconds=perf_counter() - started,
+        stage_2_format_status="valid" if not issues else "invalid",
+        stage_2_format_issues=issues,
+    )
+    write_json(
+        run_dir / "revision_review.template.json",
+        review_template(sha256_file(run_dir / "stage_2_revision_response.txt"), revised=True),
+    )
+    write_metadata(run_dir / "metadata.txt", metadata)
+    typer.echo(f"Review revised recognition at {run_dir / 'stage_2_revision_response.txt'}")
+    typer.echo("Copy revision_review.template.json to revision_review.json and approve it.")
+
+
+@app.command("finish-prompt-coaching")
+def finish_prompt_coaching(
+    run_dir: Path,
+    config_path: Path = typer.Option(DEFAULT_V04_CONFIG),
+    manifest: Path = typer.Option(DEFAULT_B_MANIFEST),
+) -> None:
+    """Generate coaching only after human approval of recognition."""
+    config, metadata, frames, run_dir = guided_run_context(run_dir, config_path, manifest)
+    if metadata["run_status"] not in {
+        "awaiting_human_review", "awaiting_revision_approval"
+    }:
+        raise typer.BadParameter("Run is not awaiting recognition approval")
+    initial_path = run_dir / "stage_1_response.txt"
+    initial_answer = initial_path.read_text(encoding="utf-8")
+    if not initial_answer.strip():
+        raise typer.BadParameter("Cannot coach from an empty recognition answer")
+    paths = {
+        name: ROOT / path for name, path in config["prompts"][P1_METHOD].items()
+    }
+    correction = None
+    revised_answer = None
+    if metadata["run_status"] == "awaiting_human_review":
+        review = checked_review(run_dir, "initial_review.json", initial_path, frames)
+        if review["decision"] != "approve":
+            raise typer.BadParameter("Revise the recognition before requesting coaching")
+        write_json(run_dir / "initial_review_snapshot.json", review)
+        metadata["initial_review_sha256"] = sha256_file(run_dir / "initial_review.json")
+    else:
+        if sha256_file(run_dir / "initial_review.json") != metadata["initial_review_sha256"]:
+            raise typer.BadParameter("Initial human review changed after revision")
+        if sha256_file(run_dir / "human_feedback.txt") != metadata["human_feedback_sha256"]:
+            raise typer.BadParameter("Human feedback changed after revision")
+        revised_path = run_dir / "stage_2_revision_response.txt"
+        review = checked_review(
+            run_dir, "revision_review.json", revised_path, frames, revised=True
+        )
+        write_json(run_dir / "revision_review_snapshot.json", review)
+        metadata["revision_review_sha256"] = sha256_file(run_dir / "revision_review.json")
+        if review["decision"] == "reject":
+            metadata["run_status"] = "recognition_rejected"
+            write_metadata(run_dir / "metadata.txt", metadata)
+            typer.echo(f"Preserved rejected recognition without coaching at {run_dir}")
+            return
+        correction = (run_dir / "human_feedback.txt").read_text(encoding="utf-8")
+        revised_answer = revised_path.read_text(encoding="utf-8")
+        if not revised_answer.strip():
+            raise typer.BadParameter("Cannot coach from an empty revised answer")
+
+    messages = coaching_messages(
+        paths["recognition"].read_text(encoding="utf-8"),
+        frames,
+        initial_answer,
+        paths["coaching"].read_text(encoding="utf-8"),
+        correction,
+        revised_answer,
+    )
+    (run_dir / "stage_3_coaching_prompt.txt").write_text(
+        readable_transcript(messages, ROOT), encoding="utf-8"
+    )
+    metadata["run_status"] = "coaching_started"
+    write_metadata(run_dir / "metadata.txt", metadata)
+
+    load_dotenv(ROOT / ".env")
+    client = OllamaClient()
+    started = perf_counter()
+    try:
+        if client.model_metadata(metadata["model"]).get("digest") != metadata["model_digest"]:
+            raise ValueError("Installed model digest differs from initial recognition")
+        raw = client.chat(
+            metadata["model"],
+            messages,
+            dict(config["generation"]["options"]),
+            bool(config["generation"]["think"]),
+        )
+        answer = response_text(raw)
+        (run_dir / "stage_3_coaching_response.txt").write_text(answer, encoding="utf-8")
+        write_json(run_dir / "stage_3_coaching_raw_api_response.json", raw)
+    except Exception as error:
+        metadata.update(
+            run_status="crash",
+            crash_stage="coaching",
+            error_type=type(error).__name__,
+            error_message=str(error),
+            stage_3_elapsed_seconds=perf_counter() - started,
+        )
+        write_json(
+            run_dir / "stage_3_error.json",
+            {"type": type(error).__name__, "message": str(error)},
+        )
+        write_metadata(run_dir / "metadata.txt", metadata)
+        raise
+    issues = heading_issues(answer, COACHING_HEADINGS)
+    metadata.update(
+        run_status="complete",
+        stage_3_elapsed_seconds=perf_counter() - started,
+        stage_3_format_status="valid" if not issues else "invalid",
+        stage_3_format_issues=issues,
+    )
+    write_metadata(run_dir / "metadata.txt", metadata)
+    typer.echo(f"Preserved human-guided coaching run at {run_dir}")
 
 
 @app.command("ollama-check")

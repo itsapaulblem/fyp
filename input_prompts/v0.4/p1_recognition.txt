@@ -1,12 +1,13 @@
 DATASET B — TURN 1: RECOGNITION BEFORE COACHING
 
 The attached images are 30 chronological frames sampled uniformly from one
-30-second football sequence. Frame filenames preserve their order.
+30-second football sequence. Refer to each image by its position in the
+supplied order, 1 through 30.
 
 Use only visible evidence from these frames. Do not use coaching knowledge to
 guess what probably happened. Do not provide coaching advice in this turn.
 Distinguish direct observations from interpretations. Tie material claims to
-specific frame numbers or frame ranges. If the ball, contact, recipient,
+specific sampled image positions or ranges. If the ball, contact, recipient,
 transition, or outcome is not visible, say "not visible" or "cannot be
 determined".
 

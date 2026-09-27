@@ -1,0 +1,13 @@
+DATASET B — HUMAN FEEDBACK ON RECOGNITION
+
+The researcher reviewed your previous recognition answer against the same
+sampled frames. Their observations cite sampled image positions 1 through 30.
+Their corrections follow below.
+
+Re-examine the supplied frames and produce a complete revised recognition
+answer. Separate what is directly visible from interpretation. Use the feedback
+only where the cited frames support it. If the evidence remains ambiguous,
+say so. Do not provide coaching advice yet.
+
+Use the same headings and labels as your original recognition answer:
+VISIBLE EVIDENCE, CHRONOLOGY, EVENT ASSESSMENT, EVIDENCE LIMITS.

@@ -1,53 +1,55 @@
-# P1 TWO-TURN DEVELOPMENT SCORE FORM
+# P1 HUMAN-GUIDED DEVELOPMENT SCORE FORM
 # Use config/scoring_rubric_v0.4.txt.
-# Score Turn 1 before reading Turn 2.
+# Score initial recognition before feedback; score any revision before coaching.
 
 Rubric version: 0.4.0-draft
 Run ID: {{RUN_ID}}
 Dataset B clip ID: {{DATASET_B_CLIP_ID}}
-Model answer preserved without correction:
-Turn 1 scored before Turn 2 was read:
+Reviewer code:
 
-# TURN 1 — VISIBLE EVIDENCE
+# INITIAL RECOGNITION
 Direct-observation accuracy score:
-Direct-observation accuracy reason:
 Frame grounding score:
-Frame grounding reason:
 Observation/inference separation score:
-Observation/inference separation reason:
 Ball and possession evidence score:
-Ball and possession evidence reason:
-
-# TURN 1 — EVENT RECOGNITION
 Temporal sequence score:
-Temporal sequence reason:
 Main event score:
-Main event reason:
 Outcome score:
-Outcome reason:
 Critical event missed:
-Critical event missed reason:
+Initial recognition evidence and reasons:
 
-# TURN 2 — COACHING
+# HUMAN REVIEW
+Decision: approve or revise
+Review file path:
+Feedback cited sampled frames:
+Feedback validity score: 0-2 or N/A when approved
+Feedback validity reason:
+
+# REVISED RECOGNITION
+Revision present: yes or no
+Direct-observation accuracy score:
+Frame grounding score:
+Observation/inference separation score:
+Ball and possession evidence score:
+Temporal sequence score:
+Main event score:
+Outcome score:
+Critical event missed:
+Revision result score: 0-2 or N/A when no revision
+Revised recognition evidence and reasons:
+Revision approved before coaching: yes or no
+
+# FINAL COACHING
 Problem identification score:
-Problem identification reason:
 Advice quality score:
-Advice quality reason:
 Practice representativeness score:
-Practice representativeness reason:
 Coaching evidence support score:
-Coaching evidence support reason:
-
-# FAILURE PROPAGATION AND UNCERTAINTY
 Recognition-to-coaching propagation score:
-Recognition-to-coaching propagation reason:
 Hallucination categories:
 Hallucination severity score:
-Hallucination reason:
 Uncertainty calibration score:
-Uncertainty calibration reason:
+Coaching evidence and reasons:
 
-# REVIEW
-Reviewer code:
+# REVIEW RECORD
 Reviewed at UTC:
 Reviewer notes:

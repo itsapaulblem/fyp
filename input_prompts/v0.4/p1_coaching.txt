@@ -1,8 +1,9 @@
-DATASET B — TURN 2: COACHING FROM THE PRESERVED RECOGNITION
+DATASET B — COACHING AFTER HUMAN REVIEW OF RECOGNITION
 
-Use the recognition answer already produced in this conversation. Do not assume
-that it is correct merely because you produced it. Keep every tactical or
-coaching claim tied to visible evidence stated in that answer.
+Use the most recent recognition answer in this conversation: the initial answer
+if the researcher approved it, or the revised answer if the researcher gave
+frame-cited feedback. Keep every tactical or coaching claim tied to visible
+evidence in that answer.
 
 Do not silently rewrite the recognised event. If the recognition is
 insufficient, contradictory, or likely unsupported, state that limitation and

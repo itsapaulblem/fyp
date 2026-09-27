@@ -1,178 +1,132 @@
-# Project Next Steps — v0.4 Evidence-First Prompting
+# Project Next Steps — v0.4 Human-Guided Recognition
 
-## 1. Current position
+## Current position
 
-Protocol v0.3 is complete at validation and preserved by the Git tag
-`v0.3-validation-complete`. Its four-clip result is negative or inconclusive:
-every evaluated condition missed every critical event, while the small B3 and
-B4 gains were concentrated mainly in one clip. The random-case control also
-improved on that clip, so the evidence does not establish that analogous-case
-relevance caused the gains.
+Protocol v0.3 completed four-clip validation with a negative or inconclusive
+retrieval result. The state is preserved by Git tag
+`v0.3-validation-complete`. All evaluated B0–B5 conditions missed the critical
+event in all four clips. Do not rerun or alter those accepted results.
 
-Do not modify, rerun, or reinterpret accepted v0.3 cells. The Dataset B test
-split remains untouched and is not authorized for the new work.
+The supervisor's next direction is to guide the model through event
+recognition before coaching. The active v0.4 experiment includes a deliberate
+human checkpoint: the researcher reviews the first recognition answer against
+the same 30 sampled frames, gives frame-cited corrections if needed, reviews
+the revised answer, and requests coaching only after approval.
 
-Following supervisor review, the next phase is a separate diagnostic:
+The final advice is a human-assisted result. An automatic no-feedback chain
+must be run and reported separately if it is used as a comparator. No P1 model
+response has been generated yet.
 
-> Test whether an evidence-first, step-by-step prompting chain improves
-> football-event recognition and evidence-supported coaching compared with the
-> existing single-prompt approach.
+## Research question
 
-Fine-tuning is a later decision gate, not the first step.
+Does specific human feedback on a model's sampled-frame recognition answer
+correct material event errors and lead to more useful, evidence-supported
+coaching advice?
 
-## 2. Protocol separation
+Measure initial recognition, revised recognition, feedback validity, and final
+coaching separately. Do not combine them into one score or claim that
+human-guided advice demonstrates independent video understanding.
 
-The new work is protocol v0.4. It must not be mixed retroactively with B0–B5.
+## Active workflow: `P1_human_guided`
 
-- Keep all v0.3 configuration, prompts, outputs, scores, hashes, and reports
-  unchanged.
-- Develop and tune v0.4 using Dataset B train only.
-- Select and freeze a train holdout before using it for comparison.
-- Use validation only after the prompt chain and model comparison are frozen.
-- Do not access test without a new supervisor-approved protocol freeze.
-- Describe performance as sampled-frame analysis, not native video
-  understanding.
+1. The model receives 30 ordered F30 frames and describes visible evidence,
+   event order, main event, outcome, and uncertainty. It gives no coaching.
+2. The researcher reviews the original answer against those sampled frames.
+   The review either approves it or records specific corrections citing sampled
+   image positions 1–30. Hidden SoccerNet labels are not used.
+3. If corrections were needed, the model receives the exact frame-cited
+   feedback and produces one complete revised recognition answer.
+4. The researcher reviews the revision. If it is still wrong, record `reject`
+   and stop without coaching; the draft workflow allows one revision.
+5. The model receives the approved recognition history and produces coaching
+   advice. The original answer, review, feedback, revision, prompts, raw API
+   responses, hashes, and timing remain in the run folder.
 
-## 3. New experimental questions
+If the first recognition answer is accurate, the researcher can approve it and
+go directly to coaching without a revision. Do not create an artificial
+correction.
 
-**Prompting:** Does a staged evidence-first pipeline improve temporal sequence,
-main-event, outcome, visible-evidence, and coaching scores relative to the
-existing single prompt when the model and frames are held constant?
+## Files to use
 
-**Model:** Does the prompting effect differ between pretrained Qwen3.5 27B and
-Qwen3.5 35B?
+| Purpose | File |
+|---|---|
+| Train-only protocol and model settings | `config/project_v0.4.0.json` |
+| Eight known development clips | `config/prompt_development_cohort_v0.4.0.json` |
+| Initial recognition prompt | `input_prompts/v0.4/p1_recognition.txt` |
+| Revision prompt | `input_prompts/v0.4/p1_revision.txt` |
+| Coaching prompt | `input_prompts/v0.4/p1_coaching.txt` |
+| Draft human scoring rubric | `config/scoring_rubric_v0.4.txt` |
+| Draft score form | `templates/v0.4/prompt_chain_score.template.txt` |
+| Generated run artifacts | `output/v0.4/prompt_chain/P1_human_guided/` |
 
-**Fine-tuning — conditional:** If a repeatable intermediate failure is
-identified, does parameter-efficient fine-tuning on human-authored B-train
-intermediate targets improve final coaching relative to the same pretrained
-model and frozen prompt chain?
+The draft rubric is for development. Freeze it before a separate train
+holdout. The eight known B-train clips are not unseen evaluation examples.
 
-## 4. Planned prompting conditions
+## First development clip
 
-| ID | Method | Purpose |
-|---|---|---|
-| P0 | Existing single prompt | Pretrained prompting baseline |
-| P1 | Two-turn chain | Turn 1 recognition and sequence; Turn 2 coaching |
-| P2 | Five-stage verified chain | Later refinement if P1 remains unreliable |
-
-P1 is the direct implementation of the supervisor request. P2 may later generate
-at most three candidate interpretations; it is not active yet.
-
-Across paired comparisons, preserve the same ordered frames, resolution, model
-tag and digest, decoding settings, human reference, rubric, and output contract.
-Record extra calls, runtime, context use, failures, and API cost.
-
-## 5. Active P1 two-turn chain
-
-### Turn 1 — Recognition before coaching
-
-Using the same 30 ordered frames, extract visible evidence, construct the
-chronology, identify the main event and immediate outcome, and state limitations.
-Material claims must cite supporting frame numbers or ranges. No coaching is
-allowed in this turn.
-
-### Turn 2 — Coaching
-
-Continue the same conversation using the exact Turn 1 response. Interpret the
-tactical phase and provide at most one evidence-supported priority problem,
-coach message, and representative practice. If Turn 1 is uncertain or
-unsupported, advice must remain conditional.
-
-There is no human correction inside an accepted P1 run. Prompt revision is
-allowed only between development runs, with every failed output preserved.
-
-## 6. Deferred P2 refinement
-
-If P1 remains unreliable, P2 will separate visible evidence, chronology, event
-hypotheses, tactical interpretation, and coaching into five stages. Its prompts
-must be declared only after P1 failures justify the added complexity.
-
-## 7. Data plan
-
-Use the existing eight B-train pilot clips for prompt development because their
-references and diagnosed failures already exist. Do not present them as unseen
-evaluation data.
-
-Before comparative evaluation:
-
-1. Define a deterministic, label-blind rule for selecting new clips from the
-   remaining B-train set.
-2. Freeze selected IDs before viewing their model answers.
-3. Finalize pixel-only human references before attaching or inspecting hidden
-   SoccerNet labels.
-4. Keep prompt-development clips separate from the internal train holdout.
-5. Evaluate P0, P1, and, if justified, P2 once on the frozen train holdout.
-
-The holdout size and selection rule remain to be decided before inference.
-
-## 8. Model plan
-
-Local Ollama inventory:
-
-- `qwen3.5:27b` — pretrained baseline;
-- `qwen3.5:35b` — stronger local comparison candidate;
-- `qwen3-vl:2b-instruct` — retired and excluded.
-
-Before comparing quality, record the Ollama version, model tag, full digest,
-quantization, GPU, VRAM, offload state, context window, and runtime settings.
-Run capacity diagnostics on development clips only.
-
-A hosted frontier model such as Claude may later be an upper-bound comparison
-using the same sampled JPEGs. External API use requires permission to transmit
-frames, an exact model identifier, cost tracking, and raw response preservation.
-The remote GPU does not run Claude inference.
-
-## 9. Fine-tuning decision gate
-
-Do not fine-tune until prompt-only diagnostics identify a stable failure that
-training is intended to correct.
-
-If fine-tuning is justified:
-
-- train only on human-authored B-train pixel observations and targets;
-- do not use validation or test examples for training;
-- do not use hidden SoccerNet labels as ordinary input or coaching ground truth;
-- preserve annotation and reviewer provenance;
-- compare pretrained and fine-tuned models with the same frozen prompt chain;
-- test parameter-efficient tuning before full-model training.
-
-Dataset A's 25 cases remain the v0.3 coaching library. They are not sufficient
-by themselves for a video-language fine-tuning dataset.
-
-## 10. Workspace layout
-
-```text
-input_prompts/v0.4/       staged prompt templates
-templates/v0.4/           human-readable intermediate/output forms
-output/v0.4/diagnostics/  capacity and transport checks
-output/v0.4/prompt_chain/ accepted P0/P1/P2 runs
-output/v0.4/model_comparison/ cross-model runs
-```
-
-Generated outputs remain Git-ignored. Folder creation does not freeze a prompt
-or configuration.
-
-## 11. Execution gates
-
-1. **Design:** agree the intermediate information and scoring contract.
-2. **Prompt development:** use only known B-train development material.
-3. **Prompt freeze:** hash prompts, schemas, frame settings, and generation
-   settings.
-4. **Train holdout:** perform the paired P0/P1/P2 comparison once.
-5. **Model comparison:** compare 27B and 35B under frozen prompting methods.
-6. **Fine-tuning decision:** proceed only with a diagnosed target and adequate
-   human-authored data.
-7. **Validation decision:** proceed only if train evidence warrants it.
-8. **Test decision:** keep test sealed without a later approved full freeze.
-
-## 12. Immediate next action only
-
-Review the draft P1 prompts and rubric, then validate the local environment with:
+Review the three prompts and the rubric. Validate the local setup without
+contacting the model:
 
 ```powershell
 uv run football-coach validate-prompt-chain
-uv run football-coach ollama-check --model qwen3.5:27b
 ```
 
-After review, run only the declared initial B-train diagnostic clip. Do not
-select a holdout, access validation/test, activate P2, or fine-tune yet.
+Check the exact installed model, then generate only the initial recognition:
+
+```powershell
+uv run football-coach ollama-check --model qwen3.5:27b
+uv run football-coach start-prompt-review B-TRAIN-0025 --model qwen3.5:27b
+```
+
+The start command prints a timestamped run directory. Open its
+`stage_1_response.txt` and review the 30 sampled images. Copy
+`initial_review.template.json` to `initial_review.json`; fill reviewer,
+date, frame-use declarations, and a decision:
+
+- `approve`: remove the template's example feedback item, then request
+  coaching.
+- `revise`: replace the example item with your actual sampled frame numbers,
+  visible evidence, and requested correction. Then run the revision command.
+
+```powershell
+uv run football-coach revise-prompt-recognition RUN_DIR
+```
+
+The revision command creates `stage_2_revision_response.txt` and
+`revision_review.template.json`. Review the revised answer. Copy that
+template to `revision_review.json`, complete it, and set `decision` to
+`approve` only if the answer is sufficiently supported. Set `reject` if
+recognition remains materially wrong. Then close the review:
+
+```powershell
+uv run football-coach finish-prompt-coaching RUN_DIR
+```
+
+With `reject`, the finish command records `recognition_rejected` and sends no
+coaching request. For a correct first answer, run `finish-prompt-coaching`
+after completing `initial_review.json`; skip revision. `RUN_DIR` is the full
+timestamped path printed by the start command. Each command checks the
+reviewed answer hash, sampled frame hashes, prompt/config hashes, train split,
+and exact model digest before continuing.
+
+The old `run-prompt-chain` command that automatically generated both answers
+has been removed.
+
+## Evaluation and later decisions
+
+- Score the first recognition before reading model coaching or writing
+  feedback. Record every mistaken and correct visible claim.
+- Score any revised recognition before generating coaching. Record whether
+  the correction fixed the event without creating another error.
+- Score final advice for relevance, specificity, practice quality, visible
+  support, hallucination, and uncertainty.
+- For a fair comparison, separately define an automatic no-feedback condition
+  using the same frames, model, and scoring criteria. Its advice must be
+  labelled automatic; P1 advice must be labelled human-assisted.
+- Select a new label-blind B-train holdout and freeze all prompts, review
+  rules, rubric, model, and frame settings before comparative evaluation.
+- Consider Qwen3.5 35B, fine-tuning, or a frontier API only after the first
+  development findings identify a specific need. Compare pretrained and
+  fine-tuned versions of the same model under a declared feedback policy.
+- Validation is not authorized during draft development. The Dataset B test
+  split remains sealed until a new supervisor-approved protocol freeze.

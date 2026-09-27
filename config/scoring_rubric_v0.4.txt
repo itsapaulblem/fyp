@@ -1,18 +1,21 @@
-FOOTBALL MLLM STAGED-PROMPTING DEVELOPMENT RUBRIC
+FOOTBALL MLLM HUMAN-GUIDED PROMPTING DEVELOPMENT RUBRIC
 Rubric version: 0.4.0-draft
 Status: train prompt development only; freeze before an internal holdout
 
 1. PURPOSE
 
-Evaluate the two-turn P1 pipeline without combining dimensions into one score.
-Score Turn 1 before reading Turn 2. The principal reference is the finalized
-pixel-only human review of the same F30 Dataset B frames. Hidden SoccerNet labels
-are not model input or coaching ground truth.
+Evaluate the P1 human-guided pipeline without combining dimensions into one
+score. First score the initial recognition before giving feedback. If it is
+wrong, record frame-cited feedback and score the model's revised recognition
+before reading the coaching answer. The principal reference is the same F30
+sampled frames and the finalized pixel-only human review. Hidden SoccerNet
+labels are not model input or coaching ground truth.
 
-Never edit a model response while scoring it. Human correction inside a run is
-not part of P1.
+The final coaching answer is a human-and-model result. Do not report it as
+independent automatic video understanding. Preserve every original answer,
+human review, feedback item, and revision; never replace an answer in place.
 
-2. TURN 1 — VISIBLE EVIDENCE
+2. INITIAL AND REVISED RECOGNITION — VISIBLE EVIDENCE
 
 Direct-observation accuracy (0–2)
 0 = Material observations are invented or contradicted.
@@ -34,7 +37,7 @@ Ball and possession evidence (0–2)
 1 = Partly correct, vague, or appropriately uncertain.
 2 = Correct and visibly supported.
 
-3. TURN 1 — EVENT RECOGNITION
+3. INITIAL AND REVISED RECOGNITION — EVENT RECOGNITION
 
 Temporal sequence (0–4)
 0 = Mostly invented, reversed, or unrelated.
@@ -56,7 +59,24 @@ Outcome (0–2)
 Critical event missed (yes/no)
 Use yes when a decisive visible event needed to understand the sequence is absent.
 
-4. TURN 2 — COACHING
+4. HUMAN FEEDBACK AND REVISION
+
+Record whether the initial answer was approved or required revision. If
+revised, record the reviewer, cited frame numbers, original mistaken claim,
+visible evidence, correction request, and whether the revision fixed the
+material error without introducing a new one.
+
+Revision result (0–2; N/A if initial answer was approved)
+0 = Material recognition error remains or a new material error appears.
+1 = Some correction, but important error or uncertainty remains.
+2 = Material error corrected with visible support.
+
+Feedback validity (0–2; N/A if initial answer was approved)
+0 = Feedback uses hidden labels, unseen information, or contradictory frames.
+1 = Feedback is partly supported but vague or overstates the frames.
+2 = Feedback is specific and supported by cited sampled frames.
+
+5. FINAL COACHING
 
 Problem identification (0–2)
 0 = Unsupported, irrelevant, unsafe, or based on a misread event.
@@ -79,12 +99,12 @@ Coaching evidence support (0–2)
 1 = Some claims are supported while others are assumed.
 2 = Problem, advice, and practice consistently follow from visible evidence.
 
-5. FAILURE PROPAGATION AND UNCERTAINTY
+6. FAILURE PROPAGATION AND UNCERTAINTY
 
 Recognition-to-coaching propagation (0–2, lower is better)
-0 = No material Turn 1 error is propagated, or Turn 1 is materially correct.
+0 = No material recognition error propagates into coaching.
 1 = A minor or qualified recognition error influences coaching.
-2 = A material recognition hallucination becomes a definite tactical diagnosis.
+2 = A material recognition error becomes a definite tactical diagnosis.
 
 Hallucination categories
 Choose any: object or relation; temporal; semantic detail; extrinsic factual;
@@ -101,9 +121,12 @@ Uncertainty calibration (0–2)
 1 = Partly calibrated.
 2 = Confidence and limitations match the frames.
 
-6. REPORTING
+7. REPORTING
 
 - Report every dimension separately; do not calculate an overall mark.
-- Preserve Turn 1, Turn 2, and all reasons.
+- Report initial recognition, revised recognition where applicable, feedback
+  validity, and final coaching separately.
+- Compare with an automatic no-feedback chain only as a separately labelled
+  condition using the same frames, model, and scoring criteria.
 - A blank, out-of-range value, or missing reason invalidates the score form.
 - Development scores may guide prompt revision but are not holdout evidence.
