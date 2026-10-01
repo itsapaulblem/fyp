@@ -32,9 +32,29 @@ coaching. Never import P1 or P2 answers into P3 or edit the frozen cues.
 The first B-TRAIN-0025 P3 run was stopped after the cue revision because
 recognition remained insufficient; no P3 coaching was requested.
 
+The approved `fixed_unattended_v2` follow-up is a separate, label-informed
+B-train development variant for B-TRAIN-0054, B-TRAIN-0040, and B-TRAIN-0051.
+Its declaration is `config/fixed_unattended_development_v0.4.3.json`. P2 sends
+the same three frozen attention questions to each clip; P3 sends one distinct
+human-approved visible-cue sheet per clip. Both start from fresh 30-frame
+recognition and stop before coaching without human review between turns.
+Before those six cells, the remote batch creates initial-only P1 recognition
+for B-TRAIN-0040 and B-TRAIN-0051. It does not rerun the existing
+B-TRAIN-0054 P1 first pass, send P1 feedback, or request P1 coaching.
+Do not merge these results with the earlier interactive P2/P3 runs or call
+them unseen evaluation. Keep P1 interactive and perform it after reviewing
+the remote fixed-run results, as requested by the researcher.
+
 ## Immediate work
 
 - Follow `PROJECT_NEXT_STEPS.md` for the current execution gate.
+- For the fixed unattended variant, use `validate-fixed-development` before
+  `run-fixed-development`. This variant uses the declared CPU-only config and
+  pre-sampled train JPEGs; it does not require raw archives or private labels
+  on the remote workstation. Transfer the two initial-only P1 run folders
+  back to this local project before filling `initial_review.json` and
+  continuing P1. Review all recognition outputs before any later coaching
+  request. Never rerun an attempted fixed cell silently.
 - Follow the P3 execution gate in `PROJECT_NEXT_STEPS.md`. Preserve the
   completed B-TRAIN-0025 P3 run and its stopped outcome.
 - Validate the train-only setup with `football-coach validate-prompt-chain`.

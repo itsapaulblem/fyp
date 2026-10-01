@@ -1,0 +1,53 @@
+{
+  "protocol_id": "evidence-first-football-v0.4.0",
+  "variant": "fixed_unattended_v2",
+  "status": "approved_train_development",
+  "split": "train",
+  "selection_manifest_path": "config/label_informed_development_order_v0.4.1.json",
+  "clip_ids_in_order": ["B-TRAIN-0054", "B-TRAIN-0040", "B-TRAIN-0051"],
+  "model": "qwen3.5:27b",
+  "device_config_path": "config/project_v0.4.0_cpu.json",
+  "cohort_path": "config/prompt_development_cohort_v0.4.0.json",
+  "recognition_prompt_path": "input_prompts/v0.4/p1_recognition.txt",
+  "p1_revision_prompt_path": "input_prompts/v0.4/p1_revision.txt",
+  "p1_coaching_prompt_path": "input_prompts/v0.4/p1_coaching.txt",
+  "p1_initial_only_clip_ids": ["B-TRAIN-0040", "B-TRAIN-0051"],
+  "batch_execution_order": "p1_initial_first_then_p2_p3",
+  "p1_local_reference_sha256": {
+    "B-TRAIN-0040": "bad5ce9d910049ee8a582c32009749c77205a63e65019eb5e460d3935275485b",
+    "B-TRAIN-0051": "f4686961ff0121820bafcf2d62cdb76bbd69be9ba5d63695c7282bd361064bc3"
+  },
+  "p2_hint_wrapper_path": "input_prompts/v0.4/p2_progressive_hint.txt",
+  "p2_fixed_hints_path": "input_prompts/v0.4/p2_fixed_hints.v1.txt",
+  "p2_fixed_hints_sha256": "9893438566ef08d6fb500b2d49ecb793744395cfc0bf1116609b9d4e38a26563",
+  "p3_cue_wrapper_path": "input_prompts/v0.4/p3_visible_cue_revision.txt",
+  "p3_cues": {
+    "B-TRAIN-0054": {
+      "path": "output/v0.4/prompt_chain/P3_visible_cue_hint/B-TRAIN-0054_visible_cues.v1.txt",
+      "sha256": "07422ad81049422e06f298ad3f6d5192d2e456a6c1cd8e4dd7b42af4ed23361d"
+    },
+    "B-TRAIN-0040": {
+      "path": "output/v0.4/prompt_chain/P3_visible_cue_hint/B-TRAIN-0040_visible_cues.v1.txt",
+      "sha256": "566c5ba7504de2640b5875b650c48aff34cb09a2a8f2f701c0232f58d84546cd"
+    },
+    "B-TRAIN-0051": {
+      "path": "output/v0.4/prompt_chain/P3_visible_cue_hint/B-TRAIN-0051_visible_cues.v1.txt",
+      "sha256": "444745e494d696b3a9ae914818baddfdf1ccc2370eae2c2a47539f31e3883d41"
+    }
+  },
+  "sampled_image_directory_pattern": "artifacts/model_inputs/dataset_b/{clip_id}/uniform_30_edge_672",
+  "sampling": "30 chronological sampled JPEGs, uniform_endpoints_v1, maximum edge 672",
+  "frame_set_sha256": {
+    "B-TRAIN-0054": "8a7d82764f48ae4a3a8c495727e6b773747236aaa27eb367e35a32740aaf3449",
+    "B-TRAIN-0040": "883676bd6fe98fb3d73aa1310b4cb4ef97a85203538526962cbb73ff54e0d51c",
+    "B-TRAIN-0051": "d177dd57573af586dc55812e4df5629d730d6333791f0aaa9cc4c6dd2eaf62e4"
+  },
+  "conditions_in_order": ["P2_attention_hint", "P3_visible_cue_hint"],
+  "fresh_recognition_per_condition": true,
+  "maximum_p2_hints": 3,
+  "maximum_p3_cue_packets": 1,
+  "pause_before_coaching": true,
+  "human_review_during_batch": false,
+  "p1_stops_after_initial_recognition": true,
+  "evaluation_role": "label-informed prompt development only; not unseen evaluation"
+}

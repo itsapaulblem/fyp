@@ -35,6 +35,54 @@ def test_visible_cue_review_requires_an_explicit_stage_decision() -> None:
         )
 
 
+def test_label_informed_selection_marks_only_declared_development_clips(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    monkeypatch.setattr(cli, "ROOT", tmp_path)
+    selection_path = tmp_path / "config/label_informed_development_order_v0.4.1.json"
+    selection_path.parent.mkdir()
+    selection_path.write_text(json.dumps({
+        "split": "train",
+        "selection_used_hidden_labels": True,
+        "clip_ids_in_order": ["B-TRAIN-0054", "B-TRAIN-0040"],
+    }), encoding="utf-8")
+    cohort = {"clip_ids": ["B-TRAIN-0054", "B-TRAIN-0040", "B-TRAIN-0025"]}
+    selected = cli.label_informed_development_selection("B-TRAIN-0054", cohort)
+    assert selected["hidden_b_action_used_for_selection"] is True
+    assert selected["selection_manifest_sha256"] == cli.sha256_file(selection_path)
+    unselected = cli.label_informed_development_selection("B-TRAIN-0025", cohort)
+    assert unselected == {
+        "hidden_b_action_used_for_selection": False,
+        "selection_manifest_sha256": None,
+    }
+
+
+def test_cpu_only_prompt_check_requires_zero_gpu_residency() -> None:
+    class FakeOllama:
+        def __init__(self, vram: int) -> None:
+            self.vram = vram
+
+        def gpu_status(
+            self, model: str, options: dict[str, Any], *, preload: bool
+        ) -> dict[str, Any]:
+            assert options["num_gpu"] == 0
+            return {
+                "model": model,
+                "digest": "a" * 64,
+                "size_vram_bytes": self.vram,
+            }
+
+    options = {"num_gpu": 0}
+    result = cli.checked_prompt_gpu(
+        FakeOllama(0), "qwen3.5:27b", options, "a" * 64, preload=True
+    )
+    assert result["size_vram_bytes"] == 0
+    with pytest.raises(RuntimeError, match="CPU-only"):
+        cli.checked_prompt_gpu(
+            FakeOllama(1024), "qwen3.5:27b", options, "a" * 64, preload=True
+        )
+
+
 def test_human_review_uses_only_feedback_and_notes() -> None:
     review = review_template()
     assert review == {"feedback": [], "notes": ""}

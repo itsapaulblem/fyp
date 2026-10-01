@@ -1,0 +1,36 @@
+P2 FIXED ATTENTION HINTS — FROZEN v1
+
+Use the same three hints, in this order, for each declared development clip.
+These are prewritten attention questions, not reviews of a model answer or
+human observations of an event. Each turn asks for a complete revised
+recognition with the original headings, frame citations, direct-observation/
+inference separation, and no coaching.
+
+HINT 1 — ANCHOR ACTION (sampled images 1–12)
+Re-examine sampled images 1–12. What is the most specific opening action or
+phase of play supported by the images? If it is a restart, identify its type
+only when the ball's location, pitch markings, and player positions support
+that identification. Give the best-supported interpretation, one plausible
+alternative if relevant, and the frame evidence for or against each. If the
+starting location or action is not visible, say that it cannot be determined
+rather than making a confident guess. Correct your opening chronology.
+
+HINT 2 — PASSES AND POSSESSION (sampled images 10–22)
+Re-examine sampled images 10–22 in chronological order. Count only passes
+whose before-and-after ball movement and participants are supported by the
+sampled images; report the minimum clearly supported count, not a guessed
+total for the unsampled intervals. For each possible change of possession,
+identify the images and explain whether the ball, contact, and receiving team
+are directly visible or inferred. Do not assign continuous possession merely
+because one team's players are near the ball. Correct your chronology.
+
+HINT 3 — FINAL ACTION AND OUTCOME (sampled images 20–30)
+Re-examine sampled images 20–30 and compare them with your proposed event
+sequence. What final action and immediate outcome can actually be identified?
+Check the ball, any player contact, changes in movement, and any official's
+visible behaviour. Is a scoring result, stoppage, ball out of play, continued
+play, or none of these clearly supported? Separate an observed challenge or
+player on the ground from a confirmed ruling; distinguish a visible result
+from an assumed one. Identify contradictions in your earlier answer, state
+what remains unknown, and give a complete revised recognition with calibrated
+confidence.

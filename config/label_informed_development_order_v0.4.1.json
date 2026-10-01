@@ -1,0 +1,12 @@
+{
+  "selection_id": "v0.4-label-informed-follow-up-20260930",
+  "split": "train",
+  "role": "prompt_development_only_not_unseen_evaluation",
+  "selection_used_hidden_labels": true,
+  "clip_ids_in_order": [
+    "B-TRAIN-0054",
+    "B-TRAIN-0040",
+    "B-TRAIN-0051"
+  ],
+  "note": "Researcher chose this follow-up order after inspecting private event references. No labels or references are model input. The original eight-clip cohort remains label-blind; these selected runs are not an unbiased evaluation."
+}

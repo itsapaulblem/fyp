@@ -35,6 +35,7 @@ from .experiment import (
 from .experiment import (
     load_json as load_experiment_json,
 )
+from .fixed_development import existing_cells, run_fixed_batch, validate_fixed_batch
 from .media import sample_dataset_a, sample_dataset_b
 from .ollama_client import OllamaClient
 from .pairing import deterministic_control_case
@@ -82,6 +83,39 @@ P2_ATTENTION_PROMPT = ROOT / "input_prompts/v0.4/p2_attention_hint.txt"
 P2_ATTENTION_CONFIG = ROOT / "config/p2_attention_hint_v0.4.0.json"
 P2_PROGRESSIVE_CONFIG = ROOT / "config/p2_progressive_hints_v0.4.1.json"
 P3_VISIBLE_CONFIG = ROOT / "config/p3_visible_cues_v0.4.0.json"
+DEFAULT_FIXED_BATCH = ROOT / "config/fixed_unattended_development_v0.4.3.json"
+
+
+@app.command("validate-fixed-development")
+def validate_fixed_development(
+    batch_config: Path = typer.Option(DEFAULT_FIXED_BATCH),
+) -> None:
+    """Check frozen train-only P2/P3 inputs; make no Ollama calls."""
+    prepared = validate_fixed_batch(ROOT, batch_config)
+    attempted = existing_cells(ROOT, prepared)
+    typer.echo(
+        f"Validated {len(prepared['batch']['clip_ids_in_order'])} clips, "
+        f"{len(prepared['hints'])} fixed hints, 3 frozen cue sheets, "
+        "and 2 P1 initial-only runs."
+    )
+    typer.echo(f"Prior fixed cells: {', '.join(attempted) if attempted else 'none'}")
+
+
+@app.command("run-fixed-development")
+def run_fixed_development(
+    batch_config: Path = typer.Option(DEFAULT_FIXED_BATCH),
+) -> None:
+    """Run fixed P2/P3 plus two P1 first passes; stop before coaching."""
+    prepared = validate_fixed_batch(ROOT, batch_config)
+    attempted = existing_cells(ROOT, prepared)
+    if attempted:
+        raise typer.BadParameter(
+            "Fixed cells already attempted; inspect them before any new batch: "
+            + ", ".join(attempted)
+        )
+    typer.echo("Starting fixed P2/P3 and P1 initial-only batch; coaching is disabled.")
+    run_fixed_batch(ROOT, prepared, on_cell=lambda run_dir: typer.echo(f"Preserved: {run_dir}"))
+    typer.echo("Batch finished. Review recognition before any coaching.")
 
 
 def pending_progressive_review() -> dict:
@@ -150,6 +184,31 @@ def load_prompt_development_cohort(config: dict) -> dict:
     return cohort
 
 
+def label_informed_development_selection(clip_id: str, cohort: dict) -> dict:
+    """Record researcher-side clip selection without sending labels to the model."""
+    path = ROOT / "config/label_informed_development_order_v0.4.1.json"
+    if not path.is_file():
+        return {
+            "hidden_b_action_used_for_selection": False,
+            "selection_manifest_sha256": None,
+        }
+    selection = load_json(path)
+    selected = selection.get("clip_ids_in_order")
+    if (
+        selection.get("split") != "train"
+        or selection.get("selection_used_hidden_labels") is not True
+        or not isinstance(selected, list)
+        or not selected
+        or len(selected) != len(set(selected))
+        or any(not isinstance(item, str) or item not in cohort["clip_ids"] for item in selected)
+    ):
+        raise ValueError("Invalid label-informed B-train development selection")
+    return {
+        "hidden_b_action_used_for_selection": clip_id in selected,
+        "selection_manifest_sha256": sha256_file(path) if clip_id in selected else None,
+    }
+
+
 def validate_prompt_chain_config(config: dict, config_path: Path) -> dict:
     if config.get("protocol_id") != "evidence-first-football-v0.4.0":
         raise ValueError("Prompt-chain command requires the v0.4 protocol")
@@ -162,10 +221,14 @@ def validate_prompt_chain_config(config: dict, config_path: Path) -> dict:
     if P1_METHOD not in config["methods"]["active"]:
         raise ValueError(f"{P1_METHOD} is not active in {config_path}")
     generation = config["generation"]
-    if generation.get("require_gpu") is not True:
-        raise ValueError("v0.4 requires verified GPU offload")
-    if generation["options"].get("num_gpu") == 0:
-        raise ValueError("v0.4 must not force CPU execution with num_gpu=0")
+    require_gpu = generation.get("require_gpu")
+    num_gpu = generation["options"].get("num_gpu")
+    if require_gpu is True and num_gpu == 0:
+        raise ValueError("GPU v0.4 configuration must not force CPU execution")
+    if require_gpu is False and num_gpu != 0:
+        raise ValueError("CPU v0.4 configuration must explicitly set num_gpu=0")
+    if not isinstance(require_gpu, bool):
+        raise ValueError("v0.4 must declare a GPU or CPU device policy")
     prompt_paths = config["prompts"][P1_METHOD]
     for name in ("recognition", "revision", "coaching"):
         path = ROOT / prompt_paths[name]
@@ -186,9 +249,12 @@ def checked_prompt_gpu(
     status = client.gpu_status(model, options, preload=preload)
     if status["digest"] != expected_digest:
         raise ValueError("Loaded model digest differs from the selected model")
-    if status["size_vram_bytes"] <= 0:
+    if options.get("num_gpu") == 0:
+        if status["size_vram_bytes"] != 0:
+            raise RuntimeError("CPU-only v0.4 run unexpectedly used GPU VRAM")
+    elif status["size_vram_bytes"] <= 0:
         raise RuntimeError(
-            "Ollama loaded the model on CPU only; v0.4 requires GPU offload. "
+            "Ollama loaded the model on CPU only; this v0.4 run requires GPU offload. "
             "Check the remote GPU with ollama ps and nvidia-smi."
         )
     return status
@@ -855,6 +921,7 @@ def start_prompt_review(
         raise typer.BadParameter(f"Model must be one of {config['models']}")
     if clip_b_id not in cohort["clip_ids"]:
         raise typer.BadParameter("Clip is not in the declared prompt-development cohort")
+    selection_provenance = label_informed_development_selection(clip_b_id, cohort)
 
     record = find_b_clip(manifest, clip_b_id)
     if record.split != "train":
@@ -913,7 +980,7 @@ def start_prompt_review(
         "dataset_b_split": record.split,
         "development_only": True,
         "hidden_b_action_sent_to_model": False,
-        "hidden_b_action_used_for_selection": False,
+        **selection_provenance,
         "human_intervention_inside_run": True,
         "human_assisted": True,
         "dataset_a_material_sent_to_model": False,
