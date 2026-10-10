@@ -39,7 +39,7 @@ from .fixed_development import existing_cells, run_fixed_batch, validate_fixed_b
 from .media import sample_dataset_a, sample_dataset_b
 from .ollama_client import OllamaClient
 from .pairing import deterministic_control_case
-from .prompting import build_messages, plain_text_answer_issues, readable_transcript
+from .prompting import PromptMessage, build_messages, plain_text_answer_issues, readable_transcript
 from .provenance import sha256_file, timestamp_utc, write_run
 from .retrieval import EmbeddingIndex
 from .soccernet import (
@@ -84,6 +84,7 @@ P2_ATTENTION_CONFIG = ROOT / "config/p2_attention_hint_v0.4.0.json"
 P2_PROGRESSIVE_CONFIG = ROOT / "config/p2_progressive_hints_v0.4.1.json"
 P3_VISIBLE_CONFIG = ROOT / "config/p3_visible_cues_v0.4.0.json"
 DEFAULT_FIXED_BATCH = ROOT / "config/fixed_unattended_development_v0.4.3.json"
+P1_MULTI_REVISION_CONFIG = ROOT / "config/p1_multi_revision_extension_v0.4.4.json"
 
 
 @app.command("validate-fixed-development")
@@ -962,7 +963,6 @@ def start_prompt_review(
         ROOT
         / config["output_root"]
         / method
-        / model.replace(":", "_")
         / clip_b_id
         / timestamp
     )
@@ -1142,13 +1142,14 @@ def checked_review(
     frames: list[Path],
     *,
     revised: bool = False,
+    revision_stage: int = 2,
 ) -> dict:
     path = run_dir / file_name
     if not path.is_file():
         raise typer.BadParameter(f"Complete the review file first: {path}")
     review = load_json(path)
     raw_name = (
-        "stage_2_revision_raw_api_response.json"
+        f"stage_{revision_stage}_revision_raw_api_response.json"
         if revised else "stage_1_raw_api_response.json"
     )
     original_answer = response_text(load_json(run_dir / raw_name))
@@ -1161,6 +1162,72 @@ def checked_review(
     except ValueError as error:
         raise typer.BadParameter(str(error)) from error
     return {**review, "decision": decision, "submitted_at_utc": timestamp_utc()}
+
+
+def p1_extension_limit(metadata: dict, extension_config: Path) -> int:
+    """Validate the opt-in, train-only extension without changing a frozen run config."""
+    extension = load_json(extension_config)
+    if (
+        extension.get("extension_id") != "P1_multi_revision_development_v0.4.4"
+        or extension.get("parent_protocol_id") != metadata.get("protocol_id")
+        or extension.get("allowed_split") != "train"
+        or not isinstance(extension.get("maximum_recognition_revisions"), int)
+        or isinstance(extension.get("maximum_recognition_revisions"), bool)
+        or extension["maximum_recognition_revisions"] != 3
+    ):
+        raise typer.BadParameter("Invalid P1 multi-revision development extension")
+    expected_hash = metadata.get("p1_extension_config_sha256")
+    if metadata.get("p1_revision_count", 1) > 1 and (
+        metadata.get("p1_extension_id") != "P1_multi_revision_development_v0.4.4"
+        or expected_hash is None
+    ):
+        raise typer.BadParameter("Missing P1 multi-revision extension provenance")
+    if expected_hash is not None and expected_hash != sha256_file(extension_config):
+        raise typer.BadParameter("P1 extension changed after a revision")
+    return extension["maximum_recognition_revisions"]
+
+
+def checked_p1_revision_history(run_dir: Path, metadata: dict) -> tuple[list[str], list[str]]:
+    """Return the exact transcript and verify every already-submitted review."""
+    count = metadata.get("p1_revision_count", 1)
+    if not isinstance(count, int) or isinstance(count, bool) or count < 1:
+        raise typer.BadParameter("Invalid P1 revision count")
+    if sha256_file(run_dir / "initial_review.json") != metadata["initial_review_sha256"]:
+        raise typer.BadParameter("Initial human review changed after revision")
+    if sha256_file(run_dir / "human_feedback.txt") != metadata["human_feedback_sha256"]:
+        raise typer.BadParameter("Initial human feedback changed after revision")
+    first_answer = (run_dir / "stage_1_response.txt").read_text(encoding="utf-8")
+    if first_answer != response_text(load_json(run_dir / "stage_1_raw_api_response.json")):
+        raise typer.BadParameter("Preserved stage 1 answer differs from raw response")
+    answers = [first_answer]
+    feedbacks = [(run_dir / "human_feedback.txt").read_text(encoding="utf-8")]
+    for revision_number in range(1, count + 1):
+        stage = revision_number + 1
+        answer_path = run_dir / f"stage_{stage}_revision_response.txt"
+        raw_path = run_dir / f"stage_{stage}_revision_raw_api_response.json"
+        answer = answer_path.read_text(encoding="utf-8")
+        if answer != response_text(load_json(raw_path)):
+            raise typer.BadParameter(f"Preserved stage {stage} answer differs from raw response")
+        answers.append(answer)
+        if revision_number < count:
+            review_name = (
+                "revision_review.json" if revision_number == 1
+                else f"revision_review_{revision_number}.json"
+            )
+            feedback_name = f"human_feedback_{revision_number + 1}.txt"
+            recorded = metadata.get("p1_prior_revision_reviews", [])
+            if len(recorded) < revision_number:
+                raise typer.BadParameter("Missing prior P1 revision review provenance")
+            provenance = recorded[revision_number - 1]
+            if (
+                provenance.get("review_file") != review_name
+                or provenance.get("feedback_file") != feedback_name
+                or provenance.get("review_sha256") != sha256_file(run_dir / review_name)
+                or provenance.get("feedback_sha256") != sha256_file(run_dir / feedback_name)
+            ):
+                raise typer.BadParameter("Prior P1 revision feedback changed")
+            feedbacks.append((run_dir / feedback_name).read_text(encoding="utf-8"))
+    return answers, feedbacks
 
 
 @app.command("revise-prompt-recognition")
@@ -1257,11 +1324,132 @@ def revise_prompt_recognition(
     typer.echo("Replace PENDING_REVIEW in notes; fill feedback if errors remain.")
 
 
+@app.command("continue-prompt-recognition")
+def continue_prompt_recognition(
+    run_dir: Path,
+    config_path: Path = typer.Option(DEFAULT_V04_CONFIG),
+    manifest: Path = typer.Option(DEFAULT_B_MANIFEST),
+    extension_config: Path = typer.Option(P1_MULTI_REVISION_CONFIG),
+) -> None:
+    """Send another reviewed P1 correction as a distinct development extension."""
+    config, metadata, frames, run_dir = guided_run_context(run_dir, config_path, manifest)
+    if metadata["run_status"] != "awaiting_revision_approval":
+        raise typer.BadParameter("Run is not awaiting a P1 revision review")
+    limit = p1_extension_limit(metadata, extension_config)
+    answers, feedbacks = checked_p1_revision_history(run_dir, metadata)
+    count = len(answers) - 1
+    if count >= limit:
+        raise typer.BadParameter(f"P1 extension limit of {limit} revisions reached")
+    review_name = "revision_review.json" if count == 1 else f"revision_review_{count}.json"
+    review = checked_review(
+        run_dir,
+        review_name,
+        run_dir / f"stage_{count + 1}_revision_response.txt",
+        frames,
+        revised=True,
+        revision_stage=count + 1,
+    )
+    if review["decision"] != "reject":
+        raise typer.BadParameter("Review contains no correction; use finish-prompt-coaching")
+    next_count = count + 1
+    stage = next_count + 1
+    review_next = run_dir / f"revision_review_{next_count}.json"
+    feedback_path = run_dir / f"human_feedback_{next_count}.txt"
+    prompt_path = run_dir / f"stage_{stage}_revision_prompt.txt"
+    answer_path = run_dir / f"stage_{stage}_revision_response.txt"
+    raw_path = run_dir / f"stage_{stage}_revision_raw_api_response.json"
+    snapshot_path = run_dir / (
+        "revision_review_snapshot.json" if count == 1
+        else f"revision_review_{count}_snapshot.json"
+    )
+    if any(path.exists() for path in (
+        review_next, feedback_path, prompt_path, answer_path, raw_path, snapshot_path,
+    )):
+        raise typer.BadParameter("P1 continuation artifacts already exist; refusing overwrite")
+    paths = {name: ROOT / path for name, path in config["prompts"][P1_METHOD].items()}
+    correction = feedback_text(review, paths["revision"].read_text(encoding="utf-8"))
+    messages = progressive_messages(
+        paths["recognition"].read_text(encoding="utf-8"),
+        frames,
+        answers,
+        feedbacks,
+        correction,
+    )
+    write_json(snapshot_path, review)
+    feedback_path.write_text(correction, encoding="utf-8")
+    prompt_path.write_text(readable_transcript(messages, ROOT), encoding="utf-8")
+    provenance = list(metadata.get("p1_prior_revision_reviews", []))
+    provenance.append({
+        "review_file": review_name,
+        "review_sha256": sha256_file(run_dir / review_name),
+        "feedback_file": feedback_path.name,
+        "feedback_sha256": sha256_file(feedback_path),
+        "submitted_at_utc": review["submitted_at_utc"],
+    })
+    metadata.update(
+        p1_extension_id="P1_multi_revision_development_v0.4.4",
+        p1_extension_config_sha256=sha256_file(extension_config),
+        p1_prior_revision_reviews=provenance,
+        p1_revision_count=next_count,
+        run_status="revision_started",
+    )
+    write_metadata(run_dir / "metadata.txt", metadata)
+
+    load_dotenv(ROOT / ".env")
+    client = OllamaClient()
+    started = perf_counter()
+    try:
+        if client.model_metadata(metadata["model"]).get("digest") != metadata["model_digest"]:
+            raise ValueError("Installed model digest differs from initial recognition")
+        options = dict(config["generation"]["options"])
+        metadata[f"stage_{stage}_gpu_preflight"] = checked_prompt_gpu(
+            client, metadata["model"], options, metadata["model_digest"], preload=True
+        )
+        raw = client.chat(
+            metadata["model"], messages, options, bool(config["generation"]["think"])
+        )
+        answer = response_text(raw)
+        answer_path.write_text(answer, encoding="utf-8")
+        write_json(raw_path, raw)
+        metadata[f"stage_{stage}_gpu_postcheck"] = checked_prompt_gpu(
+            client, metadata["model"], options, metadata["model_digest"], preload=False
+        )
+    except Exception as error:
+        metadata.update(
+            run_status="crash",
+            crash_stage=f"recognition_revision_{next_count}",
+            error_type=type(error).__name__,
+            error_message=str(error),
+            **{f"stage_{stage}_elapsed_seconds": perf_counter() - started},
+        )
+        write_json(
+            run_dir / f"stage_{stage}_error.json",
+            {"type": type(error).__name__, "message": str(error)},
+        )
+        write_metadata(run_dir / "metadata.txt", metadata)
+        raise
+    issues = heading_issues(answer, RECOGNITION_HEADINGS)
+    metadata.update(
+        run_status="awaiting_revision_approval",
+        **{
+            f"stage_{stage}_elapsed_seconds": perf_counter() - started,
+            f"stage_{stage}_format_status": "valid" if not issues else "invalid",
+            f"stage_{stage}_format_issues": issues,
+        },
+    )
+    write_json(review_next, pending_guided_review())
+    write_metadata(run_dir / "metadata.txt", metadata)
+    typer.echo(f"Review P1 revision {next_count} at {answer_path}")
+    typer.echo(f"Edit {review_next.name} after checking the frames.")
+
+
 @app.command("finish-prompt-coaching")
 def finish_prompt_coaching(
     run_dir: Path,
     config_path: Path = typer.Option(DEFAULT_V04_CONFIG),
     manifest: Path = typer.Option(DEFAULT_B_MANIFEST),
+    extension_config: Path = typer.Option(P1_MULTI_REVISION_CONFIG),
+    coaching_focus_file: Path | None = None,
 ) -> None:
     """Generate coaching only after human approval of recognition."""
     config, metadata, frames, run_dir = guided_run_context(run_dir, config_path, manifest)
@@ -1278,6 +1466,8 @@ def finish_prompt_coaching(
     }
     correction = None
     revised_answer = None
+    messages = None
+    coaching_stage = 3
     if metadata["run_status"] == "awaiting_human_review":
         review = checked_review(run_dir, "initial_review.json", initial_path, frames)
         if review["decision"] != "approve":
@@ -1287,16 +1477,30 @@ def finish_prompt_coaching(
         metadata["initial_review_decision"] = review["decision"]
         metadata["initial_review_submitted_at_utc"] = review["submitted_at_utc"]
     else:
-        if sha256_file(run_dir / "initial_review.json") != metadata["initial_review_sha256"]:
-            raise typer.BadParameter("Initial human review changed after revision")
-        if sha256_file(run_dir / "human_feedback.txt") != metadata["human_feedback_sha256"]:
-            raise typer.BadParameter("Human feedback changed after revision")
-        revised_path = run_dir / "stage_2_revision_response.txt"
-        review = checked_review(
-            run_dir, "revision_review.json", revised_path, frames, revised=True
+        revision_count = metadata.get("p1_revision_count", 1)
+        if revision_count > 1:
+            if revision_count > p1_extension_limit(metadata, extension_config):
+                raise typer.BadParameter("P1 extension revision limit exceeded")
+        answers, feedbacks = checked_p1_revision_history(run_dir, metadata)
+        if revision_count != len(answers) - 1:
+            raise typer.BadParameter("P1 revision history is inconsistent")
+        recognition_stage = revision_count + 1
+        review_name = (
+            "revision_review.json" if revision_count == 1
+            else f"revision_review_{revision_count}.json"
         )
-        write_json(run_dir / "revision_review_snapshot.json", review)
-        metadata["revision_review_sha256"] = sha256_file(run_dir / "revision_review.json")
+        revised_path = run_dir / f"stage_{recognition_stage}_revision_response.txt"
+        review = checked_review(
+            run_dir, review_name, revised_path, frames,
+            revised=True, revision_stage=recognition_stage,
+        )
+        snapshot_name = (
+            "revision_review_snapshot.json" if revision_count == 1
+            else f"revision_review_{revision_count}_snapshot.json"
+        )
+        write_json(run_dir / snapshot_name, review)
+        metadata["revision_review_sha256"] = sha256_file(run_dir / review_name)
+        metadata["revision_review_file"] = review_name
         metadata["revision_review_decision"] = review["decision"]
         metadata["revision_review_submitted_at_utc"] = review["submitted_at_utc"]
         if review["decision"] == "reject":
@@ -1304,20 +1508,48 @@ def finish_prompt_coaching(
             write_metadata(run_dir / "metadata.txt", metadata)
             typer.echo(f"Preserved rejected recognition without coaching at {run_dir}")
             return
-        correction = (run_dir / "human_feedback.txt").read_text(encoding="utf-8")
-        revised_answer = revised_path.read_text(encoding="utf-8")
+        correction = feedbacks[0]
+        revised_answer = answers[-1]
         if not revised_answer.strip():
             raise typer.BadParameter("Cannot coach from an empty revised answer")
+        if revision_count > 1:
+            coaching_stage = recognition_stage + 1
+            messages = progressive_messages(
+                paths["recognition"].read_text(encoding="utf-8"),
+                frames,
+                answers,
+                feedbacks,
+                paths["coaching"].read_text(encoding="utf-8"),
+            )
 
-    messages = coaching_messages(
-        paths["recognition"].read_text(encoding="utf-8"),
-        frames,
-        initial_answer,
-        paths["coaching"].read_text(encoding="utf-8"),
-        correction,
-        revised_answer,
-    )
-    (run_dir / "stage_3_coaching_prompt.txt").write_text(
+    if messages is None:
+        messages = coaching_messages(
+            paths["recognition"].read_text(encoding="utf-8"),
+            frames,
+            initial_answer,
+            paths["coaching"].read_text(encoding="utf-8"),
+            correction,
+            revised_answer,
+        )
+    if coaching_focus_file is not None:
+        focus_path = coaching_focus_file.resolve()
+        if not focus_path.is_file() or not focus_path.is_relative_to(run_dir):
+            raise typer.BadParameter("Coaching focus must be an existing file inside this run")
+        focus = focus_path.read_text(encoding="utf-8").strip()
+        if not focus:
+            raise typer.BadParameter("Coaching focus file is empty")
+        messages[-1] = PromptMessage(
+            "user", messages[-1].content + "\n\nDEVELOPMENT COACHING FOCUS\n" + focus + "\n"
+        )
+        metadata["coaching_variant"] = "P1_researcher_focused_development"
+        metadata["coaching_focus_file"] = focus_path.relative_to(run_dir).as_posix()
+        metadata["coaching_focus_sha256"] = sha256_file(focus_path)
+    coaching_prompt_path = run_dir / f"stage_{coaching_stage}_coaching_prompt.txt"
+    coaching_response_path = run_dir / f"stage_{coaching_stage}_coaching_response.txt"
+    coaching_raw_path = run_dir / f"stage_{coaching_stage}_coaching_raw_api_response.json"
+    if any(path.exists() for path in (coaching_prompt_path, coaching_response_path, coaching_raw_path)):
+        raise typer.BadParameter("Coaching artifacts already exist; refusing overwrite")
+    coaching_prompt_path.write_text(
         readable_transcript(messages, ROOT), encoding="utf-8"
     )
     metadata["run_status"] = "coaching_started"
@@ -1330,7 +1562,7 @@ def finish_prompt_coaching(
         if client.model_metadata(metadata["model"]).get("digest") != metadata["model_digest"]:
             raise ValueError("Installed model digest differs from initial recognition")
         options = dict(config["generation"]["options"])
-        metadata["stage_3_gpu_preflight"] = checked_prompt_gpu(
+        metadata[f"stage_{coaching_stage}_gpu_preflight"] = checked_prompt_gpu(
             client, metadata["model"], options, metadata["model_digest"], preload=True
         )
         raw = client.chat(
@@ -1340,9 +1572,9 @@ def finish_prompt_coaching(
             bool(config["generation"]["think"]),
         )
         answer = response_text(raw)
-        (run_dir / "stage_3_coaching_response.txt").write_text(answer, encoding="utf-8")
-        write_json(run_dir / "stage_3_coaching_raw_api_response.json", raw)
-        metadata["stage_3_gpu_postcheck"] = checked_prompt_gpu(
+        coaching_response_path.write_text(answer, encoding="utf-8")
+        write_json(coaching_raw_path, raw)
+        metadata[f"stage_{coaching_stage}_gpu_postcheck"] = checked_prompt_gpu(
             client, metadata["model"], options, metadata["model_digest"], preload=False
         )
     except Exception as error:
@@ -1351,10 +1583,10 @@ def finish_prompt_coaching(
             crash_stage="coaching",
             error_type=type(error).__name__,
             error_message=str(error),
-            stage_3_elapsed_seconds=perf_counter() - started,
+            **{f"stage_{coaching_stage}_elapsed_seconds": perf_counter() - started},
         )
         write_json(
-            run_dir / "stage_3_error.json",
+            run_dir / f"stage_{coaching_stage}_error.json",
             {"type": type(error).__name__, "message": str(error)},
         )
         write_metadata(run_dir / "metadata.txt", metadata)
@@ -1362,9 +1594,11 @@ def finish_prompt_coaching(
     issues = heading_issues(answer, COACHING_HEADINGS)
     metadata.update(
         run_status="complete",
-        stage_3_elapsed_seconds=perf_counter() - started,
-        stage_3_format_status="valid" if not issues else "invalid",
-        stage_3_format_issues=issues,
+        **{
+            f"stage_{coaching_stage}_elapsed_seconds": perf_counter() - started,
+            f"stage_{coaching_stage}_format_status": "valid" if not issues else "invalid",
+            f"stage_{coaching_stage}_format_issues": issues,
+        },
     )
     write_metadata(run_dir / "metadata.txt", metadata)
     typer.echo(f"Preserved human-guided coaching run at {run_dir}")
@@ -1407,7 +1641,7 @@ def start_progressive_review(
     timestamp = timestamp_utc()
     run_dir = (
         ROOT / config["output_root"] / P2_METHOD
-        / model.replace(":", "_") / clip_b_id / timestamp
+        / clip_b_id / timestamp
     )
     run_dir.mkdir(parents=True, exist_ok=False)
     (run_dir / "stage_1_prompt.txt").write_text(
@@ -1837,7 +2071,7 @@ def start_visible_cue_review(
     timestamp = timestamp_utc()
     run_dir = (
         ROOT / config["output_root"] / P3_METHOD
-        / model.replace(":", "_") / clip_b_id / timestamp
+        / clip_b_id / timestamp
     )
     run_dir.mkdir(parents=True, exist_ok=False)
     cue_snapshot = run_dir / "frozen_visible_cues.txt"
@@ -2261,7 +2495,7 @@ def start_attention_review(
     timestamp = timestamp_utc()
     run_dir = (
         ROOT / config["output_root"] / P2_METHOD
-        / source["model"].replace(":", "_") / source["dataset_b_clip_id"] / timestamp
+        / source["dataset_b_clip_id"] / timestamp
     )
     run_dir.mkdir(parents=True, exist_ok=False)
     source_files = (

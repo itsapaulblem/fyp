@@ -63,9 +63,15 @@ the remote fixed-run results, as requested by the researcher.
   `stop`. `continue-visible-cue-review` sends the frozen cues once.
   Review the revision and mark `review_stage_2.json` as `approve` or `stop`;
   `finish-visible-cue-coaching` sends coaching only after approval.
-- Preserve the original answer, review files, exact feedback, revision, and
-  coaching. Permit at most one revision in this draft workflow. Never replace
-  a model answer in place or add hidden labels to human feedback.
+- Preserve the original answer, review files, exact feedback, revisions, and
+  coaching. The original P1 protocol permits one revision. The opt-in,
+  train-only `P1_multi_revision_development_v0.4.4` extension permits up to
+  three total revisions without changing the original run configuration or
+  overwriting earlier answers. Report it separately from one-revision P1.
+  Never replace a model answer in place or add hidden labels to human feedback.
+  An optional run-local coaching focus is a separate researcher-focused
+  development variant; preserve its text and hash and do not pool its advice
+  with the standard P1 coaching result.
 - New v0.4 runs create the actual review JSON with a pending marker; they do
   not generate separate review template JSON files. A pending review cannot
   advance to the next model call.
@@ -106,9 +112,6 @@ the remote fixed-run results, as requested by the researcher.
   Use human-authored B-train pixel-derived targets, keep validation/test out of
   training, and compare the same pretrained and fine-tuned base model under a
   frozen evaluation method.
-- A frontier API is a later option if local performance is insufficient. Use
-  the same sampled frames and preserve provider/model provenance; obtain
-  permission before transmitting private frames externally.
 
 ## Historical protocol v0.3: Dataset A retrieval
 

@@ -1,0 +1,7 @@
+{
+  "extension_id": "P1_multi_revision_development_v0.4.4",
+  "parent_protocol_id": "evidence-first-football-v0.4.0",
+  "allowed_split": "train",
+  "maximum_recognition_revisions": 3,
+  "purpose": "Optional human-assisted diagnostic continuation after the original one-revision P1 answer remains wrong. Preserve every review, prompt, answer, and raw response; do not pool these cells with one-revision P1 results."
+}

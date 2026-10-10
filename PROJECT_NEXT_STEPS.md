@@ -123,8 +123,9 @@ human-guided advice demonstrates independent video understanding.
 3. If corrections were needed, the model receives the exact frame-cited
    feedback and produces one complete revised recognition answer.
 4. The researcher reviews the revision. If it is still wrong, record
-   frame-cited feedback and stop without coaching; the draft workflow allows
-   one revision.
+   frame-cited feedback. The original draft workflow stops without coaching
+   after one revision. An opt-in, separately reported train-only P1 extension
+   allows up to three total recognition revisions; it preserves every turn.
 5. The model receives the approved recognition history and produces coaching
    advice. The original answer, review, feedback, revision, prompts, raw API
    responses, hashes, and timing remain in the run folder.
@@ -138,6 +139,7 @@ correction.
 | Purpose | File |
 |---|---|
 | Train-only protocol and model settings | `config/project_v0.4.0.json` |
+| Optional P1 multi-revision development extension | `config/p1_multi_revision_extension_v0.4.4.json` |
 | P2 progressive condition declaration | `config/p2_progressive_hints_v0.4.1.json` |
 | P3 frozen cue declaration and SHA-256 | `config/p3_visible_cues_v0.4.0.json` |
 | P3 approved cue sheet (local, Git-ignored) | `output/v0.4/prompt_chain/P3_visible_cue_hint/B-TRAIN-0025_visible_cues.v1.txt` |
@@ -164,7 +166,15 @@ holdout. The eight known B-train clips are not unseen evaluation examples.
 | Progressive human hints | `output/v0.4/prompt_chain/P2_attention_hint/` | B-TRAIN-0025 stopped after three hints; no coaching requested |
 | Visible cues without event labels | `output/v0.4/prompt_chain/P3_visible_cue_hint/` | B-TRAIN-0025 stopped after one frozen cue packet; no coaching requested |
 
-The P0 copy is under `historical_v0.3_B0_reference/qwen3.5_27b/B-TRAIN-0025/20260908T094048609964Z/`.
+Outputs now use `condition/B-TRAIN-####/UTC-run-timestamp/`; see
+`output/v0.4/prompt_chain/START_HERE.txt` for the run index. The model and
+variant are recorded in each run's metadata, not in intermediate folders.
+Archived remote-transfer scripts and original metadata may still contain the
+paths used when those completed runs were created; do not rerun accepted cells
+from those scripts. The frozen P3 cue masters remain at their config-declared
+paths and were not changed.
+
+The P0 copy is under `P0_no_feedback/B-TRAIN-0025/20260908T094048609964Z/`.
 It is the 30-frame PILOT-010 B0 run, copied from
 `output/B0_frames_only/qwen3.5_27b/B-TRAIN-0025/20260908T094048609964Z/`.
 Its original v0.3 metadata and prompt remain unchanged. This is context, not
@@ -172,7 +182,7 @@ a matched v0.4 no-feedback result; the pilot score remains in
 `data/video_b/review/pilot_grading_v1/PILOT-010/score.txt`.
 
 The B-TRAIN-0054 historical copy is under
-`historical_v0.3_B0_reference/qwen3.5_27b/B-TRAIN-0054/20260908T123501974922Z/`.
+`P0_no_feedback/B-TRAIN-0054/20260908T123501974922Z/`.
 It is the 30-frame v0.3 B0 run associated with PILOT-014. Its four files
 were copied byte-for-byte from `output/B0_frames_only/`; it is likewise not
 a fresh or matched v0.4 P0 result.
@@ -193,7 +203,7 @@ sent to the model.
 ## P2 progressive-hint workflow and completed B-TRAIN-0025 diagnostic
 
 The B-TRAIN-0025 run at
-`P2_attention_hint/qwen3.5_27b/B-TRAIN-0025/20260927T153631433589Z/`
+`P2_attention_hint/B-TRAIN-0025/20260927T153631433589Z/`
 was stopped after three hints. The final answer withdrew the unsupported
 defensive-wall claim and lowered confidence, but did not resolve the specific
 restart, credited the clearance to the wrong team, and missed the late
@@ -244,7 +254,7 @@ score form. P2 is human-assisted; the v0.3 B0 copy is not a matched control.
 ## P3 frozen visible-cue workflow and completed B-TRAIN-0025 diagnostic
 
 The first P3 run at
-`P3_visible_cue_hint/qwen3.5_27b/B-TRAIN-0025/20260927T163258749494Z/`
+`P3_visible_cue_hint/B-TRAIN-0025/20260927T163258749494Z/`
 was stopped after its single cue revision. The answer became more cautious
 and noticed the apparent late stoppage, but did not identify the specific
 restart or grey-team clearance and still suggested red moved the ball away
@@ -345,8 +355,80 @@ timestamped path printed by the start command. Each command checks the
 reviewed answer against its raw model response, sampled frame hashes, prompt/config hashes, train split,
 and exact model digest before continuing.
 
+For an existing P1 run still awaiting review after its first revision, the
+optional `P1_multi_revision_development_v0.4.4` extension allows another
+frame-cited correction without changing the original v0.4.0 config hash:
+
+```powershell
+uv run --system-certs football-coach continue-prompt-recognition RUN_DIR
+```
+
+For the B-TRAIN-0054/0040/0051 CPU-only runs, append
+`--config-path config/project_v0.4.0_cpu.json` to both continuation and
+coaching commands. Their recorded config hash does not match the GPU config.
+
+First fill `revision_review.json` with the remaining frame-cited errors.
+The command preserves that review and creates `stage_3_revision_response.txt`
+and `revision_review_2.json`. After reviewing the new answer, empty feedback
+approves it for `finish-prompt-coaching`; more feedback can trigger one final
+continuation, creating stage 4 recognition and `revision_review_3.json`.
+At most three total recognition revisions are permitted. Coaching is never
+automatic, and these extended P1 runs must be reported separately from the
+original one-revision P1 results. The original prompts, answers, reviews,
+feedback, and hashes remain unchanged.
+
+An optional `--coaching-focus-file RUN_DIR/coaching_focus.txt` on
+`finish-prompt-coaching` adds a researcher-authored, run-local coaching focus
+after the frozen base coaching prompt. Its file hash and exact combined prompt
+are preserved. Label such outputs `P1_researcher_focused_development` and do
+not pool them with the standard one-team P1 coaching cell. B-TRAIN-0040 uses
+this option to request advice for both teams, prioritising red-and-black
+defending while keeping unsupported tactical faults conditional.
+
 The old `run-prompt-chain` command that automatically generated both answers
 has been removed.
+
+## Current P1 remote follow-up gate
+
+The first P1 revisions for B-TRAIN-0040, 0051, and 0054 have returned and
+were reviewed locally. B-TRAIN-0040's local coaching call stopped after its
+stage-3 prompt and `coaching_started` status were saved, without a response,
+raw result, or error. The researcher explicitly requested deletion of that
+incomplete coaching prompt and review snapshot. The stage-1 and stage-2
+answers, reviews, and frame hashes remain. The metadata records the removal;
+the interrupted call has no scorable result. The portable follow-up creates
+a separate 0040 coaching run from the reviewed recognition and researcher
+coaching focus, rather than reusing the interrupted attempt. It also requests
+standard coaching for approved 0051 recognition and
+sends one explicit, human-supplied left-corner recognition correction for 0054.
+It does not request 0054 coaching. None of these calls measures independent
+event recognition.
+
+Run `scripts/prepare_p1_followup_remote.ps1` locally to validate the three
+sources and build a hashed, incremental v2 transfer archive. The obsolete v1
+bundle containing the abandoned 0040 prompt was removed. On the remote
+workstation, extract it into the existing
+`/home/paul/fypfinal_fixed_v04_v2_20260930T103514957Z` project, run
+`python -m football_coach.remote_p1_followup --manifest
+artifacts/transfer/p1_followup_v2_manifest.json --validate-only` through
+`uv run --frozen --system-certs`, and launch
+`scripts/run_p1_followup_remote.sh` in `tmux`. The launcher checks CPU-only
+residency and the exact model digest, then creates a results archive. Review
+all returned outputs and 0054's new `revision_review_2.json` before any
+further coaching. The assistant's sandbox cannot SSH to the workstation;
+the researcher must transfer and launch this bundle.
+
+For B-TRAIN-0054, the second explicit correction still did not produce an
+approved event sequence. At the researcher's request, the optional
+`p1_unapproved_recognition_coaching_probe_v1` asks the existing coaching
+prompt what advice it gives anyway. This is an exploratory diagnostic, not a
+successful P1 coaching cell, and must not be pooled with approved-recognition
+advice. It keeps the original `revision_review_2.json` pending and writes to
+`P1_human_guided/B-TRAIN-0054/20261001T125442080Z/`. Prepare its separate
+remote bundle with `scripts/prepare_p1_exploratory_coaching_remote.ps1`, validate
+the manifest before launch, and run `scripts/run_p1_exploratory_coaching_remote.sh`
+in `tmux`. Interpret any advice as conditional on unapproved recognition and
+the researcher's prior explicit correction, not as independent video understanding.
 
 ## Evaluation and later decisions
 
@@ -361,7 +443,7 @@ has been removed.
   labelled automatic; P1 advice must be labelled human-assisted.
 - Select a new label-blind B-train holdout and freeze all prompts, review
   rules, rubric, model, and frame settings before comparative evaluation.
-- Consider Qwen3.5 35B, fine-tuning, or a frontier API only after the first
+- Consider Qwen3.5 35B or fine-tuning only after the first
   development findings identify a specific need. Compare pretrained and
   fine-tuned versions of the same model under a declared feedback policy.
 - Validation is not authorized during draft development. The Dataset B test

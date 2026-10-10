@@ -156,8 +156,7 @@ def test_failed_cell_is_preserved_and_not_retried(prepared):
     with pytest.raises(RuntimeError, match="simulated Ollama failure"):
         run_fixed_cell(root, prepared, "B-TRAIN-0054", "P2_attention_hint", client, "a" * 64)
     cell_root = (
-        root / "output/v0.4/prompt_chain/P2_attention_hint/fixed_unattended_v2"
-        / "qwen3.5_27b/B-TRAIN-0054"
+            root / "output/v0.4/prompt_chain/P2_attention_hint/B-TRAIN-0054"
     )
     run_dir = next(cell_root.iterdir())
     assert (run_dir / "stage_1_response.txt").is_file()

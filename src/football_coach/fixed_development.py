@@ -212,10 +212,9 @@ def validate_fixed_batch(root: Path, batch_path: Path) -> dict[str, Any]:
 
 
 def _run_root(root: Path, condition: str, model: str, clip_id: str) -> Path:
-    return (
-        root / "output/v0.4/prompt_chain" / condition / VARIANT
-        / model.replace(":", "_") / clip_id
-    )
+    # Keep run variants distinct by timestamp and metadata, not by intermediate
+    # variant/model folders. Treat every existing clip run as an attempted cell.
+    return root / "output/v0.4/prompt_chain" / condition / clip_id
 
 
 def existing_cells(root: Path, prepared: dict[str, Any]) -> list[str]:

@@ -224,7 +224,7 @@ def test_cli_pauses_for_human_feedback_before_coaching(
     cli.start_prompt_review(
         "B-TRAIN-0001", "qwen3.5:27b", "P1_human_guided", config_path, tmp_path / "manifest"
     )
-    run_dir = next((tmp_path / "output/v0.4/prompt_chain/P1_human_guided").glob("*/*/*"))
+    run_dir = next((tmp_path / "output/v0.4/prompt_chain/P1_human_guided").glob("B-TRAIN-*/*"))
     assert not (run_dir / "stage_3_coaching_response.txt").exists()
     assert (run_dir / "initial_review.json").exists()
     assert not (run_dir / "initial_review.template.json").exists()
@@ -247,21 +247,27 @@ def test_cli_pauses_for_human_feedback_before_coaching(
     revised = json.loads((run_dir / "revision_review.json").read_text(encoding="utf-8"))
     revised["notes"] = "Recognition now supported by sampled frames."
     (run_dir / "revision_review.json").write_text(json.dumps(revised), encoding="utf-8")
-    cli.finish_prompt_coaching(run_dir, config_path, tmp_path / "manifest")
+    focus = run_dir / "coaching_focus.txt"
+    focus.write_text("Give separate advice to both teams.", encoding="utf-8")
+    cli.finish_prompt_coaching(
+        run_dir, config_path, tmp_path / "manifest", cli.P1_MULTI_REVISION_CONFIG, focus
+    )
     assert (run_dir / "stage_3_coaching_response.txt").read_text(encoding="utf-8") == (
         "final coaching"
     )
     assert [len(history) for history in histories] == [1, 3, 5]
     assert histories[2][1] == "first recognition"
     assert histories[2][3] == "revised recognition"
+    assert "Give separate advice to both teams." in histories[2][-1]
     assert cli.read_metadata(run_dir / "metadata.txt")["run_status"] == "complete"
+    assert cli.read_metadata(run_dir / "metadata.txt")["coaching_focus_sha256"] == cli.sha256_file(focus)
     gpu_result = cli.read_metadata(run_dir / "metadata.txt")["stage_1_gpu_postcheck"]
     assert gpu_result["size_vram_bytes"] == 10
 
     cli.start_prompt_review(
         "B-TRAIN-0001", "qwen3.5:27b", "P1_human_guided", config_path, tmp_path / "manifest"
     )
-    second_run = sorted((tmp_path / "output/v0.4/prompt_chain/P1_human_guided").glob("*/*/*"))[-1]
+    second_run = sorted((tmp_path / "output/v0.4/prompt_chain/P1_human_guided").glob("B-TRAIN-*/*"))[-1]
     approved = json.loads(
         (second_run / "initial_review.json").read_text(encoding="utf-8")
     )
@@ -279,7 +285,7 @@ def test_cli_pauses_for_human_feedback_before_coaching(
     cli.start_prompt_review(
         "B-TRAIN-0001", "qwen3.5:27b", "P1_human_guided", config_path, tmp_path / "manifest"
     )
-    third_run = sorted((tmp_path / "output/v0.4/prompt_chain/P1_human_guided").glob("*/*/*"))[-1]
+    third_run = sorted((tmp_path / "output/v0.4/prompt_chain/P1_human_guided").glob("B-TRAIN-*/*"))[-1]
     correction_review = json.loads(
         (third_run / "initial_review.json").read_text(encoding="utf-8")
     )
@@ -315,6 +321,103 @@ def test_cli_pauses_for_human_feedback_before_coaching(
         "recognition_rejected"
     )
     assert [len(history) for history in histories] == [1, 3, 5, 1, 3, 1, 3]
+
+
+def test_p1_second_revision_preserves_first_turn_and_coaches_only_after_review(
+    tmp_path: Path, monkeypatch: Any
+) -> None:
+    monkeypatch.setattr(cli, "ROOT", tmp_path)
+    frame = tmp_path / "frames/01_frame_000001.jpg"
+    frame.parent.mkdir()
+    frame.write_bytes(b"sampled image")
+    prompts = tmp_path / "input_prompts/v0.4"
+    prompts.mkdir(parents=True)
+    for name in ("recognition", "revision", "coaching"):
+        (prompts / f"{name}.txt").write_text(name, encoding="utf-8")
+    config = {
+        "protocol_id": "evidence-first-football-v0.4.0",
+        "parent_protocol_id": "retrieval-assisted-football-v0.3.0",
+        "development": {"cohort_path": "cohort.json"},
+        "dataset_b": {"human_reference_directory": "data/video_b/review"},
+        "sampling": {
+            "frame_count": 1,
+            "maximum_edge": 672,
+            "algorithm": "uniform_endpoints_v1",
+            "image_encoding": "JPEG",
+        },
+        "prompts": {"P1_human_guided": {
+            name: f"input_prompts/v0.4/{name}.txt"
+            for name in ("recognition", "revision", "coaching")
+        }},
+        "output_root": "output/v0.4/prompt_chain",
+        "models": ["qwen3.5:27b"],
+        "generation": {"options": {"temperature": 0}, "think": False, "require_gpu": True},
+    }
+    config_path = tmp_path / "config.json"
+    config_path.write_text(json.dumps(config), encoding="utf-8")
+    (tmp_path / "cohort.json").write_text('{"clip_ids":["B-TRAIN-0001"]}', encoding="utf-8")
+    reference = tmp_path / "data/video_b/review/B-TRAIN-0001.json"
+    reference.parent.mkdir(parents=True)
+    reference.write_text("{}", encoding="utf-8")
+    extension_path = tmp_path / "p1_extension.json"
+    extension_path.write_text(json.dumps({
+        "extension_id": "P1_multi_revision_development_v0.4.4",
+        "parent_protocol_id": "evidence-first-football-v0.4.0",
+        "allowed_split": "train",
+        "maximum_recognition_revisions": 3,
+    }), encoding="utf-8")
+    monkeypatch.setattr(cli, "validate_prompt_chain_config", lambda *_: {"clip_ids": ["B-TRAIN-0001"]})
+    monkeypatch.setattr(
+        cli, "find_b_clip",
+        lambda *_: SimpleNamespace(clip_id="B-TRAIN-0001", split="train"),
+    )
+    monkeypatch.setattr(cli, "validate_human_reference", lambda *_: None)
+    monkeypatch.setattr(cli, "sample_dataset_b", lambda *_: [frame])
+    monkeypatch.setattr(cli, "load_dotenv", lambda *_: None)
+    answers = iter(["first", "second", "third", "coaching"])
+    histories: list[list[str]] = []
+
+    class FakeOllama:
+        def model_metadata(self, _model: str) -> dict[str, str]:
+            return {"digest": "a" * 64}
+
+        def gpu_status(self, model: str, options: dict[str, Any], *, preload: bool = True) -> dict:
+            return {"model": model, "digest": "a" * 64, "size_bytes": 20,
+                    "size_vram_bytes": 10, "context_length": None}
+
+        def chat(self, model: str, messages: list[Any], *args: Any, **kwargs: Any) -> dict:
+            histories.append([message.content for message in messages])
+            return {"message": {"content": next(answers)}}
+
+    monkeypatch.setattr(cli, "OllamaClient", FakeOllama)
+    cli.start_prompt_review(
+        "B-TRAIN-0001", "qwen3.5:27b", "P1_human_guided", config_path, tmp_path / "manifest"
+    )
+    run_dir = next((tmp_path / "output/v0.4/prompt_chain/P1_human_guided").glob("B-TRAIN-*/*"))
+    correction = {"frame_numbers_1_based": [1], "observed_evidence": "Visible cue.",
+                  "correction": "Recheck the event."}
+    first_review = run_dir / "initial_review.json"
+    first_review.write_text(json.dumps({"feedback": [correction], "notes": "First review."}), encoding="utf-8")
+    cli.revise_prompt_recognition(run_dir, config_path, tmp_path / "manifest")
+    second_review = run_dir / "revision_review.json"
+    with pytest.raises(Exception, match="pending"):
+        cli.continue_prompt_recognition(run_dir, config_path, tmp_path / "manifest", extension_path)
+    second_review.write_text(json.dumps({"feedback": [correction], "notes": "Still wrong."}), encoding="utf-8")
+    cli.continue_prompt_recognition(run_dir, config_path, tmp_path / "manifest", extension_path)
+    assert (run_dir / "stage_2_revision_response.txt").read_text(encoding="utf-8") == "second"
+    assert (run_dir / "stage_3_revision_response.txt").read_text(encoding="utf-8") == "third"
+    assert (run_dir / "revision_review_snapshot.json").exists()
+    assert histories[2][1] == "first" and histories[2][3] == "second"
+    assert len(histories[2]) == 5
+    with pytest.raises(Exception, match="pending"):
+        cli.finish_prompt_coaching(run_dir, config_path, tmp_path / "manifest", extension_path)
+    final_review = run_dir / "revision_review_2.json"
+    final_review.write_text(json.dumps({"feedback": [], "notes": "Accepted."}), encoding="utf-8")
+    cli.finish_prompt_coaching(run_dir, config_path, tmp_path / "manifest", extension_path)
+    assert (run_dir / "stage_4_coaching_response.txt").read_text(encoding="utf-8") == "coaching"
+    assert len(histories[3]) == 7
+    assert histories[3][5] == "third"
+    assert cli.read_metadata(run_dir / "metadata.txt")["p1_revision_count"] == 2
 
 
 def test_attention_branch_excludes_explicit_feedback_and_pauses_for_review(
@@ -397,7 +500,7 @@ def test_attention_branch_excludes_explicit_feedback_and_pauses_for_review(
     cli.start_prompt_review(
         "B-TRAIN-0001", "qwen3.5:27b", "P1_human_guided", config_path, manifest
     )
-    p1 = next((tmp_path / "output/v0.4/prompt_chain/P1_human_guided").glob("*/*/*"))
+    p1 = next((tmp_path / "output/v0.4/prompt_chain/P1_human_guided").glob("B-TRAIN-*/*"))
     explicit = {
         "feedback": [{
             "frame_numbers_1_based": [1],
@@ -429,7 +532,7 @@ def test_attention_branch_excludes_explicit_feedback_and_pauses_for_review(
 
     cli.start_attention_review(p1, config_path, manifest)
     p2_root = tmp_path / "output/v0.4/prompt_chain/P2_attention_hint"
-    p2 = next(p2_root.glob("*/*/*"))
+    p2 = next(p2_root.glob("B-TRAIN-*/*"))
     assert not (p2 / "stage_3_coaching_response.txt").exists()
     assert [len(history) for history in histories] == [1, 3, 5, 3]
     assert histories[3] == ["recognition", "original recognition", hint.read_text()]
@@ -448,7 +551,7 @@ def test_attention_branch_excludes_explicit_feedback_and_pauses_for_review(
     assert (p1 / "stage_3_coaching_response.txt").read_text() == "explicit coaching"
 
     cli.start_attention_review(p1, config_path, manifest)
-    rejected_run = sorted(p2_root.glob("*/*/*"))[-1]
+    rejected_run = sorted(p2_root.glob("B-TRAIN-*/*"))[-1]
     rejected_review = {
         "feedback": [{
             "frame_numbers_1_based": [1],
@@ -573,7 +676,7 @@ def test_fresh_progressive_p2_allows_three_hints_then_coaching(
     manifest = tmp_path / "manifest"
     cli.start_progressive_review("B-TRAIN-0025", "qwen3.5:27b", config_path, manifest)
     root = tmp_path / "output/v0.4/prompt_chain/P2_attention_hint"
-    run_dir = next(root.glob("*/*/*"))
+    run_dir = next(root.glob("B-TRAIN-*/*"))
     assert len(histories[0]) == 1
     assert len(histories[0][0].images) == 30
     assert (run_dir / "stage_1_response.txt").read_text() == "fresh recognition"
@@ -612,7 +715,7 @@ def test_fresh_progressive_p2_allows_three_hints_then_coaching(
     assert cli.read_metadata(run_dir / "metadata.txt")["run_status"] == "complete"
 
     cli.start_progressive_review("B-TRAIN-0025", "qwen3.5:27b", config_path, manifest)
-    stopped_run = sorted(root.glob("*/*/*"))[-1]
+    stopped_run = sorted(root.glob("B-TRAIN-*/*"))[-1]
     (stopped_run / "review_stage_1.json").write_text(json.dumps({
         "decision": "stop", "frame_numbers_1_based": [], "hint": "", "notes": "wrong"
     }), encoding="utf-8")
@@ -715,7 +818,7 @@ def test_frozen_visible_cue_p3_is_fresh_and_requires_approval(
     manifest = tmp_path / "manifest"
     cli.start_visible_cue_review("B-TRAIN-0025", "qwen3.5:27b", config_path, manifest)
     root = tmp_path / "output/v0.4/prompt_chain/P3_visible_cue_hint"
-    run_dir = next(root.glob("*/*/*"))
+    run_dir = next(root.glob("B-TRAIN-*/*"))
     assert len(histories[0]) == 1
     assert len(histories[0][0].images) == 30
     assert (run_dir / "stage_1_response.txt").read_text() == "fresh P3 recognition"
@@ -752,7 +855,7 @@ def test_frozen_visible_cue_p3_is_fresh_and_requires_approval(
     assert cli.read_metadata(run_dir / "metadata.txt")["run_status"] == "complete"
 
     cli.start_visible_cue_review("B-TRAIN-0025", "qwen3.5:27b", config_path, manifest)
-    stopped_run = sorted(root.glob("*/*/*"))[-1]
+    stopped_run = sorted(root.glob("B-TRAIN-*/*"))[-1]
     (stopped_run / "review_stage_1.json").write_text(
         json.dumps({"decision": "stop", "notes": "recognition insufficient"})
     )
