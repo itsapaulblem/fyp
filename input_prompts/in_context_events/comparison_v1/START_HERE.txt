@@ -1,0 +1,96 @@
+IN-CONTEXT FOOTBALL EVENT COMPARISON — PREPARATION ONLY
+
+Purpose
+Compare fresh recognition without examples against recognition with three
+fixed, balanced demonstrations. This is in-context prompting, not fine-tuning.
+No model calls have been made for this comparison.
+
+Approved demonstrations (all from the example split; approved 2026-10-11)
+  E-0016: corner kick; striped attackers against white defenders.
+  E-0009: attacking-flank free kick; white attackers against red defenders.
+  E-0023: penalty kick; blue taker, followed by goal celebrations.
+The descriptions in example_descriptions.txt are assistant-drafted from the
+sampled images and have now been approved by the researcher.
+They are not blinded, independent human references: source categories were
+known when these drafts were prepared.
+E-0001 was inspected but not chosen as a demonstration because the sampled
+restart is unclear among close-ups and midfield passing. Its candidate and
+frames remain intact. No example was selected using model performance.
+
+Read the frames here (relative to the project root):
+  artifacts/in_context_events/v1/frames/example/corner/E-0016/
+  artifacts/in_context_events/v1/frames/example/free_kick/E-0009/
+  artifacts/in_context_events/v1/frames/example/penalty/E-0023/
+Each demonstration retains all 30 ordered original JPEGs. Do not use the
+inspection contact sheets as a substitute for the declared model images.
+
+Comparison
+  Baseline: 30 query frames + recognition instruction.
+  With examples: three labelled 30-frame demonstrations with approved text,
+                then the same 30 query frames + the same recognition instruction.
+This proposed configuration totals 120 images in the example condition.
+Check image handling, context capacity, truncation and runtime on development
+before approving the configuration. Any reduction in example image counts
+must be declared and frozen separately, with exact positions and hashes.
+
+Use the same fixed examples for every query. Never choose demonstrations
+according to the query's true label. Send neutral image positions, not class
+folder names, source annotations, references or match paths for the query.
+Keep model tag/digest, settings, query sampling and instructions identical.
+Use separate fresh requests: no previous answers or human corrections.
+
+The B-TRAIN-0025 pilot query is now frozen, with all 30 JPEG hashes verified
+against its original P1 run. Main development/test query selection is not frozen.
+A known B-train clip such as B-TRAIN-0025 can be a separately reported pilot
+only. Main prompt development uses the new development split. Held-out clips
+must not guide example selection or prompt changes. Check prior GSR match
+overlap before describing any new queries as historically unseen.
+
+Before execution
+1. DONE: Researcher approved the three descriptions against their frames.
+2. DONE: Approved text retained with uncertainty, not called blinded references.
+3. PARTIAL: No match crosses the new dataset's roles; no exact cross-role
+   JPEG duplicate was found in 5,430 images (180 clips plus B25). Two
+   perceptual candidate pairs remain unresolved. Neither involves a chosen
+   demonstration or B25. Do not execute the four flagged clips until reviewed:
+   E-0037, E-0178, E-0095, E-0187. This is an audit hold, not a cohort replacement.
+   Prior GSR source-match overlap remains unresolved: numeric GSR game IDs
+   lack an authoritative local mapping to SoccerNet match names. Do not
+   infer this mapping from list order or claim historically unseen evaluation.
+4. DONE: Identical recognition instructions and CPU-only Qwen3.5:27b settings
+   declared for both arms. The 120-image context capacity is still unverified.
+5. DONE: SHA-256 freeze saved in config/freezes/in_context_comparison_v1_b25.json
+   with its .sha256 sidecar. It covers approved text, 90 demonstration JPEGs,
+   30 original B25 JPEGs, prompt files, settings and expected model digest.
+   The original dataset selection freeze remains unchanged.
+6. Run development comparison and score recognition before coaching.
+7. Request coaching only after recognition review; assess advice separately.
+
+The original frozen comparison remains disabled until its gates are resolved.
+On 2026-10-11 the researcher explicitly approved bypassing these execution
+gates for a separately labelled exploratory B25 pilot only. That exception
+is recorded in config/in_context_b25_exploratory_override_v1.json. It does
+not change the original freeze or approve the wider dataset for execution.
+Run scripts/run_in_context_pilot.py --validate-only before this variant;
+--run makes two sequential, fresh recognition calls with zero retries and
+no coaching. Use an isolated remote folder and launch inside tmux. Baseline
+and with_examples outputs are saved separately, including exact requests,
+raw responses, model digest/settings, timing, residency and failures.
+Successful output is not proof that the 120-image context was retained.
+No Ollama requests have yet been made locally. Full-dataset visibility/reference reviews
+are still pending; approval of three examples does not approve every clip.
+
+Files to read
+  example_descriptions.approved_v1.txt: immutable approved description copy.
+  recognition_instruction.v1.txt: identical query instruction for both arms.
+  baseline_prompt.v1.txt: query-only text packet.
+  with_examples_prompt.v1.txt: demonstration text followed by the same query packet.
+The JPEG insertion order is specified in the freeze; these text files alone
+are not complete image requests. No event-bearing query paths go to the model.
+Private audit details: artifacts/in_context_events/comparison_v1/private_audit.json.
+The duplicate screen uses SHA-256 and both DCT pHash and dHash with Hamming
+distances <=4. It cannot prove absence of all crops, overlays or replay variants.
+
+Results will be stored separately at:
+  output/in_context_events/comparison_v1/
+Do not mix these with earlier v0.4 P1, P2, P3 or historical P0 references.

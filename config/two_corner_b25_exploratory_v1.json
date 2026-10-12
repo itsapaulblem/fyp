@@ -1,0 +1,25 @@
+{
+  "variant": "two_corner_examples_v1_b25_exploratory",
+  "approval": "Researcher approved descriptions, prompt freeze and preparation of separate remote exploratory run on 2026-10-11.",
+  "parent_freeze": "config/freezes/two_corner_examples_v1_b25.json",
+  "parent_freeze_sha256": "40d1d9f36e27e1f72213b51153e705d66bb11354b96bf73e52452d4c51efe600",
+  "execution_allowed_for_this_variant_only": true,
+  "coaching_allowed": false,
+  "image_count": 90,
+  "run_arms": [
+    "with_examples"
+  ],
+  "keep_alive": "10m",
+  "timeout_seconds": 14400,
+  "retries": 0,
+  "waived_gates": [
+    "Known B25 development pilot",
+    "Prior GSR source-match overlap unresolved",
+    "Context retention unverified",
+    "Corner-only demonstrations may bias output",
+    "Both category balance and boundary wording differ from previous pilot"
+  ],
+  "output_root": "output/in_context_events/two_corner_examples_v1/b25_exploratory_v1",
+  "bundle_path": "artifacts/transfer/two_corner_b25_exploratory_v1.tar.gz",
+  "results_archive": "two_corner_b25_exploratory_v1_results.tar.gz"
+}

@@ -1,0 +1,22 @@
+{
+  "amendment_id": "event_media_duration_replacement_v1",
+  "original_selection_sha256": "4c38971834d53251b47eee3fc2a3308dfcec452fc5578e9eea879e759732b81c",
+  "original_freeze_sha256": "4d65aafb69c4c5e7a12a2d33dbca6e8dd4a9b8a31eb7f86afd1bc66d2685a03d",
+  "source_revision": "93544d42a32237e0f580f021d137b1822631f55c",
+  "approval": "Researcher approved documented rejection and reserve recovery in chat; no model results used.",
+  "replacements": [
+    {
+      "rejected_clip_id": "E-0143",
+      "replacement_clip_id": "E-0151",
+      "reason": "Full frozen window exceeds the downloaded source duration; do not truncate or shift it.",
+      "reported_source_duration_seconds": 2700.0,
+      "reported_start_ms": 2682128,
+      "reported_end_ms": 2712128,
+      "replacement_rule": "First preselected reserve in the same held-out role and category, ordered by class_rank.",
+      "verification": "Re-measure retained source video and verify its saved hash before recording rejection."
+    }
+  ],
+  "original_freeze_modified": false,
+  "replacement_visibility_review": "pending",
+  "model_runs_allowed": false
+}

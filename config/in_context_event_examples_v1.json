@@ -1,0 +1,69 @@
+{
+  "experiment_id": "football_event_in_context_examples_v1",
+  "status": "candidate_selection_only_until_media_review",
+  "source": {
+    "name": "SoccerNet-v2 Action Spotting",
+    "source_split": "train",
+    "labels_repository": "SoccerNet/SN-Labels",
+    "labels_revision": "8e01649fe968da9f541c91019b65b3028b2425fc",
+    "train_list_url": "https://raw.githubusercontent.com/SoccerNet/SoccerNet/dbf27e0633a11ea10cec048cbe0ebb8bdf80827b/SoccerNet/data/SoccerNetGamesTrain.json",
+    "task_url": "https://www.soccer-net.org/tasks/action-spotting",
+    "access_url": "https://www.soccer-net.org/data",
+    "video_repository": "SoccerNet/SoccerNet_raw_HQ",
+    "video_access": "requires provider authorisation; no gated media downloaded by this selection tool"
+  },
+  "classes": {
+    "corner": ["Corner"],
+    "penalty": ["Penalty"],
+    "free_kick": ["Direct free-kick", "Indirect free-kick"]
+  },
+  "seed": "football-event-examples-v1-20261010",
+  "match_split": {
+    "example": 0.6,
+    "development": 0.2,
+    "held_out_test": 0.2
+  },
+  "primary_clips_per_class": {
+    "example": 30,
+    "development": 10,
+    "held_out_test": 20
+  },
+  "maximum_reserves_per_class_per_role": 5,
+  "clip_window": {
+    "seconds_before_annotation": 10,
+    "seconds_after_annotation": 20,
+    "frame_count": 30,
+    "maximum_edge": 672,
+    "sampling": "uniform endpoints; exact decoded indices and JPEG hashes frozen after media access"
+  },
+  "selection_policy": {
+    "match_assignment": "fixed-hash order; reserve primary plus reserve quotas of the rarest category in each role before filling 60/20/20 whole-match capacities",
+    "visible_annotations_only": true,
+    "maximum_clips_per_class_per_match": 1,
+    "overlapping_windows_in_same_half": "reject later candidate",
+    "all_halves_and_replays_of_a_match_share_role": true,
+    "annotation_labels_used_for_cohort_selection": true,
+    "query_labels_are_model_input": false,
+    "human_references": "write from neutral-ID sampled frames before comparing source labels",
+    "reserve_use": "document visual rejection before any model run; never replace based on model performance",
+    "test_policy": "internal holdout from official train; seal until prompts and example selection are frozen"
+  },
+  "execution_gate": [
+    "authorised access to provider footage",
+    "check prior Dataset B match overlap",
+    "review event visibility and write human references from sampled frames",
+    "audit identical and near-duplicate sampled frames across roles",
+    "freeze exact image hashes and approved reference/example text",
+    "freeze prompts, balanced example counts, settings and context-budget check on development only"
+  ],
+  "experiment_policy": {
+    "weights_updated": false,
+    "example_pool_is_not_one_prompt": true,
+    "same_balanced_examples_for_every_query": true,
+    "do_not_choose_examples_using_query_ground_truth": true,
+    "baseline": "fresh recognition using identical query frames and settings without examples",
+    "coaching": "request only after separately reviewed recognition; evaluate advice separately"
+  },
+  "workspace": "artifacts/in_context_events/v1",
+  "freeze_record": "config/freezes/in_context_event_selection_v1.json"
+}

@@ -1,0 +1,13 @@
+{
+  "approval": "Researcher approved E-0017 and the two-corner prompt in chat on 2026-10-11; not blinded references.",
+  "examples": [
+    {
+      "clip_id": "E-0016",
+      "description": "Event: Corner kick.\nIn images 1-3, a red-and-white-striped player places the ball beside the\ncorner flag and corner arc. Images 4-10 show striped attackers and\nwhite-shirted defenders gathering near goal. Images 11-12 show the delivery\nreaching the crowded goal area. The goalkeeper in bright green appears to\ncollect the ball in images 13-15, after which the white team advances towards\nmidfield and the opposite penalty area in images 16-30.\nLimits: The kick itself and individual contacts in the crowded box are not\nclearly captured. Do not invent a successful header or goal."
+    },
+    {
+      "clip_id": "E-0017",
+      "description": "Event: Corner kick.\nImage 10 shows a dark-shirted player approaching a stationary ball in the\ncorner arc beside the corner flag, where the goal line meets the touchline.\nImages 4 and 9 show dark-shirted attackers and white-shirted defenders\npositioned around the penalty area. Images 11-13 show players contesting\nthe delivery near goal, with a bright-green goalkeeper involved.\nIn images 15-16, the ball is away from the crowded goal area and players\nmove outward. Images 23 and 30 show subsequent play farther up the pitch,\nincluding a white-shirted player with the ball in image 30.\nLimits: The exact aerial contact and the player responsible for sending the\nball away are uncertain. Do not infer a goal from the delivery or goalkeeper\nmovement. The corner identification rests on the visible corner-arc setup,\nnot on a defensive wall or merely crowded player positions."
+    }
+  ]
+}

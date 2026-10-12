@@ -1,1 +1,5 @@
 *.sh text eol=lf
+config/in_context_event_examples_v1.json text eol=lf
+config/freezes/in_context_event_selection_v1.json text eol=lf
+config/freezes/in_context_event_selection_v1.sha256 text eol=lf
+src/football_coach/event_examples.py text eol=lf

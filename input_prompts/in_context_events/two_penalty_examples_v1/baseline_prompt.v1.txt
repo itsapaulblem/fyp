@@ -1,0 +1,4 @@
+BEGIN QUERY
+The attached 30 images belong to one query clip and are ordered chronologically.
+Apply recognition_instruction.v1.txt to these images.
+END QUERY

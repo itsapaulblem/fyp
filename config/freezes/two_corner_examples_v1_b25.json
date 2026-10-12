@@ -1,0 +1,1174 @@
+{
+  "experiment_id": "two_corner_examples_v1_b25_exploratory",
+  "execution_allowed": false,
+  "approval": "Researcher approved descriptions, prompt freeze and preparation of separate remote exploratory run on 2026-10-11.",
+  "model": "qwen3.5:27b",
+  "expected_model_digest": "193ec05b1e8048df17f7b8d15528671ae40e1a25cf4e0f5416c02b9cac5b990c",
+  "generation": {
+    "options": {
+      "temperature": 0,
+      "seed": 20260903,
+      "num_ctx": 32768,
+      "num_gpu": 0
+    },
+    "think": false,
+    "stream": false
+  },
+  "examples": [
+    {
+      "clip_id": "E-0016",
+      "approved_description": "Event: Corner kick.\nIn images 1-3, a red-and-white-striped player places the ball beside the\ncorner flag and corner arc. Images 4-10 show striped attackers and\nwhite-shirted defenders gathering near goal. Images 11-12 show the delivery\nreaching the crowded goal area. The goalkeeper in bright green appears to\ncollect the ball in images 13-15, after which the white team advances towards\nmidfield and the opposite penalty area in images 16-30.\nLimits: The kick itself and individual contacts in the crowded box are not\nclearly captured. Do not invent a successful header or goal.",
+      "message_content": "You will receive two labelled demonstration sequences followed by a separate QUERY sequence.\nDemonstrations illustrate reasoning from visible evidence; they are not the query.\nDescribe only the QUERY in your final answer. Do not carry an example's event,\nteam possession, or outcome into the query. The query may show a different event.\n\nBEGIN DEMONSTRATION 1 \u2014 30 ORDERED IMAGES\nEvent: Corner kick.\nIn images 1-3, a red-and-white-striped player places the ball beside the\ncorner flag and corner arc. Images 4-10 show striped attackers and\nwhite-shirted defenders gathering near goal. Images 11-12 show the delivery\nreaching the crowded goal area. The goalkeeper in bright green appears to\ncollect the ball in images 13-15, after which the white team advances towards\nmidfield and the opposite penalty area in images 16-30.\nLimits: The kick itself and individual contacts in the crowded box are not\nclearly captured. Do not invent a successful header or goal.\nEND DEMONSTRATION 1\n",
+      "frames": [
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/01.jpg",
+          "sha256": "19c40eb95b9f0f9a3a1252c8bcf7dd897c498f5acac42a47964cffe211ffc67f",
+          "sample_position_1_based": 1,
+          "decoded_frame_index_0_based": 45057,
+          "source_time_ms": 1802280.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/02.jpg",
+          "sha256": "cc8db46c30502f1019ec8b8bc060f92e1d76f81815f16ba12d76917073ddfe45",
+          "sample_position_1_based": 2,
+          "decoded_frame_index_0_based": 45083,
+          "source_time_ms": 1803320.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/03.jpg",
+          "sha256": "3058c4f9d35335b9db6ad09b00d28d70badc6ba366ddbc97f89eed1895242c63",
+          "sample_position_1_based": 3,
+          "decoded_frame_index_0_based": 45109,
+          "source_time_ms": 1804360.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/04.jpg",
+          "sha256": "ceab55f79192d52f31912788ef1af96e9e489652b1a64df9da75a309e598cd6b",
+          "sample_position_1_based": 4,
+          "decoded_frame_index_0_based": 45134,
+          "source_time_ms": 1805360.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/05.jpg",
+          "sha256": "2950726e450de520b51efdf9ecdbbd9edfb3f0a4d5ce77ed0ec56db6b9409ede",
+          "sample_position_1_based": 5,
+          "decoded_frame_index_0_based": 45160,
+          "source_time_ms": 1806400.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/06.jpg",
+          "sha256": "a4aa4f5506dfe797bbc0b8682c1e5a558c65c0897ad545787b35b2817d2c8b78",
+          "sample_position_1_based": 6,
+          "decoded_frame_index_0_based": 45186,
+          "source_time_ms": 1807440.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/07.jpg",
+          "sha256": "9721f27252b72eabe25dea7a2c5e461d962bf3fd29837fffb444cefd2576985a",
+          "sample_position_1_based": 7,
+          "decoded_frame_index_0_based": 45212,
+          "source_time_ms": 1808480.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/08.jpg",
+          "sha256": "ab8469c6e84c909c9b206ba3c6bbc93c3e7d6604dfea2798c79aff327220139e",
+          "sample_position_1_based": 8,
+          "decoded_frame_index_0_based": 45238,
+          "source_time_ms": 1809520.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/09.jpg",
+          "sha256": "8a310261564c220ecf9b8a6f105d16b4734755f9ed4a14ab0232698955dcb68d",
+          "sample_position_1_based": 9,
+          "decoded_frame_index_0_based": 45264,
+          "source_time_ms": 1810560.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/10.jpg",
+          "sha256": "3c6ab22f6ea4c66ba910e9affe2bce3aa4ad85327edb53d4d66c6513ee783210",
+          "sample_position_1_based": 10,
+          "decoded_frame_index_0_based": 45289,
+          "source_time_ms": 1811560.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/11.jpg",
+          "sha256": "a3df2904387c73b93303a73a93cc5f95095c0403a8738676a0230c3d076f39cd",
+          "sample_position_1_based": 11,
+          "decoded_frame_index_0_based": 45315,
+          "source_time_ms": 1812600.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/12.jpg",
+          "sha256": "db6b1183a2d6ff20bd2773f61d0002ee22487b6c4fd3145c6ee594eb1f6ae4c9",
+          "sample_position_1_based": 12,
+          "decoded_frame_index_0_based": 45341,
+          "source_time_ms": 1813640.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/13.jpg",
+          "sha256": "0802cee1896bba191ba04bf7d80c2edca93f3886b15731a4dfdf89bbcefc539a",
+          "sample_position_1_based": 13,
+          "decoded_frame_index_0_based": 45367,
+          "source_time_ms": 1814680.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/14.jpg",
+          "sha256": "01031449f1592a08b2940ef10ff5840ba282a835e628f1eaeff3e80e62b8213f",
+          "sample_position_1_based": 14,
+          "decoded_frame_index_0_based": 45393,
+          "source_time_ms": 1815720.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/15.jpg",
+          "sha256": "d4cefd78fad809bc5ded6479905b3907069b4de6308086eb5606eb8d4ccd676b",
+          "sample_position_1_based": 15,
+          "decoded_frame_index_0_based": 45419,
+          "source_time_ms": 1816760.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/16.jpg",
+          "sha256": "7b816f5db6a60b60b13270d9e6e4f2a6c3ecd47ee173b131a297e6f0a16b057d",
+          "sample_position_1_based": 16,
+          "decoded_frame_index_0_based": 45444,
+          "source_time_ms": 1817760.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/17.jpg",
+          "sha256": "af75d3a7f2597ce8b15cb5144c433f93327bbea7a54706f0afed541b0ec3b853",
+          "sample_position_1_based": 17,
+          "decoded_frame_index_0_based": 45470,
+          "source_time_ms": 1818800.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/18.jpg",
+          "sha256": "37f0fd14e861252c8e92920752209bc60c07c0816dfa7a0d8904ec54a83abb44",
+          "sample_position_1_based": 18,
+          "decoded_frame_index_0_based": 45496,
+          "source_time_ms": 1819840.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/19.jpg",
+          "sha256": "2814437e860831af346d5dd6d70584efa225bf4587f442799e4e674c5ec4fb9e",
+          "sample_position_1_based": 19,
+          "decoded_frame_index_0_based": 45522,
+          "source_time_ms": 1820880.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/20.jpg",
+          "sha256": "f1078e19d0d3a5ad7136805952eea7db75fac83e4b8290c752b2dc81b30ba69a",
+          "sample_position_1_based": 20,
+          "decoded_frame_index_0_based": 45548,
+          "source_time_ms": 1821920.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/21.jpg",
+          "sha256": "ddc3277a904c1455cef21419778791a613ee044a920136125e48edf7767a0ba1",
+          "sample_position_1_based": 21,
+          "decoded_frame_index_0_based": 45574,
+          "source_time_ms": 1822960.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/22.jpg",
+          "sha256": "76e5165025b8e58e1d56dbf1ec5f89a68be5a2fc704c9b18223e013efa57c8c3",
+          "sample_position_1_based": 22,
+          "decoded_frame_index_0_based": 45599,
+          "source_time_ms": 1823960.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/23.jpg",
+          "sha256": "8364b63cbfca57fbe9d843e91e702c7ad303f59927a66a39b520b151aab1b5a1",
+          "sample_position_1_based": 23,
+          "decoded_frame_index_0_based": 45625,
+          "source_time_ms": 1825000.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/24.jpg",
+          "sha256": "0ed723bc81b8528ee78e13d96bdd8e27c7128034dfc9488e369ce69d43644068",
+          "sample_position_1_based": 24,
+          "decoded_frame_index_0_based": 45651,
+          "source_time_ms": 1826040.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/25.jpg",
+          "sha256": "0abf4a1e4e94615aacb0d5bcaa56cbc98ad95e0976f0c3a9cbe431e56464edce",
+          "sample_position_1_based": 25,
+          "decoded_frame_index_0_based": 45677,
+          "source_time_ms": 1827080.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/26.jpg",
+          "sha256": "845278d2fd0132e68c5485ff1976b7e728f6fcc90887ba5d76fed998de5666d1",
+          "sample_position_1_based": 26,
+          "decoded_frame_index_0_based": 45703,
+          "source_time_ms": 1828120.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/27.jpg",
+          "sha256": "5b47a5dd37df38f5887db46368e6555c7ae056bc45fdf38509dba1c7a1cc7811",
+          "sample_position_1_based": 27,
+          "decoded_frame_index_0_based": 45729,
+          "source_time_ms": 1829160.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/28.jpg",
+          "sha256": "f203de282c71a12cb8ac1fcc4d7173131379d08b92da600a4eed387befb982c4",
+          "sample_position_1_based": 28,
+          "decoded_frame_index_0_based": 45754,
+          "source_time_ms": 1830160.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/29.jpg",
+          "sha256": "7639654934d3d101ed990e1cfd3ea5b17405b8c17e279051640ea9aabb0b3ddc",
+          "sample_position_1_based": 29,
+          "decoded_frame_index_0_based": 45780,
+          "source_time_ms": 1831200.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/30.jpg",
+          "sha256": "2ba82111885317111dd1c63b2b71c6c25ca5fc4e506a883b448d815bfc4c47ee",
+          "sample_position_1_based": 30,
+          "decoded_frame_index_0_based": 45806,
+          "source_time_ms": 1832240.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        }
+      ]
+    },
+    {
+      "clip_id": "E-0017",
+      "approved_description": "Event: Corner kick.\nImage 10 shows a dark-shirted player approaching a stationary ball in the\ncorner arc beside the corner flag, where the goal line meets the touchline.\nImages 4 and 9 show dark-shirted attackers and white-shirted defenders\npositioned around the penalty area. Images 11-13 show players contesting\nthe delivery near goal, with a bright-green goalkeeper involved.\nIn images 15-16, the ball is away from the crowded goal area and players\nmove outward. Images 23 and 30 show subsequent play farther up the pitch,\nincluding a white-shirted player with the ball in image 30.\nLimits: The exact aerial contact and the player responsible for sending the\nball away are uncertain. Do not infer a goal from the delivery or goalkeeper\nmovement. The corner identification rests on the visible corner-arc setup,\nnot on a defensive wall or merely crowded player positions.",
+      "message_content": "BEGIN DEMONSTRATION 2 \u2014 30 ORDERED IMAGES\nEvent: Corner kick.\nImage 10 shows a dark-shirted player approaching a stationary ball in the\ncorner arc beside the corner flag, where the goal line meets the touchline.\nImages 4 and 9 show dark-shirted attackers and white-shirted defenders\npositioned around the penalty area. Images 11-13 show players contesting\nthe delivery near goal, with a bright-green goalkeeper involved.\nIn images 15-16, the ball is away from the crowded goal area and players\nmove outward. Images 23 and 30 show subsequent play farther up the pitch,\nincluding a white-shirted player with the ball in image 30.\nLimits: The exact aerial contact and the player responsible for sending the\nball away are uncertain. Do not infer a goal from the delivery or goalkeeper\nmovement. The corner identification rests on the visible corner-arc setup,\nnot on a defensive wall or merely crowded player positions.\nEND DEMONSTRATION 2\n",
+      "frames": [
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/01.jpg",
+          "sha256": "6d71fc76b242b4b9b54c1848a329279ab8921116e488316a5e37b2a5a9b1767c",
+          "sample_position_1_based": 1,
+          "decoded_frame_index_0_based": 31592,
+          "source_time_ms": 1263680.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/02.jpg",
+          "sha256": "337b88d1bec446f59c73aaebc70fb8cdaefa40c1bbde3237c7fbcdf9beeb58c9",
+          "sample_position_1_based": 2,
+          "decoded_frame_index_0_based": 31618,
+          "source_time_ms": 1264720.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/03.jpg",
+          "sha256": "592a52abe2ba554d011264c8a30b2d16b6cd7e4bc2fc08efbac2e461a37b2d60",
+          "sample_position_1_based": 3,
+          "decoded_frame_index_0_based": 31644,
+          "source_time_ms": 1265760.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/04.jpg",
+          "sha256": "c4f10d02443a629c3c3476f38747357dd5655e05ebcee75f7b874aae44c32f92",
+          "sample_position_1_based": 4,
+          "decoded_frame_index_0_based": 31669,
+          "source_time_ms": 1266760.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/05.jpg",
+          "sha256": "2f511e5c19e00a739eac881d48b941889ab8c29d83b4cbe527a42b81538cd6ae",
+          "sample_position_1_based": 5,
+          "decoded_frame_index_0_based": 31695,
+          "source_time_ms": 1267800.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/06.jpg",
+          "sha256": "a11f55bed279788daf70943e9621a8084c93cc57f2e71be105490a457e5879e6",
+          "sample_position_1_based": 6,
+          "decoded_frame_index_0_based": 31721,
+          "source_time_ms": 1268840.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/07.jpg",
+          "sha256": "0c0755e94c49834e4cf6b6ffc2d3a130c73be02933d10b21e25764541e9345df",
+          "sample_position_1_based": 7,
+          "decoded_frame_index_0_based": 31747,
+          "source_time_ms": 1269880.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/08.jpg",
+          "sha256": "0d00a2f553b53dd8b5c5bee696031cd9c70d01a0362380d75f6b0cee95727953",
+          "sample_position_1_based": 8,
+          "decoded_frame_index_0_based": 31773,
+          "source_time_ms": 1270920.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/09.jpg",
+          "sha256": "d368428062ea7c0e0c813963737caef390aeee45237b7973ffb122c579468f16",
+          "sample_position_1_based": 9,
+          "decoded_frame_index_0_based": 31799,
+          "source_time_ms": 1271960.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/10.jpg",
+          "sha256": "b55c5a7af1ff9287298edc99a781b00f3602030cdc56a63de62fb77759251ea3",
+          "sample_position_1_based": 10,
+          "decoded_frame_index_0_based": 31824,
+          "source_time_ms": 1272960.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/11.jpg",
+          "sha256": "b29db64923f823d8466b0f2ff8ef50fb9549ad5c555815ce46124ea6856a8365",
+          "sample_position_1_based": 11,
+          "decoded_frame_index_0_based": 31850,
+          "source_time_ms": 1274000.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/12.jpg",
+          "sha256": "65dd6d699170543ff0475b84e7c4667e76669976486e7ee3c882d6a08c99e0a2",
+          "sample_position_1_based": 12,
+          "decoded_frame_index_0_based": 31876,
+          "source_time_ms": 1275040.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/13.jpg",
+          "sha256": "196886c43d92133fc16a9c2779facb948d364251ec2515ce1b11c40b7841888b",
+          "sample_position_1_based": 13,
+          "decoded_frame_index_0_based": 31902,
+          "source_time_ms": 1276080.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/14.jpg",
+          "sha256": "8d8bd2f6258ff8993a7bb384b945fdb20c28a249461384bb7c4441d0c25525e2",
+          "sample_position_1_based": 14,
+          "decoded_frame_index_0_based": 31928,
+          "source_time_ms": 1277120.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/15.jpg",
+          "sha256": "8c5769d90352e2904d84aa23ff96b5e0ba3ee91477e87b0f550b444799ffb5e3",
+          "sample_position_1_based": 15,
+          "decoded_frame_index_0_based": 31954,
+          "source_time_ms": 1278160.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/16.jpg",
+          "sha256": "b0d39cf24131f7d4d6862225d275d34ecbdc19f15adbcbdbab4336a9b24ebf54",
+          "sample_position_1_based": 16,
+          "decoded_frame_index_0_based": 31979,
+          "source_time_ms": 1279160.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/17.jpg",
+          "sha256": "c8e4973701e06b740c56ed1ea7a4031069b0ff19cb9bc0571eaac855cef023eb",
+          "sample_position_1_based": 17,
+          "decoded_frame_index_0_based": 32005,
+          "source_time_ms": 1280200.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/18.jpg",
+          "sha256": "bc84042ced36fafeee5f143d190897413cf7013ef2ddeb29560136bc60a88198",
+          "sample_position_1_based": 18,
+          "decoded_frame_index_0_based": 32031,
+          "source_time_ms": 1281240.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/19.jpg",
+          "sha256": "983d460673e77f06b9b127471461fca09585556013bb463646e7fbc208c8e2a8",
+          "sample_position_1_based": 19,
+          "decoded_frame_index_0_based": 32057,
+          "source_time_ms": 1282280.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/20.jpg",
+          "sha256": "5614173a150b41bc83282863ece012c0d67d0441e60024aeb00d09d370a5e057",
+          "sample_position_1_based": 20,
+          "decoded_frame_index_0_based": 32083,
+          "source_time_ms": 1283320.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/21.jpg",
+          "sha256": "853439d6391b12359697ceebe3152908dfe2e7775d4ba562176100b5a7043bc2",
+          "sample_position_1_based": 21,
+          "decoded_frame_index_0_based": 32109,
+          "source_time_ms": 1284360.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/22.jpg",
+          "sha256": "d9b284f697690ffa8424512b75afa97ae17f112bc74006ebb08cacadc5996983",
+          "sample_position_1_based": 22,
+          "decoded_frame_index_0_based": 32134,
+          "source_time_ms": 1285360.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/23.jpg",
+          "sha256": "d287e41e0bedd869ebbc3b63d778bb1940fd7bab1bc3e6cfc47187b9ffa8871e",
+          "sample_position_1_based": 23,
+          "decoded_frame_index_0_based": 32160,
+          "source_time_ms": 1286400.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/24.jpg",
+          "sha256": "4410f06945856abdf3eed51bca0312f0eb4a4f4c1d4a33623ddfbdc02a2a0ae9",
+          "sample_position_1_based": 24,
+          "decoded_frame_index_0_based": 32186,
+          "source_time_ms": 1287440.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/25.jpg",
+          "sha256": "22a21428b226fd90e5e4614b264e721d8151932e7a7081de079dfae8c2afb99d",
+          "sample_position_1_based": 25,
+          "decoded_frame_index_0_based": 32212,
+          "source_time_ms": 1288480.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/26.jpg",
+          "sha256": "79f5022d0a59997a9c4a4d56342927a2837daba0bda246eea2978d3e7bcbdde1",
+          "sample_position_1_based": 26,
+          "decoded_frame_index_0_based": 32238,
+          "source_time_ms": 1289520.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/27.jpg",
+          "sha256": "38697659218fcffa654bb91ff0b6e41fce8be85dc6caa752cdb6a33d097c0806",
+          "sample_position_1_based": 27,
+          "decoded_frame_index_0_based": 32264,
+          "source_time_ms": 1290560.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/28.jpg",
+          "sha256": "f66eadc6eaf57e3434b7dfc572e0780bd67d8c638c034254254434669baf72ee",
+          "sample_position_1_based": 28,
+          "decoded_frame_index_0_based": 32289,
+          "source_time_ms": 1291560.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/29.jpg",
+          "sha256": "c2c52e43833040224afe6d85b10eef69fe0a27f4979b15220bc4d2a3ec84a2b9",
+          "sample_position_1_based": 29,
+          "decoded_frame_index_0_based": 32315,
+          "source_time_ms": 1292600.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0017/30.jpg",
+          "sha256": "c92556e11f09cd5b5c39f9925d32b592864da55cf37fef86d85d51dc7b21d844",
+          "sample_position_1_based": 30,
+          "decoded_frame_index_0_based": 32341,
+          "source_time_ms": 1293640.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        }
+      ]
+    }
+  ],
+  "query": {
+    "clip_id": "B-TRAIN-0025",
+    "classification": "known development pilot, not unseen evaluation",
+    "frames": [
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/01_frame_000001.jpg",
+        "sha256": "7b9068c580dc00f4c1383d01495aac643cb168ef3553420e4963337c3e492df1",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 1
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/02_frame_000027.jpg",
+        "sha256": "7d4ce8de85d0018758e870e73312e6089ca1f64c9e9fc1289e2a0bd4f34b182a",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 2
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/03_frame_000053.jpg",
+        "sha256": "1cfa40896f22ba63a60f972c436d6e3a63546c1225e93a69ef2b70a854f607ad",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 3
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/04_frame_000078.jpg",
+        "sha256": "bd0e57782235983f763c8ba3784bb1905df837a88ca78501b34e673bca0dfead",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 4
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/05_frame_000104.jpg",
+        "sha256": "d0fd039377b421caa4ee9368d7eb4d55405076e6febf0f46b73b2ef51675bdf1",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 5
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/06_frame_000130.jpg",
+        "sha256": "ab95bb9ffbd4c27efd9d7c577ef73fc43649c0844dfe98cec0cbd1a08cf0ecba",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 6
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/07_frame_000156.jpg",
+        "sha256": "00ef410a0fed746afe9d95f27ed137d198e03fe9a4c5c356f95ae63c6c20c339",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 7
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/08_frame_000182.jpg",
+        "sha256": "acaad265dd6cb61fb225e8b3ba1f84d0dc4b637e25a59daa80722ef30439e108",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 8
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/09_frame_000208.jpg",
+        "sha256": "09aad3a1271f0483dfa321ec06dab31e16531c428dac117da4e49afcc17bb66a",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 9
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/10_frame_000233.jpg",
+        "sha256": "5752aaaa51d59c4fa6c4f86b8f0d311b17cde97cee67b716111f2909e9722d3c",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 10
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/11_frame_000259.jpg",
+        "sha256": "fd51b97f962322f4522a7d58ab8377d2d1bdb9f5192f71bce984ae411cefde1e",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 11
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/12_frame_000285.jpg",
+        "sha256": "061e29a7b9b4be1aea5b34258e99bc82fd93b01bdaf0a47603bfb730dc92c726",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 12
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/13_frame_000311.jpg",
+        "sha256": "443b58f49a27b4230e2e921af1ae91969ede3cd0d2e967b624026eb6a2b6215c",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 13
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/14_frame_000337.jpg",
+        "sha256": "a02510b895d83a88355b93a44543769d5fd2b474702ee175f477512179d5ea55",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 14
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/15_frame_000363.jpg",
+        "sha256": "1e02683d67f7add6d11cbca00de1fa103fe89f6f20428c9bb71a43874b8911fa",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 15
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/16_frame_000388.jpg",
+        "sha256": "26745122f9c16a72f1dba2a2e085b61554781f12127b058258a2bdc1e79aef87",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 16
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/17_frame_000414.jpg",
+        "sha256": "dda8404f8ffceaf7179d4b032ccc6d75e0179c6d45a626eac7f0ec5f5afffc8f",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 17
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/18_frame_000440.jpg",
+        "sha256": "ad9e5fa32793e9e3b24688a137e827e78da87f1b227cb9e9e89710ece0164fd5",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 18
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/19_frame_000466.jpg",
+        "sha256": "0da788a4ae7a402f0fe481cc4babb5a5e40cccd0445ab9d627ce4b10302cf95b",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 19
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/20_frame_000492.jpg",
+        "sha256": "476ed12f5cc5fd407dff26704a5afeed4895f146d770ac08f0ca80c2d38e1439",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 20
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/21_frame_000518.jpg",
+        "sha256": "e0edc706f10feb4403b518951ef73d5080aa443bf9c1ec6463813531f8f084bb",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 21
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/22_frame_000543.jpg",
+        "sha256": "72e2328acfdffbfc036a2012d54a01e79231c90cb3deb8062ec84fd029cf8046",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 22
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/23_frame_000569.jpg",
+        "sha256": "4140951e24a4c8c3c48b7a6665e161f5080baee2a53271d7ffadbe819f6e04e8",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 23
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/24_frame_000595.jpg",
+        "sha256": "a83017644a28b99dae5bcc8b2fd876bc37cde7a5179f9541760d64d03cf48435",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 24
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/25_frame_000621.jpg",
+        "sha256": "da1e4214e3c29e0dd61e3849eddd835f3af9f6fe841a7a0cec0193c218b5a605",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 25
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/26_frame_000647.jpg",
+        "sha256": "8cbcffa6b930cdc29a3c8aaa2acc95841e6a9a0eeb326369afa2aaa0b3c949e2",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 26
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/27_frame_000673.jpg",
+        "sha256": "5b4c009a3b7155e440d31c6c81f1bfc3023e7e84b94cf14f0a41fde997e291ae",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 27
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/28_frame_000698.jpg",
+        "sha256": "6a6de0da5676eeaef0a5fc77a65773f00e6c8e97d50cbd299e218bb5e1f9c20a",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 28
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/29_frame_000724.jpg",
+        "sha256": "41a28a3d72b9d636cbfe197fdec72110e31690106503dcd6d1b83d75d670cee1",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 29
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/30_frame_000750.jpg",
+        "sha256": "540ccd5fd12814c837d43d5066daab4b95e016a564a89ab2374c492af65f1e28",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 30
+      }
+    ]
+  },
+  "query_message_content": "BEGIN QUERY \u2014 30 ORDERED IMAGES\nQUERY\nImages 1-30 belong to the query sequence.\n\nDATASET B \u2014 TURN 1: RECOGNITION BEFORE COACHING\n\nThe attached images are 30 chronological frames sampled uniformly from one\n30-second football sequence. Refer to each image by its position in the\nsupplied order, 1 through 30.\n\nUse only visible evidence from these frames. Do not use coaching knowledge to\nguess what probably happened. Do not provide coaching advice in this turn.\nDistinguish direct observations from interpretations. Tie material claims to\nspecific sampled image positions or ranges. If the ball, contact, recipient,\ntransition, or outcome is not visible, say \"not visible\" or \"cannot be\ndetermined\".\n\nWrite normal plain text using exactly these headings and labels:\n\nVISIBLE EVIDENCE\nPossession:\nBall visibility and location:\nPitch area:\nPlayer and unit movement:\nCamera cuts or repeated views:\nDirect observations with supporting frames:\n\nCHRONOLOGY\nInitial visible state:\nOrdered sequence:\nMissing transitions:\n\nEVENT ASSESSMENT\nMain event:\nImmediate outcome:\nDirect evidence:\nInterpretation rather than observation:\n\nEVIDENCE LIMITS\nContradictory or absent evidence:\nUncertain points:\nConfidence: low, medium, or high\n\nDo not infer team names, player identities, hidden action labels, intentions,\noff-screen positions, unseen contact, or an unseen final outcome.\n\nEND QUERY\n",
+  "prompt_files": {
+    "with_examples": "input_prompts/in_context_events/two_corner_examples_v1/with_examples_prompt.approved_v1.txt"
+  },
+  "frozen_files": {
+    "input_prompts/in_context_events/two_corner_examples_v1/with_examples_prompt.approved_v1.txt": "bbf68081306a24efead1c740f193a69f51cd6b9f97dcf7f0e1412bd4dbe950e2",
+    "input_prompts/in_context_events/two_corner_examples_v1/example_descriptions.approved_v1.txt": "71e38a8056ed24c8e2d810d8c0ac1e5d26b75ea38bddf6a88f9ea02265763734",
+    "config/freezes/in_context_comparison_v1_b25.json": "50142163fa3cc2545552ce43169a84a53076234960a71a240ee2865067f79a41",
+    "config/freezes/in_context_comparison_v1_b25.sha256": "25d0c561c949ccb9b713aeaf8a16af4684c81014aa7ed31774d753b9d0b401e4",
+    "scripts/run_in_context_pilot.py": "16fdd358c6291839435222504d2799f5f1fb480afd70202a50a635cc8f4e5fb3",
+    "scripts/freeze_two_corner_pilot.py": "b5de516e7c74c57aeb73e74fbf1c8422474016b69c74ed9d47524baa2e044e31",
+    "input_prompts/in_context_events/comparison_v1/baseline_prompt.v1.txt": "7f2af7e463b7138791e367f047a5561903cbbbbd17d2065e6344f7f1acdf7045",
+    "artifacts/in_context_events/comparison_v1/private_audit.json": "59d7336e5f77dc8e677cd6a1bbc13d283f0200bd3d547a0244f135298fafb257",
+    "artifacts/in_context_events/v1/media_records/clips/E-0017.json": "dd4ec6a8381d217a9fbd35a14adcd824f756f3eff440d9458c2e0e3b505fb331"
+  },
+  "image_count": 90,
+  "prior_baseline_reference": "Earlier 30-image B25 baseline preserved; not rerun or treated as paired unseen evaluation.",
+  "limitations": [
+    "Known B25 development pilot",
+    "Prior GSR source-match overlap unresolved",
+    "Context retention unverified",
+    "Corner-only demonstrations may bias output",
+    "Both category balance and boundary wording differ from previous pilot"
+  ],
+  "coaching_allowed": false
+}

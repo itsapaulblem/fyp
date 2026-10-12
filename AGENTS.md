@@ -47,6 +47,15 @@ the remote fixed-run results, as requested by the researcher.
 
 ## Immediate work
 
+- The researcher approved a separate in-context event-example dataset search
+  and match split for corners, penalties and free kicks. Follow
+  `config/in_context_event_examples_v1.json` and
+  `input_prompts/in_context_events/START_HERE.txt`. Only official SoccerNet-v2
+  Action Spotting train matches enter its internal example/development/held-out
+  roles. Freeze the annotation selection separately from approved media and
+  human references; no model execution is enabled before the media gates.
+  This permission does not open the existing Dataset B validation/test splits.
+
 - Follow `PROJECT_NEXT_STEPS.md` for the current execution gate.
 - For the fixed unattended variant, use `validate-fixed-development` before
   `run-fixed-development`. This variant uses the declared CPU-only config and

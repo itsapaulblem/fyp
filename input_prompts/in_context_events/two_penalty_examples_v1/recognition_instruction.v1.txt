@@ -1,0 +1,15 @@
+Describe what happens in the QUERY clip using only its 30 ordered sampled images.
+Image citations refer to QUERY image positions 1–30, not demonstration images.
+Identify the opening event or restart only when supported by visible evidence.
+Describe the teams using visible kit colours, the ball location, player movement,
+ordered event sequence, possession changes, and immediate outcome.
+Distinguish direct observations from interpretations. Cite supporting images.
+Do not assume that the query has the same event or outcome as a demonstration.
+Do not invent ball contacts, goals, fouls, or tactical assignments when unclear.
+State uncertainty and any missing transitions. Do not give coaching advice.
+
+Use these headings:
+VISIBLE EVIDENCE
+CHRONOLOGY
+EVENT ASSESSMENT
+EVIDENCE LIMITS

@@ -1,0 +1,15 @@
+Researcher correction: The opening event is a penalty kick, not a free kick.
+Re-examine query images 1–12 and revise your recognition answer.
+Check your earlier claims about a defensive wall and the ball being outside
+the penalty area; retain them only if visibly supported. Do not preserve
+unsupported details merely to maintain consistency with your earlier answer.
+Distinguish researcher-supplied information from your own observations.
+Cite query image positions 1–30, state uncertainty, and describe the ordered
+sequence and outcome from the images. Do not assume a goal just because a
+penalty is supplied as context. Do not give coaching advice.
+
+Use these headings:
+VISIBLE EVIDENCE
+CHRONOLOGY
+EVENT ASSESSMENT
+EVIDENCE LIMITS

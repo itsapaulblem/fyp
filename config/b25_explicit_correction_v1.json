@@ -1,0 +1,23 @@
+{
+  "variant": "b25_explicit_correction_v1",
+  "approval": "Researcher requested explicit correction that B25 is a corner kick in chat on 2026-10-11.",
+  "parent_freeze": "config/freezes/b25_explicit_correction_v1.json",
+  "parent_freeze_sha256": "c1408adb90a01d1091d4ae4c0d0b6e4859576c6d24b3b42e51d84a6679957c2b",
+  "execution_allowed_for_this_variant_only": true,
+  "coaching_allowed": false,
+  "image_count": 30,
+  "run_arms": [
+    "explicit_revision"
+  ],
+  "keep_alive": "10m",
+  "timeout_seconds": 14400,
+  "retries": 0,
+  "output_root": "output/in_context_events/b25_explicit_correction_v1/recognition_revision",
+  "bundle_path": "artifacts/transfer/b25_explicit_correction_v1.tar.gz",
+  "results_archive": "b25_explicit_correction_v1_results.tar.gz",
+  "waived_gates": [
+    "Context retention not independently verified",
+    "Prior GSR source-match overlap unresolved",
+    "Researcher supplies event identity; any success is human-assisted"
+  ]
+}

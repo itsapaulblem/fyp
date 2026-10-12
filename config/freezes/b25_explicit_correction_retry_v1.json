@@ -1,0 +1,263 @@
+{
+  "experiment_id": "b25_explicit_correction_retry_v1",
+  "execution_allowed": false,
+  "approval": "Researcher requested explicit correction that B25 is a corner kick in chat on 2026-10-11.",
+  "model": "qwen3.5:27b",
+  "expected_model_digest": "193ec05b1e8048df17f7b8d15528671ae40e1a25cf4e0f5416c02b9cac5b990c",
+  "generation": {
+    "options": {
+      "temperature": 0,
+      "seed": 20260903,
+      "num_ctx": 32768,
+      "num_gpu": 0
+    },
+    "think": false,
+    "stream": false
+  },
+  "query": {
+    "clip_id": "B-TRAIN-0025",
+    "classification": "known development pilot, not unseen evaluation",
+    "frames": [
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/01_frame_000001.jpg",
+        "sha256": "7b9068c580dc00f4c1383d01495aac643cb168ef3553420e4963337c3e492df1",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 1
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/02_frame_000027.jpg",
+        "sha256": "7d4ce8de85d0018758e870e73312e6089ca1f64c9e9fc1289e2a0bd4f34b182a",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 2
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/03_frame_000053.jpg",
+        "sha256": "1cfa40896f22ba63a60f972c436d6e3a63546c1225e93a69ef2b70a854f607ad",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 3
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/04_frame_000078.jpg",
+        "sha256": "bd0e57782235983f763c8ba3784bb1905df837a88ca78501b34e673bca0dfead",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 4
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/05_frame_000104.jpg",
+        "sha256": "d0fd039377b421caa4ee9368d7eb4d55405076e6febf0f46b73b2ef51675bdf1",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 5
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/06_frame_000130.jpg",
+        "sha256": "ab95bb9ffbd4c27efd9d7c577ef73fc43649c0844dfe98cec0cbd1a08cf0ecba",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 6
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/07_frame_000156.jpg",
+        "sha256": "00ef410a0fed746afe9d95f27ed137d198e03fe9a4c5c356f95ae63c6c20c339",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 7
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/08_frame_000182.jpg",
+        "sha256": "acaad265dd6cb61fb225e8b3ba1f84d0dc4b637e25a59daa80722ef30439e108",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 8
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/09_frame_000208.jpg",
+        "sha256": "09aad3a1271f0483dfa321ec06dab31e16531c428dac117da4e49afcc17bb66a",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 9
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/10_frame_000233.jpg",
+        "sha256": "5752aaaa51d59c4fa6c4f86b8f0d311b17cde97cee67b716111f2909e9722d3c",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 10
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/11_frame_000259.jpg",
+        "sha256": "fd51b97f962322f4522a7d58ab8377d2d1bdb9f5192f71bce984ae411cefde1e",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 11
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/12_frame_000285.jpg",
+        "sha256": "061e29a7b9b4be1aea5b34258e99bc82fd93b01bdaf0a47603bfb730dc92c726",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 12
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/13_frame_000311.jpg",
+        "sha256": "443b58f49a27b4230e2e921af1ae91969ede3cd0d2e967b624026eb6a2b6215c",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 13
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/14_frame_000337.jpg",
+        "sha256": "a02510b895d83a88355b93a44543769d5fd2b474702ee175f477512179d5ea55",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 14
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/15_frame_000363.jpg",
+        "sha256": "1e02683d67f7add6d11cbca00de1fa103fe89f6f20428c9bb71a43874b8911fa",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 15
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/16_frame_000388.jpg",
+        "sha256": "26745122f9c16a72f1dba2a2e085b61554781f12127b058258a2bdc1e79aef87",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 16
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/17_frame_000414.jpg",
+        "sha256": "dda8404f8ffceaf7179d4b032ccc6d75e0179c6d45a626eac7f0ec5f5afffc8f",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 17
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/18_frame_000440.jpg",
+        "sha256": "ad9e5fa32793e9e3b24688a137e827e78da87f1b227cb9e9e89710ece0164fd5",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 18
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/19_frame_000466.jpg",
+        "sha256": "0da788a4ae7a402f0fe481cc4babb5a5e40cccd0445ab9d627ce4b10302cf95b",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 19
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/20_frame_000492.jpg",
+        "sha256": "476ed12f5cc5fd407dff26704a5afeed4895f146d770ac08f0ca80c2d38e1439",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 20
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/21_frame_000518.jpg",
+        "sha256": "e0edc706f10feb4403b518951ef73d5080aa443bf9c1ec6463813531f8f084bb",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 21
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/22_frame_000543.jpg",
+        "sha256": "72e2328acfdffbfc036a2012d54a01e79231c90cb3deb8062ec84fd029cf8046",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 22
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/23_frame_000569.jpg",
+        "sha256": "4140951e24a4c8c3c48b7a6665e161f5080baee2a53271d7ffadbe819f6e04e8",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 23
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/24_frame_000595.jpg",
+        "sha256": "a83017644a28b99dae5bcc8b2fd876bc37cde7a5179f9541760d64d03cf48435",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 24
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/25_frame_000621.jpg",
+        "sha256": "da1e4214e3c29e0dd61e3849eddd835f3af9f6fe841a7a0cec0193c218b5a605",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 25
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/26_frame_000647.jpg",
+        "sha256": "8cbcffa6b930cdc29a3c8aaa2acc95841e6a9a0eeb326369afa2aaa0b3c949e2",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 26
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/27_frame_000673.jpg",
+        "sha256": "5b4c009a3b7155e440d31c6c81f1bfc3023e7e84b94cf14f0a41fde997e291ae",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 27
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/28_frame_000698.jpg",
+        "sha256": "6a6de0da5676eeaef0a5fc77a65773f00e6c8e97d50cbd299e218bb5e1f9c20a",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 28
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/29_frame_000724.jpg",
+        "sha256": "41a28a3d72b9d636cbfe197fdec72110e31690106503dcd6d1b83d75d670cee1",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 29
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/30_frame_000750.jpg",
+        "sha256": "540ccd5fd12814c837d43d5066daab4b95e016a564a89ab2374c492af65f1e28",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 30
+      }
+    ]
+  },
+  "examples": [],
+  "frozen_files": {
+    "output/in_context_events/two_corner_examples_v1/b25_exploratory_v1/with_examples/response.txt": "b4955dfa1ea6879931c357cfbacb551cb712afe26f0d677e3f4fbb0d72a8e557",
+    "input_prompts/in_context_events/b25_explicit_correction_v1/human_correction.txt": "9191dc137376904765a293ab863f1e74288e8280169f47c3050111ee2afef907",
+    "input_prompts/in_context_events/comparison_v1/baseline_prompt.v1.txt": "7f2af7e463b7138791e367f047a5561903cbbbbd17d2065e6344f7f1acdf7045",
+    "scripts/run_in_context_pilot.py": "16fdd358c6291839435222504d2799f5f1fb480afd70202a50a635cc8f4e5fb3",
+    "scripts/run_b25_explicit_correction.py": "2178f2ce30d9c9eb9c6a78a883272e581911b74eb15955c834b60d86fa67b948",
+    "config/freezes/two_corner_examples_v1_b25.json": "40d1d9f36e27e1f72213b51153e705d66bb11354b96bf73e52452d4c51efe600",
+    "config/freezes/b25_explicit_correction_v1.json": "c1408adb90a01d1091d4ae4c0d0b6e4859576c6d24b3b42e51d84a6679957c2b",
+    "config/b25_explicit_correction_v1.json": "0bce683204781cc6f3f55ce5a389d4598b101b63410dc4bb4300abc091afa99f",
+    "scripts/run_b25_explicit_correction_retry.py": "1b3bca28dcfb432aceb8b63d04723da15694c4db6077eb7b3d4aafe6fa22b533"
+  },
+  "prompt_files": {
+    "explicit_revision": "input_prompts/in_context_events/b25_explicit_correction_v1/human_correction.txt"
+  },
+  "classification": "Human-assisted recognition revision, not independent recognition or in-context comparison.",
+  "request_policy": "Original query instruction and 30 B25 JPEGs, previous failed answer, then explicit researcher correction. No demonstration images, no other-run answers, no coaching.",
+  "source_answer": "output/in_context_events/two_corner_examples_v1/b25_exploratory_v1/with_examples/response.txt",
+  "correction": "input_prompts/in_context_events/b25_explicit_correction_v1/human_correction.txt",
+  "limitations": [
+    "Context retention not independently verified",
+    "Prior GSR source-match overlap unresolved",
+    "Researcher supplies event identity; any success is human-assisted"
+  ],
+  "retry_provenance": {
+    "parent_variant": "b25_explicit_correction_v1",
+    "reason": "Researcher supplied remote traceback: KeyError 'images' while counting text-only messages, before /api/chat.",
+    "fix": "Add empty images arrays to text-only messages; query images, previous answer, correction and settings unchanged.",
+    "failed_attempt_policy": "Keep original remote output and its error archive intact; new output path only."
+  }
+}

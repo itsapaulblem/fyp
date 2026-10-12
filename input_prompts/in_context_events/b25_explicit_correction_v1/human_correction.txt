@@ -1,0 +1,19 @@
+HUMAN FRAME-BASED CORRECTION — RECOGNITION ONLY
+
+The researcher identifies the opening restart in sampled images 1-10 of
+the QUERY B-TRAIN-0025 as a corner kick taken by the red-shirted team, with
+the grey-shirted team defending. Your previous answer instead located the
+ball on the penalty spot and suggested a penalty or free kick. Remember that the event is a corner kick.
+
+Re-examine the same 30 query images, particularly the opening restart.
+Check the ball's starting position, visible pitch markings, and player setup
+against the researcher's correction. Do not treat your earlier penalty-spot
+claim as established evidence. Use the correction where supported by the
+images; if the precise starting position is not visible, state that limit
+and distinguish the researcher's supplied event identification from your
+own visual observation.
+
+Produce a complete revised recognition answer using the same headings:
+VISIBLE EVIDENCE, CHRONOLOGY, EVENT ASSESSMENT, EVIDENCE LIMITS.
+Retain frame citations and uncertainty. Do not infer a goal or change of
+possession merely from the corner label. Do not provide coaching advice.

@@ -1,0 +1,33 @@
+TWO PENALTY DEMONSTRATIONS — APPROVED DESCRIPTIONS v1
+
+Approval source: researcher review and explicit approval in chat on 2026-10-11.
+Frame numbers refer to ordered sampled image positions 1–30.
+These descriptions are label-informed human-reviewed demonstrations, not blind annotations.
+Preserve this version unchanged; later corrections require a new version.
+Approval of wording does not by itself approve media hashes, overlap checks, or model execution.
+
+DEMONSTRATION 1: E-0023
+Event: penalty kick resulting in a goal.
+Images 1–8 show penalty preparation, with a blue-shirted taker, the goalkeeper
+on the goal line, and other players outside the penalty area. Images 9–10
+show the run-up. Around images 11–13, the kick is taken and the goalkeeper
+dives. The researcher confirms that the ball clearly crosses the goal line
+in image 13. Images 14–30 show the blue-shirted players celebrating.
+The preceding foul and exact foot-to-ball contact are not established by
+this description.
+
+DEMONSTRATION 2: E-0117
+Event: penalty kick resulting in a goal.
+Images 1–11 show preparation for a penalty kick. The kick occurs around
+images 11–12. The researcher confirms that the ball visibly crosses the
+goal line from image 13 onwards, establishing a goal. The yellow-shirted
+players celebrate afterwards. Do not infer the preceding foul, kick
+technique, or goalkeeper movement beyond these reviewed observations.
+
+QUERY SEPARATION
+E-0127 is the proposed development query, not a demonstration.
+Do not include its researcher reference, event label, goal outcome, or
+frame-13 goal-line observation in the model request.
+Only the two demonstration descriptions above may accompany demonstration images.
+This is a category-matched, label-informed development pilot, not unseen evaluation.
+No coaching is requested in the proposed recognition comparison.

@@ -1,0 +1,17 @@
+{
+  "variant": "b25_exploratory_override_v1",
+  "approval": "Researcher explicitly requested bypassing the execution freeze in chat on 2026-10-11.",
+  "parent_freeze": "config/freezes/in_context_comparison_v1_b25.json",
+  "parent_freeze_sha256": "50142163fa3cc2545552ce43169a84a53076234960a71a240ee2865067f79a41",
+  "execution_allowed_for_this_variant_only": true,
+  "scope": "Two fresh recognition-only requests: baseline and with_examples for known B-TRAIN-0025.",
+  "waived_gates": ["Prior GSR source-match overlap unresolved", "Context capacity and truncation not verified", "Global perceptual duplicate candidates not yet reviewed; none involves selected examples or B25"],
+  "interpretation": "Exploratory diagnostic only; not verified comparative or unseen evaluation. Successful HTTP response does not prove all images were retained.",
+  "coaching_allowed": false,
+  "stream": false,
+  "keep_alive": "10m",
+  "timeout_seconds": 14400,
+  "requests_are_sequential": true,
+  "retries": 0,
+  "output_root": "output/in_context_events/comparison_v1/b25_exploratory_override_v1"
+}

@@ -1,0 +1,79 @@
+DEMONSTRATION 1
+Images 1-30 belong to this demonstration.
+Event: Corner kick.
+In images 1-3, a red-and-white-striped player places the ball beside the
+corner flag and corner arc. Images 4-10 show striped attackers and
+white-shirted defenders gathering near goal. Images 11-12 show the delivery
+reaching the crowded goal area. The goalkeeper in bright green appears to
+collect the ball in images 13-15, after which the white team advances towards
+midfield and the opposite penalty area in images 16-30.
+Limits: The kick itself and individual contacts in the crowded box are not
+clearly captured. Do not invent a successful header or goal.
+
+DEMONSTRATION 2
+Images 1-30 belong to this demonstration.
+Event: Free kick from the attacking flank.
+Images 1-7 show a white-shirted player beside a stationary ball near the
+touchline, away from the corner arc, with red defenders positioned around
+their penalty area. Images 11-12 show a short ground pass towards another
+white player outside the box. Images 13-14 show a subsequent delivery towards
+the crowded goal area. By images 15-16, the ball travels away from goal and
+defenders move outward. Further contested attacking play follows.
+Limits: The original foul and exact defensive contact are not visible.
+A defensive wall is not required for every free kick.
+
+DEMONSTRATION 3
+Images 1-30 belong to this demonstration.
+Event: Penalty kick resulting in a goal.
+Images 1-8 show a blue-shirted taker preparing beside the ball; the wide view
+shows the penalty setup, goalkeeper on the goal line, and other players
+outside the penalty area. Images 9-10 show the run-up. Images 11-13 show the
+goalkeeper diving and players entering the box. Images 14-30 show blue-team
+celebrations, with the displayed score changing from 2-0 to 3-0, supporting
+a scored penalty.
+Limits: The preceding foul and precise foot-ball contact are not captured.
+
+QUERY
+Images 1-30 belong to the query sequence.
+
+DATASET B — TURN 1: RECOGNITION BEFORE COACHING
+
+The attached images are 30 chronological frames sampled uniformly from one
+30-second football sequence. Refer to each image by its position in the
+supplied order, 1 through 30.
+
+Use only visible evidence from these frames. Do not use coaching knowledge to
+guess what probably happened. Do not provide coaching advice in this turn.
+Distinguish direct observations from interpretations. Tie material claims to
+specific sampled image positions or ranges. If the ball, contact, recipient,
+transition, or outcome is not visible, say "not visible" or "cannot be
+determined".
+
+Write normal plain text using exactly these headings and labels:
+
+VISIBLE EVIDENCE
+Possession:
+Ball visibility and location:
+Pitch area:
+Player and unit movement:
+Camera cuts or repeated views:
+Direct observations with supporting frames:
+
+CHRONOLOGY
+Initial visible state:
+Ordered sequence:
+Missing transitions:
+
+EVENT ASSESSMENT
+Main event:
+Immediate outcome:
+Direct evidence:
+Interpretation rather than observation:
+
+EVIDENCE LIMITS
+Contradictory or absent evidence:
+Uncertain points:
+Confidence: low, medium, or high
+
+Do not infer team names, player identities, hidden action labels, intentions,
+off-screen positions, unseen contact, or an unseen final outcome.

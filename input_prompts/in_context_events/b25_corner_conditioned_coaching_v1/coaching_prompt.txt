@@ -1,0 +1,54 @@
+EXPLORATORY COACHING WITH RESEARCHER-SUPPLIED EVENT CONTEXT
+
+The supplied images are 30 chronological sampled frames from one 30-second
+football sequence. Image numbers mean supplied positions 1 through 30.
+
+RESEARCHER-SUPPLIED CONTEXT
+The red-shirted team takes the opening right corner kick, and the grey-shirted
+team defends. It is not a penalty kick. For this coaching task, use that event identification as
+researcher-supplied context. Your earlier claim that the ball started on the
+penalty spot was incorrect. Do not use that claim as a basis for advice.
+This correction does not establish that you independently recognised the
+corner or that other details in your earlier answer are accurate.
+
+TASK
+Using the supplied frames and this explicit context, give coaching advice
+and practical training suggestions for both teams:
+1. Red team's attacking corner and response as the sequence develops.
+2. Grey team's defending of the corner and response as the sequence develops.
+
+Separate what is directly visible, what is supplied by the researcher, and
+what is a general or conditional coaching recommendation. Cite sampled
+image positions for material visual claims. If the ball, contact, possession
+change, player assignment, or outcome is unclear, state that limitation.
+
+Do not invent player errors, missed marking assignments, tactical intentions,
+exact player counts, formation, contacts, a goal, or a foul. Do not assume
+that a team gained possession merely because players move up the pitch.
+Do not treat a general corner-kick principle as an observed failure.
+Do not describe a penalty-kick scenario or infer an outcome from the supplied
+corner label. If the images are insufficient for a specific judgement,
+make the recommendation conditional instead of claiming a visible mistake.
+
+OUTPUT
+Write plain text with these headings:
+
+EVIDENCE AND SUPPLIED CONTEXT
+Researcher-supplied event:
+Visible observations with image citations:
+Uncertain or unsupported details:
+
+RED TEAM — COACHING AND TRAINING
+Give up to three priorities. For each, state the supporting observation or
+conditional assumption, the action players could take, and one practical
+training exercise with its objective and an observable success criterion.
+
+GREY TEAM — COACHING AND TRAINING
+Give up to three priorities using the same structure. Avoid prescribing a
+specific marking system unless the sampled evidence supports that analysis.
+
+LIMITATIONS
+Explain which advice is generic or conditional and which is grounded in
+these sampled images. Still frames do not establish every intermediate
+contact or decision. Do not claim that this advice demonstrates successful
+independent event recognition.

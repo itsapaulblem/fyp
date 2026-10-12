@@ -1,0 +1,96 @@
+FOOTBALL EVENT EXAMPLES — NEW IN-CONTEXT EXPERIMENT
+
+Dataset decision
+Use SoccerNet-v2 Action Spotting, the larger full-match dataset rather than
+the 57-clip Dataset B GSR train set. Its categories cover Corner, Penalty,
+Direct free-kick and Indirect free-kick. Combine the two free-kick labels for
+the first recognition task while retaining their original labels privately.
+Only the official 300-match train list enters the new selection. Development
+and held-out test below are internal roles within that source train split.
+
+Alternatives inspected (2026-10-10)
+SoccerDB: provides Corner, Penalty Kick and Free Kick segment classes, plus
+a SoccerNet match mapping to identify overlap. Its additional videos require
+a signed provider agreement; SoccerNet-derived videos require SoccerNet access.
+https://github.com/newsdata/SoccerDB/tree/master/dataset/video_dataset
+SoccerLens: 200 SoccerNet-derived clips with corner, penalty and free-kick
+captions; smaller and not an independent source of footage. Its repository
+license and README describe different licenses, so clarify terms before use.
+https://github.com/IsmaelElsharkawi/SoccerLensDataset
+Selected dataset: https://www.soccer-net.org/tasks/action-spotting
+Access: https://www.soccer-net.org/data
+Labels: https://huggingface.co/datasets/SoccerNet/SN-Labels
+Footage: https://huggingface.co/datasets/SoccerNet/SoccerNet_raw_HQ
+
+The fixed selection
+For EACH of corner, penalty and free kick:
+  30 example candidates: pool for selecting balanced demonstrations.
+  10 development candidates: prompt and context-budget experiments.
+  20 held-out test candidates: final frozen comparison only.
+There are 180 primary candidates in total, plus up to five ordered reserves
+per category and role. Every match, both halves and replay variants belong
+to one role. At most one clip of a category is selected per match; selected
+windows within a half cannot overlap. The seed, source revisions, selection
+files and SHA-256 hashes are frozen before prompting.
+The split is stratified by the rarest category (penalties): enough distinct
+penalty matches are reserved for each role before filling the 60/20/20 match
+capacities in fixed hash order. This selection uses source labels explicitly.
+
+Completed annotation freeze
+The 300 official train annotation files contain 2,533 eligible visible corner
+anchors, 4,696 free-kick anchors and 96 penalty anchors (82 penalty matches).
+Selected 180 primary candidates plus 45 reserves across 169 distinct matches.
+All source snapshots and selection files passed SHA-256 verification, and no
+selected match crosses roles. This is an annotation-candidate freeze, not a
+claim that the footage has been downloaded or every event is visually usable.
+
+Read config/freezes/in_context_event_selection_v1.json for the freeze status.
+Human-readable role lists are in artifacts/in_context_events/v1/private_selection/:
+  example.csv
+  development.csv
+  held_out_test.csv (sealed for prompt development)
+These contain event labels and source identifiers for the researcher only.
+Do not pass these files or source match paths to the model. Use neutral IDs.
+
+What remains before an image dataset can be called frozen
+1. Obtain authorised access to SoccerNet footage. Annotation access alone
+   does not grant video access. Accept the provider's terms personally.
+2. Download only required source matches/halves; record source video hashes.
+   Never edit data/raw, store new downloads in a new source directory.
+3. Check overlap with prior GSR matches before calling the new query set unseen.
+4. Extract the declared 30-second windows (10 seconds before the annotation,
+   20 after), uniformly sample 30 frames and resize to maximum edge 672.
+   Check source duration and timestamp alignment. Record decoded frame indices,
+   construction settings and exact JPEG hashes. Do not shift a test window
+   because the model failed; define any visibility rejection before inference.
+5. Review neutral-ID frames to write human references before comparing source
+   action labels. Source labels are candidate anchors, not coaching truth;
+   penalty award and penalty execution may require distinguishing in review.
+   Reject insufficient visibility, truncated windows and unsuitable replays.
+   Reserves remain in their preassigned roles. Log every reason for replacement.
+6. Audit identical and near-duplicate sampled images across roles. Match grouping
+   alone cannot prove that pixels from mislabeled broadcasts are distinct.
+   Hold cross-role duplicate groups out of execution and create a new documented
+   freeze if necessary; do not edit the original candidate freeze.
+7. Freeze approved pixels, example/reference text, prompts and settings in a
+   second media freeze. An independent reference reviewer should keep the test
+   labels out of prompt development. No model calls are enabled by this tool.
+
+First comparison after approval
+Use a fresh no-example recognition baseline and identical query frames with
+balanced examples. The 90-example pool is not sent in one prompt. Develop
+small fixed sets (e.g. one example per category, then two per category) on
+development only; verify context and image-token limits before deciding.
+Use the same mixed-category examples for every query, never select a corner
+example because the query's hidden ground-truth label says corner. Start every
+query with a fresh request containing only its declared examples and frames.
+Assess event confusion, sequence, outcome and uncertainty, then assess coaching
+after recognition review. Keep advice coverage and rejected cases in the report.
+This is in-context prompting; it does not train or change model weights.
+The three-category cohort cannot establish recognition of all other football
+events. Known examples must not be counted as held-out query performance.
+
+Verify the existing annotation freeze (no network or model calls):
+uv run --system-certs python -m football_coach.event_examples verify
+
+This experiment extends the research without changing accepted v0.3/v0.4 runs.

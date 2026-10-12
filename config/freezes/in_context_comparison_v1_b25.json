@@ -1,0 +1,1649 @@
+{
+  "experiment_id": "in_context_comparison_v1_b25_pilot",
+  "status": "approved_examples_and_prompts_frozen_execution_gated",
+  "approval": {
+    "date": "2026-10-11",
+    "source": "researcher approval in chat",
+    "blinded": false,
+    "scope": [
+      "E-0016",
+      "E-0009",
+      "E-0023"
+    ]
+  },
+  "query": {
+    "clip_id": "B-TRAIN-0025",
+    "classification": "known development pilot, not unseen evaluation",
+    "frames": [
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/01_frame_000001.jpg",
+        "sha256": "7b9068c580dc00f4c1383d01495aac643cb168ef3553420e4963337c3e492df1",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 1
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/02_frame_000027.jpg",
+        "sha256": "7d4ce8de85d0018758e870e73312e6089ca1f64c9e9fc1289e2a0bd4f34b182a",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 2
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/03_frame_000053.jpg",
+        "sha256": "1cfa40896f22ba63a60f972c436d6e3a63546c1225e93a69ef2b70a854f607ad",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 3
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/04_frame_000078.jpg",
+        "sha256": "bd0e57782235983f763c8ba3784bb1905df837a88ca78501b34e673bca0dfead",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 4
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/05_frame_000104.jpg",
+        "sha256": "d0fd039377b421caa4ee9368d7eb4d55405076e6febf0f46b73b2ef51675bdf1",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 5
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/06_frame_000130.jpg",
+        "sha256": "ab95bb9ffbd4c27efd9d7c577ef73fc43649c0844dfe98cec0cbd1a08cf0ecba",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 6
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/07_frame_000156.jpg",
+        "sha256": "00ef410a0fed746afe9d95f27ed137d198e03fe9a4c5c356f95ae63c6c20c339",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 7
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/08_frame_000182.jpg",
+        "sha256": "acaad265dd6cb61fb225e8b3ba1f84d0dc4b637e25a59daa80722ef30439e108",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 8
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/09_frame_000208.jpg",
+        "sha256": "09aad3a1271f0483dfa321ec06dab31e16531c428dac117da4e49afcc17bb66a",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 9
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/10_frame_000233.jpg",
+        "sha256": "5752aaaa51d59c4fa6c4f86b8f0d311b17cde97cee67b716111f2909e9722d3c",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 10
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/11_frame_000259.jpg",
+        "sha256": "fd51b97f962322f4522a7d58ab8377d2d1bdb9f5192f71bce984ae411cefde1e",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 11
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/12_frame_000285.jpg",
+        "sha256": "061e29a7b9b4be1aea5b34258e99bc82fd93b01bdaf0a47603bfb730dc92c726",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 12
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/13_frame_000311.jpg",
+        "sha256": "443b58f49a27b4230e2e921af1ae91969ede3cd0d2e967b624026eb6a2b6215c",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 13
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/14_frame_000337.jpg",
+        "sha256": "a02510b895d83a88355b93a44543769d5fd2b474702ee175f477512179d5ea55",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 14
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/15_frame_000363.jpg",
+        "sha256": "1e02683d67f7add6d11cbca00de1fa103fe89f6f20428c9bb71a43874b8911fa",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 15
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/16_frame_000388.jpg",
+        "sha256": "26745122f9c16a72f1dba2a2e085b61554781f12127b058258a2bdc1e79aef87",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 16
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/17_frame_000414.jpg",
+        "sha256": "dda8404f8ffceaf7179d4b032ccc6d75e0179c6d45a626eac7f0ec5f5afffc8f",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 17
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/18_frame_000440.jpg",
+        "sha256": "ad9e5fa32793e9e3b24688a137e827e78da87f1b227cb9e9e89710ece0164fd5",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 18
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/19_frame_000466.jpg",
+        "sha256": "0da788a4ae7a402f0fe481cc4babb5a5e40cccd0445ab9d627ce4b10302cf95b",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 19
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/20_frame_000492.jpg",
+        "sha256": "476ed12f5cc5fd407dff26704a5afeed4895f146d770ac08f0ca80c2d38e1439",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 20
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/21_frame_000518.jpg",
+        "sha256": "e0edc706f10feb4403b518951ef73d5080aa443bf9c1ec6463813531f8f084bb",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 21
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/22_frame_000543.jpg",
+        "sha256": "72e2328acfdffbfc036a2012d54a01e79231c90cb3deb8062ec84fd029cf8046",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 22
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/23_frame_000569.jpg",
+        "sha256": "4140951e24a4c8c3c48b7a6665e161f5080baee2a53271d7ffadbe819f6e04e8",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 23
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/24_frame_000595.jpg",
+        "sha256": "a83017644a28b99dae5bcc8b2fd876bc37cde7a5179f9541760d64d03cf48435",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 24
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/25_frame_000621.jpg",
+        "sha256": "da1e4214e3c29e0dd61e3849eddd835f3af9f6fe841a7a0cec0193c218b5a605",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 25
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/26_frame_000647.jpg",
+        "sha256": "8cbcffa6b930cdc29a3c8aaa2acc95841e6a9a0eeb326369afa2aaa0b3c949e2",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 26
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/27_frame_000673.jpg",
+        "sha256": "5b4c009a3b7155e440d31c6c81f1bfc3023e7e84b94cf14f0a41fde997e291ae",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 27
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/28_frame_000698.jpg",
+        "sha256": "6a6de0da5676eeaef0a5fc77a65773f00e6c8e97d50cbd299e218bb5e1f9c20a",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 28
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/29_frame_000724.jpg",
+        "sha256": "41a28a3d72b9d636cbfe197fdec72110e31690106503dcd6d1b83d75d670cee1",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 29
+      },
+      {
+        "path": "artifacts/model_inputs/dataset_b/B-TRAIN-0025/uniform_30_edge_672/30_frame_000750.jpg",
+        "sha256": "540ccd5fd12814c837d43d5066daab4b95e016a564a89ab2374c492af65f1e28",
+        "clip_id": "B-TRAIN-0025",
+        "role": "known_b_train_pilot",
+        "sample_position_1_based": 30
+      }
+    ]
+  },
+  "examples": [
+    {
+      "clip_id": "E-0016",
+      "approved_description": "Event: Corner kick.\nIn images 1-3, a red-and-white-striped player places the ball beside the\ncorner flag and corner arc. Images 4-10 show striped attackers and\nwhite-shirted defenders gathering near goal. Images 11-12 show the delivery\nreaching the crowded goal area. The goalkeeper in bright green appears to\ncollect the ball in images 13-15, after which the white team advances towards\nmidfield and the opposite penalty area in images 16-30.\nLimits: The kick itself and individual contacts in the crowded box are not\nclearly captured. Do not invent a successful header or goal.",
+      "frames": [
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/01.jpg",
+          "sha256": "19c40eb95b9f0f9a3a1252c8bcf7dd897c498f5acac42a47964cffe211ffc67f",
+          "sample_position_1_based": 1,
+          "decoded_frame_index_0_based": 45057,
+          "source_time_ms": 1802280.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/02.jpg",
+          "sha256": "cc8db46c30502f1019ec8b8bc060f92e1d76f81815f16ba12d76917073ddfe45",
+          "sample_position_1_based": 2,
+          "decoded_frame_index_0_based": 45083,
+          "source_time_ms": 1803320.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/03.jpg",
+          "sha256": "3058c4f9d35335b9db6ad09b00d28d70badc6ba366ddbc97f89eed1895242c63",
+          "sample_position_1_based": 3,
+          "decoded_frame_index_0_based": 45109,
+          "source_time_ms": 1804360.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/04.jpg",
+          "sha256": "ceab55f79192d52f31912788ef1af96e9e489652b1a64df9da75a309e598cd6b",
+          "sample_position_1_based": 4,
+          "decoded_frame_index_0_based": 45134,
+          "source_time_ms": 1805360.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/05.jpg",
+          "sha256": "2950726e450de520b51efdf9ecdbbd9edfb3f0a4d5ce77ed0ec56db6b9409ede",
+          "sample_position_1_based": 5,
+          "decoded_frame_index_0_based": 45160,
+          "source_time_ms": 1806400.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/06.jpg",
+          "sha256": "a4aa4f5506dfe797bbc0b8682c1e5a558c65c0897ad545787b35b2817d2c8b78",
+          "sample_position_1_based": 6,
+          "decoded_frame_index_0_based": 45186,
+          "source_time_ms": 1807440.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/07.jpg",
+          "sha256": "9721f27252b72eabe25dea7a2c5e461d962bf3fd29837fffb444cefd2576985a",
+          "sample_position_1_based": 7,
+          "decoded_frame_index_0_based": 45212,
+          "source_time_ms": 1808480.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/08.jpg",
+          "sha256": "ab8469c6e84c909c9b206ba3c6bbc93c3e7d6604dfea2798c79aff327220139e",
+          "sample_position_1_based": 8,
+          "decoded_frame_index_0_based": 45238,
+          "source_time_ms": 1809520.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/09.jpg",
+          "sha256": "8a310261564c220ecf9b8a6f105d16b4734755f9ed4a14ab0232698955dcb68d",
+          "sample_position_1_based": 9,
+          "decoded_frame_index_0_based": 45264,
+          "source_time_ms": 1810560.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/10.jpg",
+          "sha256": "3c6ab22f6ea4c66ba910e9affe2bce3aa4ad85327edb53d4d66c6513ee783210",
+          "sample_position_1_based": 10,
+          "decoded_frame_index_0_based": 45289,
+          "source_time_ms": 1811560.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/11.jpg",
+          "sha256": "a3df2904387c73b93303a73a93cc5f95095c0403a8738676a0230c3d076f39cd",
+          "sample_position_1_based": 11,
+          "decoded_frame_index_0_based": 45315,
+          "source_time_ms": 1812600.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/12.jpg",
+          "sha256": "db6b1183a2d6ff20bd2773f61d0002ee22487b6c4fd3145c6ee594eb1f6ae4c9",
+          "sample_position_1_based": 12,
+          "decoded_frame_index_0_based": 45341,
+          "source_time_ms": 1813640.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/13.jpg",
+          "sha256": "0802cee1896bba191ba04bf7d80c2edca93f3886b15731a4dfdf89bbcefc539a",
+          "sample_position_1_based": 13,
+          "decoded_frame_index_0_based": 45367,
+          "source_time_ms": 1814680.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/14.jpg",
+          "sha256": "01031449f1592a08b2940ef10ff5840ba282a835e628f1eaeff3e80e62b8213f",
+          "sample_position_1_based": 14,
+          "decoded_frame_index_0_based": 45393,
+          "source_time_ms": 1815720.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/15.jpg",
+          "sha256": "d4cefd78fad809bc5ded6479905b3907069b4de6308086eb5606eb8d4ccd676b",
+          "sample_position_1_based": 15,
+          "decoded_frame_index_0_based": 45419,
+          "source_time_ms": 1816760.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/16.jpg",
+          "sha256": "7b816f5db6a60b60b13270d9e6e4f2a6c3ecd47ee173b131a297e6f0a16b057d",
+          "sample_position_1_based": 16,
+          "decoded_frame_index_0_based": 45444,
+          "source_time_ms": 1817760.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/17.jpg",
+          "sha256": "af75d3a7f2597ce8b15cb5144c433f93327bbea7a54706f0afed541b0ec3b853",
+          "sample_position_1_based": 17,
+          "decoded_frame_index_0_based": 45470,
+          "source_time_ms": 1818800.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/18.jpg",
+          "sha256": "37f0fd14e861252c8e92920752209bc60c07c0816dfa7a0d8904ec54a83abb44",
+          "sample_position_1_based": 18,
+          "decoded_frame_index_0_based": 45496,
+          "source_time_ms": 1819840.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/19.jpg",
+          "sha256": "2814437e860831af346d5dd6d70584efa225bf4587f442799e4e674c5ec4fb9e",
+          "sample_position_1_based": 19,
+          "decoded_frame_index_0_based": 45522,
+          "source_time_ms": 1820880.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/20.jpg",
+          "sha256": "f1078e19d0d3a5ad7136805952eea7db75fac83e4b8290c752b2dc81b30ba69a",
+          "sample_position_1_based": 20,
+          "decoded_frame_index_0_based": 45548,
+          "source_time_ms": 1821920.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/21.jpg",
+          "sha256": "ddc3277a904c1455cef21419778791a613ee044a920136125e48edf7767a0ba1",
+          "sample_position_1_based": 21,
+          "decoded_frame_index_0_based": 45574,
+          "source_time_ms": 1822960.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/22.jpg",
+          "sha256": "76e5165025b8e58e1d56dbf1ec5f89a68be5a2fc704c9b18223e013efa57c8c3",
+          "sample_position_1_based": 22,
+          "decoded_frame_index_0_based": 45599,
+          "source_time_ms": 1823960.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/23.jpg",
+          "sha256": "8364b63cbfca57fbe9d843e91e702c7ad303f59927a66a39b520b151aab1b5a1",
+          "sample_position_1_based": 23,
+          "decoded_frame_index_0_based": 45625,
+          "source_time_ms": 1825000.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/24.jpg",
+          "sha256": "0ed723bc81b8528ee78e13d96bdd8e27c7128034dfc9488e369ce69d43644068",
+          "sample_position_1_based": 24,
+          "decoded_frame_index_0_based": 45651,
+          "source_time_ms": 1826040.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/25.jpg",
+          "sha256": "0abf4a1e4e94615aacb0d5bcaa56cbc98ad95e0976f0c3a9cbe431e56464edce",
+          "sample_position_1_based": 25,
+          "decoded_frame_index_0_based": 45677,
+          "source_time_ms": 1827080.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/26.jpg",
+          "sha256": "845278d2fd0132e68c5485ff1976b7e728f6fcc90887ba5d76fed998de5666d1",
+          "sample_position_1_based": 26,
+          "decoded_frame_index_0_based": 45703,
+          "source_time_ms": 1828120.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/27.jpg",
+          "sha256": "5b47a5dd37df38f5887db46368e6555c7ae056bc45fdf38509dba1c7a1cc7811",
+          "sample_position_1_based": 27,
+          "decoded_frame_index_0_based": 45729,
+          "source_time_ms": 1829160.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/28.jpg",
+          "sha256": "f203de282c71a12cb8ac1fcc4d7173131379d08b92da600a4eed387befb982c4",
+          "sample_position_1_based": 28,
+          "decoded_frame_index_0_based": 45754,
+          "source_time_ms": 1830160.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/29.jpg",
+          "sha256": "7639654934d3d101ed990e1cfd3ea5b17405b8c17e279051640ea9aabb0b3ddc",
+          "sample_position_1_based": 29,
+          "decoded_frame_index_0_based": 45780,
+          "source_time_ms": 1831200.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/corner/E-0016/30.jpg",
+          "sha256": "2ba82111885317111dd1c63b2b71c6c25ca5fc4e506a883b448d815bfc4c47ee",
+          "sample_position_1_based": 30,
+          "decoded_frame_index_0_based": 45806,
+          "source_time_ms": 1832240.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        }
+      ]
+    },
+    {
+      "clip_id": "E-0009",
+      "approved_description": "Event: Free kick from the attacking flank.\nImages 1-7 show a white-shirted player beside a stationary ball near the\ntouchline, away from the corner arc, with red defenders positioned around\ntheir penalty area. Images 11-12 show a short ground pass towards another\nwhite player outside the box. Images 13-14 show a subsequent delivery towards\nthe crowded goal area. By images 15-16, the ball travels away from goal and\ndefenders move outward. Further contested attacking play follows.\nLimits: The original foul and exact defensive contact are not visible.\nA defensive wall is not required for every free kick.",
+      "frames": [
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/01.jpg",
+          "sha256": "8025492018c304b25a1cf8cd62a6f83ac2d170cc75f2d7adccf193b5c3184a66",
+          "sample_position_1_based": 1,
+          "decoded_frame_index_0_based": 43137,
+          "source_time_ms": 1725480.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/02.jpg",
+          "sha256": "3e4d271b1cf7f35a4d40b18e3832778e8bb86f35aa8bcc12dc257757c192e7c8",
+          "sample_position_1_based": 2,
+          "decoded_frame_index_0_based": 43163,
+          "source_time_ms": 1726520.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/03.jpg",
+          "sha256": "bf90c5b2130ba172d9b98cb87142a509f4d108925878155a653a20ed556c0243",
+          "sample_position_1_based": 3,
+          "decoded_frame_index_0_based": 43189,
+          "source_time_ms": 1727560.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/04.jpg",
+          "sha256": "6abfb045197fc9ecfc6fb52f4b945a9a85906534d6aa04c0c5ba73f2c6ac221d",
+          "sample_position_1_based": 4,
+          "decoded_frame_index_0_based": 43214,
+          "source_time_ms": 1728560.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/05.jpg",
+          "sha256": "69b2325862f1e7fa5a2dd7d0a5f3e7cea26d43731068c9af1d19c2a45b4c301d",
+          "sample_position_1_based": 5,
+          "decoded_frame_index_0_based": 43240,
+          "source_time_ms": 1729600.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/06.jpg",
+          "sha256": "2c96050a8412bdd3af22878470c1d5546ad952de0aa4affdeb27b11e0d7a942e",
+          "sample_position_1_based": 6,
+          "decoded_frame_index_0_based": 43266,
+          "source_time_ms": 1730640.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/07.jpg",
+          "sha256": "ed1b5ef6cbc9d2cdbd000a8bbac7ae603eb23ecb5e63459784145e30df60c5f3",
+          "sample_position_1_based": 7,
+          "decoded_frame_index_0_based": 43292,
+          "source_time_ms": 1731680.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/08.jpg",
+          "sha256": "bfbe3065adaa8f1da606178558e663a6ea352c9e90436a3881d79288ffa046e3",
+          "sample_position_1_based": 8,
+          "decoded_frame_index_0_based": 43318,
+          "source_time_ms": 1732720.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/09.jpg",
+          "sha256": "389b1b30f615522b8d5fefa73c2b5bf871a4145a60a3b89d855b22bfee96bd88",
+          "sample_position_1_based": 9,
+          "decoded_frame_index_0_based": 43344,
+          "source_time_ms": 1733760.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/10.jpg",
+          "sha256": "bc58cb2ab60eb2bf0073f8487e2517c7c43b8ba08561ae532d7af15c5746a6ed",
+          "sample_position_1_based": 10,
+          "decoded_frame_index_0_based": 43369,
+          "source_time_ms": 1734760.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/11.jpg",
+          "sha256": "90bbf76ee65739ba0d36547d75b704793a561eaede224028a0be5a68d59ead39",
+          "sample_position_1_based": 11,
+          "decoded_frame_index_0_based": 43395,
+          "source_time_ms": 1735800.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/12.jpg",
+          "sha256": "b135b9d5e538d832d3204f98b931c694ebd18670d43dc1b4bb5f3487f83a3d8b",
+          "sample_position_1_based": 12,
+          "decoded_frame_index_0_based": 43421,
+          "source_time_ms": 1736840.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/13.jpg",
+          "sha256": "68f1e7b7b5bec67422539c60e7d285931e3e4d1e4a0806b7720490ab65305616",
+          "sample_position_1_based": 13,
+          "decoded_frame_index_0_based": 43447,
+          "source_time_ms": 1737880.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/14.jpg",
+          "sha256": "326c6b06ee620a2a53b8bb27b1fea2cc8b3947515cd79c456bae72c6a9ec1fb3",
+          "sample_position_1_based": 14,
+          "decoded_frame_index_0_based": 43473,
+          "source_time_ms": 1738920.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/15.jpg",
+          "sha256": "cfffd0907af8044840b3cb5a855d941a16cdd526daf2903e16426c50a3d52bef",
+          "sample_position_1_based": 15,
+          "decoded_frame_index_0_based": 43499,
+          "source_time_ms": 1739960.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/16.jpg",
+          "sha256": "d99faa0a9a24d896b86b3fe0efbf97094c89b6a5d2a5b9bb5548764de28beba1",
+          "sample_position_1_based": 16,
+          "decoded_frame_index_0_based": 43524,
+          "source_time_ms": 1740960.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/17.jpg",
+          "sha256": "34a76903bb07bc347b6f548a5ebca8e8c963b03eb6dc7427d11f4c961a6f8447",
+          "sample_position_1_based": 17,
+          "decoded_frame_index_0_based": 43550,
+          "source_time_ms": 1742000.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/18.jpg",
+          "sha256": "f416a10d10ffb57c5f6bff1bfe2efeeb5d6b09692e25c1520c7280fbf18efbb4",
+          "sample_position_1_based": 18,
+          "decoded_frame_index_0_based": 43576,
+          "source_time_ms": 1743040.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/19.jpg",
+          "sha256": "654c64019e60a4cf3221fcbfb9c329e94bf5ec4e4426d1c1d34b033ba0d32bd0",
+          "sample_position_1_based": 19,
+          "decoded_frame_index_0_based": 43602,
+          "source_time_ms": 1744080.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/20.jpg",
+          "sha256": "54ffa6fb967b388528ec0dc90f466ca8aa2296af631ffc98395075a57f5b6abb",
+          "sample_position_1_based": 20,
+          "decoded_frame_index_0_based": 43628,
+          "source_time_ms": 1745120.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/21.jpg",
+          "sha256": "23119f363f2a038862353454e7a5a3090a8ab7809964e50b55f2fa55d13d3030",
+          "sample_position_1_based": 21,
+          "decoded_frame_index_0_based": 43654,
+          "source_time_ms": 1746160.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/22.jpg",
+          "sha256": "ebd155acfac8e71fee6d58337f7a4fa5d8534378bb977ad67aac1fb65f2fddc9",
+          "sample_position_1_based": 22,
+          "decoded_frame_index_0_based": 43679,
+          "source_time_ms": 1747160.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/23.jpg",
+          "sha256": "4a01bc9f08dd3efdea992f7f6b399c59694ed98fa41b9535f3ad53d6c0976322",
+          "sample_position_1_based": 23,
+          "decoded_frame_index_0_based": 43705,
+          "source_time_ms": 1748200.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/24.jpg",
+          "sha256": "4c48328d05ceb9ed305a120b89e8a2396439c6c2e715263428af2d9b61d52e95",
+          "sample_position_1_based": 24,
+          "decoded_frame_index_0_based": 43731,
+          "source_time_ms": 1749240.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/25.jpg",
+          "sha256": "66b8cd58b22f339f1d60c798ba3f608e452b264b88fb48f848e6083c291c2f08",
+          "sample_position_1_based": 25,
+          "decoded_frame_index_0_based": 43757,
+          "source_time_ms": 1750280.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/26.jpg",
+          "sha256": "3098c9bd5048e0ffda7e04b4c6dc3dbd782558f2dc07f706843c1d10153bcdc1",
+          "sample_position_1_based": 26,
+          "decoded_frame_index_0_based": 43783,
+          "source_time_ms": 1751320.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/27.jpg",
+          "sha256": "9dc4842092c0f06e94cea6b76800e875103cd26bbcce8f132a806091c730a6a9",
+          "sample_position_1_based": 27,
+          "decoded_frame_index_0_based": 43809,
+          "source_time_ms": 1752360.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/28.jpg",
+          "sha256": "8047233d66ea9e3ef10b4a428292f1dc0e95c26a3fc4b74029d46713804de4fe",
+          "sample_position_1_based": 28,
+          "decoded_frame_index_0_based": 43834,
+          "source_time_ms": 1753360.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/29.jpg",
+          "sha256": "8f203f296d8979a5f740e299422528f27510527ab1d534876c659ac3e0e0c969",
+          "sample_position_1_based": 29,
+          "decoded_frame_index_0_based": 43860,
+          "source_time_ms": 1754400.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/free_kick/E-0009/30.jpg",
+          "sha256": "82ed5c5e7e3a6c2605e5eca26406b7ed61ec0816a0e8dad17b42e5a35cd1b773",
+          "sample_position_1_based": 30,
+          "decoded_frame_index_0_based": 43886,
+          "source_time_ms": 1755440.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        }
+      ]
+    },
+    {
+      "clip_id": "E-0023",
+      "approved_description": "Event: Penalty kick resulting in a goal.\nImages 1-8 show a blue-shirted taker preparing beside the ball; the wide view\nshows the penalty setup, goalkeeper on the goal line, and other players\noutside the penalty area. Images 9-10 show the run-up. Images 11-13 show the\ngoalkeeper diving and players entering the box. Images 14-30 show blue-team\ncelebrations, with the displayed score changing from 2-0 to 3-0, supporting\na scored penalty.\nLimits: The preceding foul and precise foot-ball contact are not captured.",
+      "frames": [
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/01.jpg",
+          "sha256": "bda9fd29e8a6b246fb05a03bcc829a3489f3e80b323138437015f23ebe9ed542",
+          "sample_position_1_based": 1,
+          "decoded_frame_index_0_based": 6124,
+          "source_time_ms": 244960.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/02.jpg",
+          "sha256": "e9a087af576be7152fd337e27b81dded7efd3c24c3b677de096d22f4b9f71974",
+          "sample_position_1_based": 2,
+          "decoded_frame_index_0_based": 6150,
+          "source_time_ms": 246000.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/03.jpg",
+          "sha256": "f87e9f0e1111ddaab8354146033f0fd5cee950e1e2225f012e9c6fbda22cb027",
+          "sample_position_1_based": 3,
+          "decoded_frame_index_0_based": 6176,
+          "source_time_ms": 247040.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/04.jpg",
+          "sha256": "d8f5da2d93f40656e20549e3adf4c0ed501fed7a797314e45dae65f532364b71",
+          "sample_position_1_based": 4,
+          "decoded_frame_index_0_based": 6201,
+          "source_time_ms": 248040.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/05.jpg",
+          "sha256": "e3e1874e2085c90b5045bd6af2258b2b8437cbf7fd9fb514416c8a7031560a41",
+          "sample_position_1_based": 5,
+          "decoded_frame_index_0_based": 6227,
+          "source_time_ms": 249080.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/06.jpg",
+          "sha256": "5c3790c90f33f23f94ae3595f54bde9cd9894d244300dcd2cf70a39fc01c1545",
+          "sample_position_1_based": 6,
+          "decoded_frame_index_0_based": 6253,
+          "source_time_ms": 250120.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/07.jpg",
+          "sha256": "ec166b584df854703061f1c56b4f306ee8c347419e3ef4e6ff6666efe5e067d0",
+          "sample_position_1_based": 7,
+          "decoded_frame_index_0_based": 6279,
+          "source_time_ms": 251160.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/08.jpg",
+          "sha256": "2a828900dfbb45f447e5f1b37b3030ff0d21bd3910b1b88506214001b4ce08fc",
+          "sample_position_1_based": 8,
+          "decoded_frame_index_0_based": 6305,
+          "source_time_ms": 252200.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/09.jpg",
+          "sha256": "8611976516fcc91dc9e8ca5f8f67c1efa3188204535aefcf01dd2f5c4d84b885",
+          "sample_position_1_based": 9,
+          "decoded_frame_index_0_based": 6331,
+          "source_time_ms": 253240.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/10.jpg",
+          "sha256": "f695b16908affa1e806cb8f384df8db8571808d4e56628903e7b85940a61213d",
+          "sample_position_1_based": 10,
+          "decoded_frame_index_0_based": 6356,
+          "source_time_ms": 254240.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/11.jpg",
+          "sha256": "2088f2e457dbceb1c16419ce9780c1d670f5005309f4f4c3e883e5eb84eb6a2e",
+          "sample_position_1_based": 11,
+          "decoded_frame_index_0_based": 6382,
+          "source_time_ms": 255280.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/12.jpg",
+          "sha256": "fb26ef140c7f52e338d406d74a2c30ab3ef390cfb3c26bd165a9a7ac6304cb62",
+          "sample_position_1_based": 12,
+          "decoded_frame_index_0_based": 6408,
+          "source_time_ms": 256320.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/13.jpg",
+          "sha256": "d356b2a381f2037d643dd7bde8ec875a70c21d0dfe0450d9e32bce8d2565ccb8",
+          "sample_position_1_based": 13,
+          "decoded_frame_index_0_based": 6434,
+          "source_time_ms": 257360.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/14.jpg",
+          "sha256": "6ca0e6c211034f7810d99bdb175ea9fed31e6ae564693182dcde91a8cf4350d5",
+          "sample_position_1_based": 14,
+          "decoded_frame_index_0_based": 6460,
+          "source_time_ms": 258400.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/15.jpg",
+          "sha256": "c53dba2ce4aee1bd407462480c9e349387ecf81454436ee0b1cf6a9c96bd39eb",
+          "sample_position_1_based": 15,
+          "decoded_frame_index_0_based": 6486,
+          "source_time_ms": 259440.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/16.jpg",
+          "sha256": "64287cd74f605387f6be3d5f7931a174e507b9f1ea5d7e408c9be9e42af666c3",
+          "sample_position_1_based": 16,
+          "decoded_frame_index_0_based": 6511,
+          "source_time_ms": 260440.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/17.jpg",
+          "sha256": "c79afb9b439a95e8cebc68477abd1c27ada8644dea961ed78b8e7e9ef5b36b4b",
+          "sample_position_1_based": 17,
+          "decoded_frame_index_0_based": 6537,
+          "source_time_ms": 261480.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/18.jpg",
+          "sha256": "b4391819fffe840623976dd43a4fd8aceb0260af9c1e85d1a43c4de5ba541ec0",
+          "sample_position_1_based": 18,
+          "decoded_frame_index_0_based": 6563,
+          "source_time_ms": 262520.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/19.jpg",
+          "sha256": "368f223b68f9a9d3d84d34b0912a45939fff91ec42c15931cdbf5b27d6782844",
+          "sample_position_1_based": 19,
+          "decoded_frame_index_0_based": 6589,
+          "source_time_ms": 263560.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/20.jpg",
+          "sha256": "0c7f17cfc07fad0db6895ae6a87a7e21bde0227d1c84f40afbaba0b0b4f21ce1",
+          "sample_position_1_based": 20,
+          "decoded_frame_index_0_based": 6615,
+          "source_time_ms": 264600.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/21.jpg",
+          "sha256": "6542c9780625b6e94fb1ea00748f013622f1da13390b3595acc10102fab684b2",
+          "sample_position_1_based": 21,
+          "decoded_frame_index_0_based": 6641,
+          "source_time_ms": 265640.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/22.jpg",
+          "sha256": "e8158d079e096cdf8b7248f16b55ab18beccc0c9e2f58b0594085e38f72c44fd",
+          "sample_position_1_based": 22,
+          "decoded_frame_index_0_based": 6666,
+          "source_time_ms": 266640.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/23.jpg",
+          "sha256": "3519bb81eb3833c65f0b61f0cb1e67e0a69eff0d2f773c8671681e3c87c3603d",
+          "sample_position_1_based": 23,
+          "decoded_frame_index_0_based": 6692,
+          "source_time_ms": 267680.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/24.jpg",
+          "sha256": "312d7464b7c0f54a8062d72c4bf0b4e7454028af5b9eb86cd15a3990ff17e173",
+          "sample_position_1_based": 24,
+          "decoded_frame_index_0_based": 6718,
+          "source_time_ms": 268720.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/25.jpg",
+          "sha256": "eeee91af2892f7c8aadd8ba15a9ba4a231cfe81302355d94326d6403cdc16f2c",
+          "sample_position_1_based": 25,
+          "decoded_frame_index_0_based": 6744,
+          "source_time_ms": 269760.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/26.jpg",
+          "sha256": "ffb9b63d1573e23e2194cb7431dca2b6de2dd1547fa7dee86282324c140772c1",
+          "sample_position_1_based": 26,
+          "decoded_frame_index_0_based": 6770,
+          "source_time_ms": 270800.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/27.jpg",
+          "sha256": "bb6b56003db53953a3b6d4fa0ba0ee3b2edeaa86f78c866a7fae871cfded32f7",
+          "sample_position_1_based": 27,
+          "decoded_frame_index_0_based": 6796,
+          "source_time_ms": 271840.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/28.jpg",
+          "sha256": "5c1ea0596da0968efe335d1099f73f810501c87ae2709e84f4a7d2ce0aa74ac8",
+          "sample_position_1_based": 28,
+          "decoded_frame_index_0_based": 6821,
+          "source_time_ms": 272840.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/29.jpg",
+          "sha256": "f2bde275632effd85fec9df019450565fb7dc79ed8ad7729d4d1d05a0e2e5d26",
+          "sample_position_1_based": 29,
+          "decoded_frame_index_0_based": 6847,
+          "source_time_ms": 273880.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        },
+        {
+          "path": "artifacts/in_context_events/v1/frames/example/penalty/E-0023/30.jpg",
+          "sha256": "c3df4249e12f6cf990850451a858a3ac91b5ebc6c62052bcf07ef05c8fc596fe",
+          "sample_position_1_based": 30,
+          "decoded_frame_index_0_based": 6873,
+          "source_time_ms": 274920.0,
+          "source_dimensions": [
+            1280,
+            720
+          ],
+          "image_dimensions": [
+            672,
+            378
+          ]
+        }
+      ]
+    }
+  ],
+  "model": "qwen3.5:27b",
+  "expected_model_digest": "193ec05b1e8048df17f7b8d15528671ae40e1a25cf4e0f5416c02b9cac5b990c",
+  "generation": {
+    "options": {
+      "temperature": 0,
+      "seed": 20260903,
+      "num_ctx": 32768,
+      "num_gpu": 0
+    },
+    "think": false,
+    "stream": false
+  },
+  "device_policy": "CPU-only in both arms; verify digest and /api/ps residency before execution",
+  "request_policy": "Separate fresh requests; no prior answers, corrections, query labels or references; no coaching",
+  "payload_order": {
+    "baseline": [
+      "query:30 ordered JPEGs",
+      "recognition instruction"
+    ],
+    "with_examples": [
+      "demo1:30 JPEGs + description",
+      "demo2:30 JPEGs + description",
+      "demo3:30 JPEGs + description",
+      "query:30 JPEGs",
+      "same recognition instruction"
+    ]
+  },
+  "images_per_request": {
+    "baseline": 30,
+    "with_examples": 120
+  },
+  "frozen_files": {
+    "input_prompts/in_context_events/comparison_v1/example_descriptions.approved_v1.txt": "2b6b7d9cba4d9b422a0b3acd30ac4695aa6b90e1585d09544cb790cb041432ea",
+    "input_prompts/in_context_events/comparison_v1/recognition_instruction.v1.txt": "9a8e16e1559310269d9f07db7138e17739983223f4034e07f3d397c8f842aaaf",
+    "input_prompts/in_context_events/comparison_v1/baseline_prompt.v1.txt": "7f2af7e463b7138791e367f047a5561903cbbbbd17d2065e6344f7f1acdf7045",
+    "input_prompts/in_context_events/comparison_v1/with_examples_prompt.v1.txt": "029b703b9bae6c7e398a36052fb46e7555142c0c87baade8699792db84770061",
+    "artifacts/in_context_events/comparison_v1/private_audit.json": "59d7336e5f77dc8e677cd6a1bbc13d283f0200bd3d547a0244f135298fafb257",
+    "config/in_context_event_media_amendment_v1.json": "d23a9a7bb3be7c86ef78f6273e8083e252c1453f294f26bdcfde3db28ded6270",
+    "config/freezes/in_context_event_selection_v1.json": "4d65aafb69c4c5e7a12a2d33dbca6e8dd4a9b8a31eb7f86afd1bc66d2685a03d",
+    "src/football_coach/in_context_comparison.py": "51c982529e802b807e66ec0cf9fc2e3765154fa69bdb12feeefa4dc98da45d4d"
+  },
+  "execution_allowed": false,
+  "outstanding_gates": [
+    "Authoritative prior GSR match mapping",
+    "Review any cross-role duplicate candidates",
+    "Verify 120-image payload/context capacity without silent truncation on development only",
+    "Verify current model digest and CPU residency"
+  ],
+  "full_dataset_reference_review": "pending; three example approvals do not approve other clips"
+}

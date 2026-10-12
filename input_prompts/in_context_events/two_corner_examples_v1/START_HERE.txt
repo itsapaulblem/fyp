@@ -1,0 +1,46 @@
+TWO-CORNER-EXAMPLE B25 PILOT — APPROVED AND FROZEN
+
+Researcher requested two corner demonstrations, without free-kick or penalty
+demonstrations. This is a separate variant; previous prompts/results remain intact.
+
+Demonstration 1: E-0016, 30 original frames; description already approved.
+Demonstration 2: E-0017, 30 original frames; researcher approved on 2026-10-11.
+Both are in the example split, from different source matches. Neither belongs
+to the four clips flagged in the earlier cross-role perceptual audit.
+The second demonstration was selected for visibly informative corner setup,
+not by running it through the model and selecting a successful answer.
+
+Frames to review:
+artifacts/in_context_events/v1/frames/example/corner/E-0017/
+Image 10 clearly shows the ball at the corner arc beside the corner flag.
+Approved descriptions: example_descriptions.approved_v1.txt.
+The assistant inspected selected frames; researcher review covers all 30.
+
+Query assumed unchanged: B-TRAIN-0025, all 30 original frozen JPEGs.
+Total proposed request: 60 demonstration images + 30 query images = 90.
+Do not reduce sampling silently. Use the same Qwen3.5:27b digest and CPU-only
+32,768-token settings as comparison_v1; context retention is not yet verified.
+No previous model answers, P1 corrections, query event labels or references
+are included. Recognition only; no coaching.
+
+Frozen prompt packet: with_examples_prompt.approved_v1.txt.
+Actual model payload must attach each example's 30 JPEGs to its own block,
+then B25's 30 JPEGs to the query block. Do not send class-bearing file paths.
+The query recognition instruction remains unchanged. The new boundary
+instructions distinguish demonstrations from the query. Because example
+count, category balance and boundary wording change, this exploratory run
+cannot isolate which change causes a different answer.
+
+The researcher approved freezing and preparing this separate remote
+exploratory run on 2026-10-11. Its image/text/settings SHA-256 freeze is
+config/freezes/two_corner_examples_v1_b25.json with a .sha256 sidecar.
+Its explicit exploratory exception is config/two_corner_b25_exploratory_v1.json.
+Existing comparison_v1 freeze and results are not modified.
+Prior GSR match overlap remains unresolved. No inference has been launched.
+Results folder: output/in_context_events/two_corner_examples_v1/b25_exploratory_v1/.
+One fresh recognition request only; earlier baseline is not rerun. Runner:
+python3 scripts/run_in_context_pilot.py --declaration config/two_corner_b25_exploratory_v1.json --validate-only
+Replace --validate-only with --run only inside the new isolated remote tmux run.
+No model request has been launched by local preparation.
+Corner-only examples may bias predictions; a later development check should
+include non-corner queries before claiming general recognition improvement.
